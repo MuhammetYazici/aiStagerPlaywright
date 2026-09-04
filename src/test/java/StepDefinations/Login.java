@@ -1,5 +1,7 @@
 package StepDefinations;
 
+import Pages.LoginPage;
+import Pages.RegisterPage;
 import Pages.pages;
 import Utilities.ConfigReader;
 import Utilities.ReusableMethod;
@@ -15,11 +17,12 @@ import java.util.List;
 public class Login {
     pages pages = new pages();
     ReusableMethod rm = new ReusableMethod();
+    LoginPage loginPage = new LoginPage();
+    RegisterPage registerPage = new RegisterPage();
 
     @Given("The user clicks the Log in button on the homepage.")
-    public void theUserClicksTheButtonOnTheHomepage(DataTable dataTable) {
-        String locator = dataTable.asList().get(0);
-        rm.myClick(pages.getLocator(locator));
+    public void theUserClicksTheButtonOnTheHomepage() {
+        rm.myClick(loginPage.girisYapInput());
     }
 
     @When("The user clicks the register button on the login page.")
@@ -28,27 +31,22 @@ public class Login {
         rm.myClick(pages.getLocator(locator));
     }
 
-    @When("On the registration page,enter a valid email and password.")
+
     @Then("On the registration page,enter a valid email and password.")
-    @And("On the registration page,enter a valid email and password.")
     public void onTheRegistrationPageEnterAValidEmailAndPassword(DataTable dataTable) {
-        executeRegistrationPageEnterData(dataTable);
+        List<String> data = dataTable.asList();
+        rm.mySendKeys(registerPage.emailInput(),rm.resolveDynamicValue(data.get(0)));
+        rm.mySendKeys(registerPage.passwordInput(),rm.resolveDynamicValue(data.get(1)));
+        rm.mySendKeys(registerPage.passwordRepeatInput(),rm.resolveDynamicValue(data.get(2)));
     }
 
-    private void executeRegistrationPageEnterData(DataTable dataTable) {
-        List<List<String>> data = dataTable.asLists();
-        for (int i = 0; i < data.size(); i++) {
-            String locatorKey = data.get(i).get(0);
-            String valueToSend = data.get(i).get(1);
-
-            if (valueToSend.equalsIgnoreCase("fakerEmail")){
-                valueToSend = ConfigReader.getRandomEmail();
-            } else if (valueToSend.equalsIgnoreCase("fakerPassword")) {
-                valueToSend = ConfigReader.getRandomPassword();
-            }
-            rm.mySendKeys(pages.getLocator(locatorKey),valueToSend);
-        }
+    @When("On the login page,enter a valid email and password.")
+    public void onTheLoginPageEnterAValidEmailAndPassword(DataTable dataTable) {
+        List<String> data = dataTable.asList();
+        rm.mySendKeys(loginPage.emailInput(),rm.resolveDynamicValue(data.get(0)));
+        rm.mySendKeys(loginPage.passwordInput(),rm.resolveDynamicValue(data.get(1)));
     }
+
 
     @And("The user checks the terms of acceptance box.")
     public void theUserChecksTheTermsOfAcceptanceBox() {
@@ -154,4 +152,5 @@ public class Login {
             System.out.println("⚠ Şifre uyuşmazlığı hatası alındı");
         }
     }
+
 }

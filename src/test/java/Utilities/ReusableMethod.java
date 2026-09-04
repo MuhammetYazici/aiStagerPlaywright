@@ -40,6 +40,13 @@ public class ReusableMethod{
         locator.check();
     }
 
-
+    public String resolveDynamicValue(String data) {
+        if (data.equalsIgnoreCase("fakerEmail")){
+            data = ConfigReader.getRandomEmail();
+        } else if (data.equalsIgnoreCase("fakerPassword")) {
+            data = ConfigReader.getRandomPassword();
+        }
+        return data;
+    }
 
 }
