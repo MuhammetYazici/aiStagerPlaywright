@@ -21,7 +21,7 @@ public class LoginPage {
     }
 
     public Locator girisYapInput(){
-        return page.getByText("Giriş Yap").last();
+        return page.getByText("Giriş Yap").first();
     }
 
     public Locator forgotPassword(){

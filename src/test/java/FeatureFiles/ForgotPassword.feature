@@ -1,6 +1,6 @@
 Feature: Forgot Password Test
 
-  @Regression
+  @Regression @ForgotPassword
   Scenario Outline: The user tests the forgot password flow with different email inputs
     Given The user clicks the Log in button on the homepage.
     When The user clicks the forgot password button
@@ -9,9 +9,9 @@ Feature: Forgot Password Test
     Then The "<expectedMessage>" message should be displayed
 
     Examples:
-      | email                     | expectedMessage          |
-      | registered@example.com    | sent                     |
-      |                           | enter your email address |
-      | invalidformat             | invalid format           |
-      | notregistered@example.com | sent                     |
+      | email             | expectedMessage                     |
+      | yzcmm61@gmail.com | If an account exists for this email |
+      |                   | enter your email address            |
+      | invalidformat     | invalid format                      |
+      | fakerEmail        | If an account exists for this email |
 

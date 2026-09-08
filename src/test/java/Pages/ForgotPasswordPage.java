@@ -20,7 +20,7 @@ public class ForgotPasswordPage {
     }
 
     public Locator message(){
-        return page.locator("(//div//span)[1]");
+        return page.locator("//div[@class='text-center mb-7']/following-sibling::div[1]");
     }
 
 

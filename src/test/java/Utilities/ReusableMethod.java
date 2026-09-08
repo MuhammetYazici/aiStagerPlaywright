@@ -16,7 +16,6 @@ public class ReusableMethod{
     }
 
     public  void myClick(Locator locator){
-        locator.waitFor();
         locator.click();
     }
 
@@ -45,6 +44,10 @@ public class ReusableMethod{
             data = ConfigReader.getRandomEmail();
         } else if (data.equalsIgnoreCase("fakerPassword")) {
             data = ConfigReader.getRandomPassword();
+        } else if (data.equalsIgnoreCase("fakerGenerateEmail")) {
+            data = ConfigReader.getGenerateEmail();
+        } else if (data.equalsIgnoreCase("fakerGeneratePassword")) {
+            data = ConfigReader.getGeneratePassword();
         }
         return data;
     }
