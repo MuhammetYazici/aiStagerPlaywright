@@ -16,6 +16,7 @@ public class ReusableMethod{
     }
 
     public  void myClick(Locator locator){
+        locator.waitFor();
         locator.click();
     }
 

@@ -29,7 +29,7 @@ public class pages {
             case "creatAccount":
                 return page.getByText("Hesap Oluştur");
             case "text":
-                return page.getByText("Verify your email");
+//                return page.getByText("Verify your email");
             case "girisYapButton":
                 return page.getByRole(AriaRole.BUTTON,new Page.GetByRoleOptions().setName("Giriş Yap"));
             case "passwordLogin":

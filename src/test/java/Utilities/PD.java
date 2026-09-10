@@ -27,7 +27,7 @@ public class PD {
         if (page == null) {
             playwright = Playwright.create();
             String browserName = ConfigReader.getProperty("browser");
-            BrowserType.LaunchOptions launchOptions = new BrowserType.LaunchOptions().setHeadless(false).setArgs(Arrays.asList("--start-maximized"));
+            BrowserType.LaunchOptions launchOptions = new BrowserType.LaunchOptions().setHeadless(true).setArgs(Arrays.asList("--start-maximized"));
             ;
 
             switch (browserName.toLowerCase()) {
@@ -84,7 +84,7 @@ public class PD {
         } catch (Exception e) {
             throw new IllegalArgumentException("TraceViewer kaydetme işlemi başarısız. " + e);
         } finally {
-            cleanUp();
+            contextClose();
 
             if (video != null) {
                 try {
@@ -102,11 +102,16 @@ public class PD {
                     e.printStackTrace();
                 }
             }
+
+            cleanUp();
         }
     }
 
+    private static void contextClose(){
+        if (context != null){ context.close();}
+    }
+
     private static void cleanUp() {
-        if (context != null) context.close();
         if (browser != null) browser.close();
         if (playwright != null) playwright.close();
 

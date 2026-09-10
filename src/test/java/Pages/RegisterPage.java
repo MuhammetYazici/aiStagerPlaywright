@@ -14,8 +14,12 @@ public class RegisterPage {
         this.page = PD.getPage();
     }
 
+    public Locator registerButton(){
+        return page.getByText("Kayıt ol");
+    }
+
     public Locator emailInput(){
-        return page.getByText("//input[@type='email']");
+        return page.locator("//input[@type='email']");
     }
 
     public Locator passwordInput(){
