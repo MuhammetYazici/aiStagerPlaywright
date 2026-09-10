@@ -50,9 +50,12 @@ public class PD {
                     message += "Lütfen geçerli bir tarayıcı ismi giriniz [Edge, Firefox, Chrome,Chromium]";
             }
 
+            int width = ConfigReader.getIntProperty("width");
+            int height = ConfigReader.getIntProperty("height");
+
             Browser.NewContextOptions contextOptions = new Browser.NewContextOptions()
                     .setRecordVideoDir(Paths.get(videoPath))
-                    .setViewportSize(null);
+                    .setViewportSize(width,height);
 
             context = browser.newContext(contextOptions);
             ;
