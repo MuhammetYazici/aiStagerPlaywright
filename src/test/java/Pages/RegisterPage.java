@@ -1,11 +1,11 @@
 package Pages;
 
-import Utilities.PD;
-import com.microsoft.playwright.Page;
 import com.microsoft.playwright.Locator;
+import com.microsoft.playwright.Page;
+import Utilities.PD;
 
 public class RegisterPage {
-    Page page;
+    private Page page;
 
     public RegisterPage() {
         this.page = PD.getPage();
@@ -28,22 +28,18 @@ public class RegisterPage {
     }
 
     public Locator getSubmitButton() {
-        return page.locator("button:has-text('Hesap Oluştur')");
+        return page.getByRole(com.microsoft.playwright.options.AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Hesap Oluştur"));
     }
 
-    public Locator getSuccessMessage() {
-        return page.locator(".success-message, text=Kayıt başarılı");
+    public Locator getLoginLink() {
+        return page.getByRole(com.microsoft.playwright.options.AriaRole.LINK, new Page.GetByRoleOptions().setName("Giriş yap"));
     }
 
     public Locator getCreditBalance() {
-        return page.locator(".credit-balance, text=Kredi");
+        return page.locator(".credit-balance, [data-testid='credit-balance']");
     }
 
     public Locator getErrorMessage() {
-        return page.locator(".error-message, text=geçersiz");
-    }
-
-    public Locator getAcceptAllCookiesButton() {
-        return page.locator("button:has-text('Tümünü Kabul Et')");
+        return page.locator(".error-message, .alert-danger, [role='alert']");
     }
 }
