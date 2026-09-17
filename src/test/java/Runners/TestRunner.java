@@ -7,10 +7,11 @@ import io.cucumber.testng.CucumberOptions;
         features = {"src/test/java/FeatureFiles"},
         glue = {"StepDefinations", "Hooks"},
         tags = "@negative_auth",
-        plugin = {"pretty",
-                "html:target/cucumber-reports/cucumber.html",
-                "json:target/cucumber-reports/cucumber.json"}
+        plugin = {
+                "pretty",
+                "html:target/cucumber-reports/cucumber-html-report.html",
+                "json:target/cucumber-reports/cucumber.json"
+        }
 )
-
 public class TestRunner extends AbstractTestNGCucumberTests {
 }

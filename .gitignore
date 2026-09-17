@@ -3,41 +3,48 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+### Güvenlik ve API Anahtarları (KRİTİK) ###
+.env
+*.env
+*.key
+*.secret
+
+### Python Pipeline Çıktıları ###
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+venv/
+.venv/
+input_docs/*
+!input_docs/.gitkeep
+
+### Test Koşum Medyaları ve Raporlar ###
+src/test/resources/TraceViewer/*.zip
+src/test/resources/Video/*.webm
+allure-results/
+allure-report/
+
 ### IntelliJ IDEA ###
-.idea/modules.xml
-.idea/jarRepositories.xml
-.idea/compiler.xml
-.idea/libraries/
+.idea/
 *.iws
 *.iml
 *.ipr
 
-### Eclipse ###
+### VS Code & Roo Code ###
+.vscode/
+.roo/
+.cline/
+
+### Eclipse & NetBeans ###
 .apt_generated
 .classpath
 .factorypath
 .project
 .settings
-.springBeans
-.sts4-cache
-
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
 build/
-!**/src/main/**/build/
-!**/src/test/**/build/
+/nbproject/private/
 
-### VS Code ###
-.vscode/
-
-### Mac OS ###
+### İşletim Sistemi ###
 .DS_Store
-
-
-src/test/resources/TraceViewer/
-src/test/resources/Video/
-target/
+Thumbs.db

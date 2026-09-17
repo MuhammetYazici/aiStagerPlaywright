@@ -1,44 +1,45 @@
 package Pages;
 
 import Utilities.PD;
-import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
-import com.microsoft.playwright.options.AriaRole;
-
-import java.util.Locale;
+import com.microsoft.playwright.Locator;
 
 public class RegisterPage {
-    private final Page page;
+    private Page page;
 
     public RegisterPage() {
         this.page = PD.getPage();
     }
 
-    public Locator registerButton(){
-        return page.getByText("Kayıt ol");
+    public Locator getEmailInput() {
+        return page.locator("input[name='email']");
     }
 
-    public Locator emailInput(){
-        return page.locator("//input[@type='email']");
+    public Locator getPasswordInput() {
+        return page.locator("input[name='password']");
     }
 
-    public Locator passwordInput(){
-        return page.locator("(//input[@type='password'])[1]");
+    public Locator getConfirmPasswordInput() {
+        return page.locator("input[name='confirmPassword']");
     }
 
-    public Locator passwordRepeatInput(){
-        return page.locator("(//input[@type='password'])[2]");
+    public Locator getTermsCheckbox() {
+        return page.locator("#terms-accept");
     }
 
-    public Locator checkBoxButton(){
-        return page.getByRole(AriaRole.CHECKBOX,new Page.GetByRoleOptions().setName("Kabul ediyorum: Hizmet Şartları ve Gizlilik Politikası"));
+    public Locator getCreateAccountButton() {
+        return page.locator("button:has-text('Hesap Oluştur')");
     }
 
-    public Locator creatAccount(){
-        return page.getByText("Hesap Oluştur");
+    public Locator getLoginLink() {
+        return page.locator("a:has-text('Giriş yap')");
     }
 
-    public Locator control(){
-        return page.getByText("Verify your email");
+    public Locator getCreditBalance() {
+        return page.locator(".credit-balance, [data-testid='credit-balance']");
+    }
+
+    public Locator getErrorMessage() {
+        return page.locator(".error-message, [role='alert']");
     }
 }
