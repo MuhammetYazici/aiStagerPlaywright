@@ -1,48 +1,40 @@
-Feature: Silinen Hesapla Yeniden Kayıt ve Welcome Credit Kontrolü
-  Kimlik doğrulama (Auth) sisteminde, yeni kullanıcıların hoş geldin kredisinden yararlanması,
-  silinen hesapların tekrar kaydolabilmesi ancak kötüye kullanımın önlenmesi için
-  kredi kısıtlarının ve e-posta normalizasyonunun test edilmesi.
+Feature: Silinen Hesapla Yeniden Kayıt ve Kredi Hak Ediş Kontrolü
+  Kullanıcı olarak, hesabımı sildikten sonra aynı e-posta ile yeniden kayıt olmak istiyorum,
+  ancak sistemin daha önce bu e-posta ile kredi aldığını tespit ederek yeni hesaba 
+  "Welcome Credit" (Hoş Geldin Kredisi) tanımlamamasını test ediyorum.
 
   Background:
-    Given kullanıcı kayıt ve kimlik doğrulama servisleri aktif durumdadır
+    Given kullanıcı kayıt sayfasında bulunur
 
-  Scenario: Yepyeni bir kullanıcının sisteme ilk kez kayıt olması
-    Given sistemde daha önce hiç kaydedilmemiş "yeni.kullanici@mail.com" e-posta adresi bulunmaktadır
-    When kullanıcı "yeni.kullanici@mail.com" e-posta adresi ile kayıt formunu doldurur
-    And e-posta doğrulama adımını başarıyla tamamlar
-    And sisteme giriş yapar
-    Then kayıt işlemi başarıyla tamamlanmalıdır
-    And kullanıcının başlangıç kredi bakiyesi "2" olmalıdır (BR-01)
+  @Pozitif @BR-02
+  Scenario: Yeni kullanıcının kayıt ve hoş geldin kredisi hak edişi
+    Given sistemde daha önce hiç kayıt olmamış "yeni.kullanici@mail.com" e-posta adresi vardır
+    When kullanıcı "yeni.kullanici@mail.com" adresi ile yeni bir kayıt oluşturur
+    And e-posta doğrulama adımı tamamlanır
+    And kullanıcı sisteme giriş yapar
+    Then kayıt işlemi başarılı olmalı
+    And kullanıcı kredi bakiyesinin "2" olduğunu görmelidir
 
-  Scenario: Daha önce hesabını silmiş kullanıcının aynı e-posta ile yeniden kayıt olması
-    Given "silinen.kullanici@mail.com" adresine ait bir hesap geçmişte oluşturulmuş ve tamamen silinmiştir
-    When kullanıcı "silinen.kullanici@mail.com" e-posta adresi ile yeniden kayıt formunu doldurur
-    And kayıt sırasında herhangi bir hata veya uyarı mesajı gösterilmemelidir (BR-02)
-    And e-posta doğrulama adımını başarıyla tamamlar
-    And sisteme giriş yapar
-    Then kayıt işlemi başarıyla tamamlanmalıdır
-    And kullanıcının başlangıç kredi bakiyesi "0" olmalıdır (BR-03)
+  @Pozitif @EdgeCase @BR-01 @BR-03
+  Scenario: Silinmiş hesapla yeniden kayıt ve mükerrer kredi engeli
+    Given daha önce açılıp "Hesabı Sil" özelliği ile silinmiş "silinmis.kullanici@mail.com" e-posta adresi vardır
+    When kullanıcı silinmiş olan "silinmis.kullanici@mail.com" adresi ile yeniden kayıt oluşturur
+    And e-posta doğrulama adımı tamamlanır
+    And kullanıcı sisteme giriş yapar
+    Then kayıt işlemi herhangi bir hata almadan başarılı olmalı
+    And kullanıcı kredi bakiyesinin "0" olduğunu görmelidir
 
-  Scenario: Silinmiş hesabın e-postasını büyük ve küçük harf kombinasyonuyla yeniden kaydetme
-    Given "CaseSensitivity@Mail.COM" adresine ait bir hesap geçmişte oluşturulmuş ve silinmiştir
-    When kullanıcı farklı yazım formatına sahip "casesensitivity@mail.com" e-posta adresiyle yeniden kayıt olur
-    And kayıt işlemi engellenmeden başarıyla tamamlanmalıdır (BR-02)
-    And e-posta doğrulama adımını tamamlar
-    And sisteme giriş yapar
-    Then sistem e-posta normalizasyonu uygulayarak geçmiş kaydı tanımalıdır (BR-04)
-    And kullanıcının başlangıç kredi bakiyesi "0" olmalıdır (BR-03)
+  @EdgeCase @BR-04
+  Scenario Outline: E-posta büyük ve küçük harf normalizasyon kontrolü
+    Given daha önce silinmiş olan "<orijinal_eposta>" e-posta adresi vardır
+    When kullanıcı bu e-postanın farklı bir varyasyonu olan "<farkli_kasa_eposta>" ile yeniden kayıt oluşturur
+    And e-posta doğrulama adımı tamamlanır
+    And kullanıcı sisteme giriş yapar
+    Then kayıt işlemi başarılı olmalı
+    And kullanıcı kredi bakiyesinin "0" olduğunu görmelidir
 
-  Scenario: Silinen hesabın eski bakiye ve abonelik haklarının sıfırlanmış olarak gelmesi
-    Given "eski.bakiye@mail.com" adresli hesabın silinmeden önce "15" kredisi bulunmaktadır
-    And bu hesap kullanıcı tarafından silinmiştir
-    When kullanıcı "eski.bakiye@mail.com" e-posta adresiyle sisteme tekrar kayıt olur ve doğrulamayı tamamlar
-    And sisteme giriş yapar
-    Then silinen hesaba ait eski bakiye, abonelik veya top-up hakları tamamen silinmiş olmalıdır (BR-03)
-    And kullanıcının kredi bakiyesi sadece "0" olmalıdır
-
-  Scenario: Aktif (silinmemiş) bir hesapla mükerrer kayıt denemesi yapılması
-    Given "aktif.kullanici@mail.com" adresine ait halihazırda aktif bir hesap bulunmaktadır
-    When kullanıcı aynı "aktif.kullanici@mail.com" adresi ile tekrar kayıt olmaya çalışır
-    Then kayıt işlemi engellenmelidir
-    And kullanıcıya e-posta adresinin kullanımda olduğuna dair uygun bir hata mesajı gösterilmelidir
-    And yeni bir hesap oluşturulmamalıdır
+    Examples:
+      | orijinal_eposta      | farkli_kasa_eposta   |
+      | ornek@mail.com       | Ornek@Mail.COM       |
+      | test.user@domain.com | TEST.USER@DOMAIN.COM |
+      | kucuk@harf.com       | KUCUK@harf.com       |

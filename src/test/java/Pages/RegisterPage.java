@@ -28,18 +28,18 @@ public class RegisterPage {
     }
 
     public Locator getSubmitButton() {
-        return page.getByRole(com.microsoft.playwright.options.AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Hesap Oluştur"));
+        return page.locator("button:has-text('Hesap Oluştur')");
     }
 
     public Locator getLoginLink() {
-        return page.getByRole(com.microsoft.playwright.options.AriaRole.LINK, new Page.GetByRoleOptions().setName("Giriş yap"));
+        return page.locator("a:has-text('Giriş yap')");
     }
 
     public Locator getCreditBalance() {
         return page.locator(".credit-balance, [data-testid='credit-balance']");
     }
 
-    public Locator getErrorMessage() {
-        return page.locator(".error-message, .alert-danger, [role='alert']");
+    public Locator getSuccessMessage() {
+        return page.locator(".success-message, :text('Kayıt başarılı')");
     }
 }

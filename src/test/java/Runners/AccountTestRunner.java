@@ -6,12 +6,13 @@ import io.cucumber.testng.CucumberOptions;
 @CucumberOptions(
     features = "src/test/resources/features",
     glue = {"StepDefinations", "Hooks"},
+    tags = "@Pozitif or @EdgeCase",
     plugin = {
         "pretty",
         "html:target/cucumber-reports.html",
         "json:target/cucumber.json"
     },
-    tags = "@Positive or @EdgeCase or @Negative"
+    monochrome = true
 )
-public class SolutionsRunner extends AbstractTestNGCucumberTests {
+public class AccountTestRunner extends AbstractTestNGCucumberTests {
 }
