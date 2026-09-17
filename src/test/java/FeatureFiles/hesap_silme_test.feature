@@ -1,50 +1,33 @@
-Feature: Silinen Hesapla Yeniden Kayıt ve Welcome Credit Yönetimi
-  Kullanıcı olarak, daha önce hesabımı silmiş olsam bile aynı e-posta ile yeniden kayıt olabilmek istiyorum,
-  ancak sistemin kötüye kullanımı önlemek için hoş geldin kredisini ikinci kez vermemesi ve 
-  yeni kullanıcıların hak ettikleri kredileri eksiksiz alması gerekmektedir.
+Feature: Silinen Hesapla Yeniden Kayıt ve Welcome Credit Kontrolü
+  Kullanıcıların kayıt süreçlerini, hesap silme durumlarını ve hoş geldin kredisi 
+  kurallarının doğru çalışıp çalışmadığını test eder.
 
-  Background:
-    Given Sistem aktif ve kayıt servisleri çalışır durumdadır
+  @Pozitif @BR-01 @Test-A
+  Scenario: Yepyeni bir kullanıcının sisteme ilk kez kaydolması ve hoş geldin kredisi alması
+    Given Kullanıcı AIStager sisteminde daha önce hiç kayıt olmamış "yeni_kullanici@mail.com" adresine sahiptir
+    When Kullanıcı kayıt formunu doldurarak "yeni_kullanici@mail.com" ile kayıt olur
+    And E-posta doğrulama adımını başarıyla tamamlar ve sisteme giriş yapar
+    Then Kayıt işlemi başarılı olmalıdır
+    And Kullanıcının başlangıç kredi bakiyesi 2 olmalıdır
 
-  @pozitif @ac-1 @tc-01
-  Scenario: Yeni ve benzersiz bir kullanıcının sisteme ilk kez kayıt olması
-    Given Sistemi daha önce hiç kullanmamış benzersiz bir e-posta adresi vardır
-    When Kullanıcı kayıt formunu doldurur ve kayıt olur
-    And E-posta doğrulama adımı tamamlanır
-    And Kullanıcı sisteme başarılı bir şekilde giriş yapar
-    Then Kayıt işleminin başarılı olduğu görülmelidir
-    And Kullanıcının başlangıç kredi bakiyesi tam olarak "2" Kredi olmalıdır
+  @Pozitif @BR-02 @BR-03 @Test-B
+  Scenario: Hesabını silmiş bir kullanıcının aynı e-posta ile yeniden kaydolması ve kredi alamaması
+    Given "silinmis_kullanici@mail.com" adresine sahip bir kullanıcı daha önceden kayıt olup hesabını silmiştir
+    When Kullanıcı aynı "silinmis_kullanici@mail.com" adresini kullanarak yeniden kayıt olur
+    And E-posta doğrulama adımını tamamlar ve sisteme giriş yapar
+    Then Kayıt işlemi başarıyla tamamlanmalı ve herhangi bir engelleme veya hata mesajı gösterilmemelidir
+    And Kullanıcının başlangıç kredi bakiyesi 0 olmalıdır
 
-  @pozitif @ac-2 @tc-02
-  Scenario: Daha önce hesabı silinmiş bir kullanıcının aynı e-posta ile yeniden kayıt olması
-    Given Daha önceden hesabı veritabanından silinmiş bir e-posta adresi bulunur
-    When Kullanıcı aynı e-posta adresi ile yeniden kayıt olur
-    And E-posta doğrulama adımı tamamlanır
-    And Kullanıcı sisteme başarılı bir şekilde giriş yapar
-    Then Kayıt işlemi herhangi bir hata veya uyarı almaksızın başarılı bir şekilde tamamlanmalıdır
-    And Hoş geldin kredisi kullanıcıya ikinci kez verilmemelidir
-    And Kullanıcının güncel kredi bakiyesi "0" Kredi olmalıdır
-
-  @edge_case @ac-3 @tc-03
-  Scenario: Silinmiş hesap için farklı büyük ve küçük harf kombinasyonlarıyla yeniden kayıt (Email Normalization)
-    Given Sistemde geçmişte silinmiş olan "ornek@mail.com" e-posta adresi kayıtlıdır
-    When Kullanıcı bu adresi büyük/küçük harf varyasyonu olan "Ornek@Mail.COM" formatıyla yeniden kayda girer
-    And Kayıt işlemi tamamlanır ve e-posta doğrulanarak giriş yapılır
-    Then Sistem e-postayı normalize ederek mükerrer kaydı ve kredi istismarını engellemelidir
-    And Kayıt işlemi başarılı olmalıdır
-    And Kullanıcının kredi bakiyesi "0" Kredi olarak başlatılmalıdır
-
-  @negatif @edge_case
-  Scenario Outline: Eksik veya geçersiz e-posta formatı ile yeniden kayıt denemesi
-    Given Daha önce silinmiş bir e-posta adresinin geçersiz bir formatı vardır
-    When Kullanıcı "<gecersiz_email>" formatta bir e-posta ile kayıt olmayı dener
-    Then Kayıt işlemi başarısız olmalıdır
-    And Sistem kullanıcıya uygun bir hata mesajı göstermelidir
-    And Hiçbir kredi tanımlaması yapılmamalıdır
+  @ScenarioOutline @EdgeCase @BR-03 @Negatif
+  Scenario Outline: Silinmiş bir hesabın farklı silme yöntemleri veya varyasyonları ile yeniden kaydı
+    Given "<eposta>" adresine sahip kullanıcı hesabı "<silme_tipi>" yöntemiyle silinmiştir
+    When Kullanıcı "<giris_epostasi>" adresini kullanarak tekrar kayıt olur
+    And E-posta doğrulama sürecini tamamlar ve sisteme giriş yapar
+    Then Kayıt işlemi başarılı olmalıdır
+    And Kullanıcının başlangıç kredi bakiyesi 0 olmalıdır
 
     Examples:
-      | gecersiz_email |
-      | eksk@mail      |
-      | hatali-format  |
-      | @domain.com    |
-      | test@          |
+      | eposta                   | silme_tipi           | giris_epostasi           |
+      | ornek@mail.com           | normal               | Ornek@Mail.COM           |
+      | soft_delete@mail.com     | soft-delete          | soft_delete@mail.com     |
+      | hard_delete@mail.com     | hard-delete          | hard_delete@mail.com     |
