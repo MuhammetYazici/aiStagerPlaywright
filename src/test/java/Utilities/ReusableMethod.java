@@ -1,9 +1,7 @@
 package Utilities;
 
-import Pages.pages;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
-import org.testng.Assert;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 

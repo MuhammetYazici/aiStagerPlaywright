@@ -5,7 +5,7 @@ import com.microsoft.playwright.Page;
 import com.microsoft.playwright.Locator;
 
 public class RegisterPage {
-    private Page page;
+    Page page;
 
     public RegisterPage() {
         this.page = PD.getPage();
@@ -27,19 +27,23 @@ public class RegisterPage {
         return page.locator("#terms-accept");
     }
 
-    public Locator getCreateAccountButton() {
+    public Locator getSubmitButton() {
         return page.locator("button:has-text('Hesap Oluştur')");
     }
 
-    public Locator getLoginLink() {
-        return page.locator("a:has-text('Giriş yap')");
+    public Locator getSuccessMessage() {
+        return page.locator(".success-message, text=Kayıt başarılı");
     }
 
     public Locator getCreditBalance() {
-        return page.locator(".credit-balance, [data-testid='credit-balance']");
+        return page.locator(".credit-balance, text=Kredi");
     }
 
     public Locator getErrorMessage() {
-        return page.locator(".error-message, [role='alert']");
+        return page.locator(".error-message, text=geçersiz");
+    }
+
+    public Locator getAcceptAllCookiesButton() {
+        return page.locator("button:has-text('Tümünü Kabul Et')");
     }
 }
