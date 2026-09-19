@@ -1,93 +1,71 @@
-Feature: AiStager.ai Ana Sayfa Temel Bileşenleri ve Etkileşimleri
-  Kullanıcı olarak ana sayfadaki slider, menüler, galeri, SSS ve bülten alanlarını 
-  test kurallarına uygun şekilde deneyimleyebilmeliyim.
+Feature: US_HP_001 - AiStager.ai Ana Sayfa Temel Fonksiyonları, Menü ve Galeri Yönetimi
 
-  Background:
-    Given Kullanıcı AiStager.ai ana sayfasını ("/tr") ziyaret eder
+  @regression @homepage @slider
+  Scenario: Öncesi ve Sonrası Slider ile Carousel bileşenlerinin sorunsuz çalışması
+    Given kullanıcı "https://aistager.ai/tr" adresindedir
+    When kullanıcı ana sayfadaki "Öncesi ve Sonrası" görsel alanına gelir
+    And kullanıcı ortadaki iki yönlü ok butonuna basılı tutarak sağa ve sola sürükler
+    And kullanıcı slider altındaki ok butonlarına ve yuvarlak carousel noktalarına tıklar
+    And kullanıcı "Odanızı Yükleyin" butonuna ve "TR" dil seçeneğine tıklar
+    Then görsel geçişleri pürüzsüz gerçekleşmeli ve "Önce/Sonra" alanları dinamik boyutlanmalıdır
+    And nokta ve ok seçimleri ilgili odayı ekrana getirmelidir
+    And dil değişimi arayüz metinlerini güncellemelidir
+    And "Odanızı Yükleyin" butonu kullanıcıyı ilgili oda yükleme arayüzüne yönlendirmelidir
 
-  @positive @slider
-  Scenario: BR-01 - Slider alanının iki yönlü ok ile dinamik olarak boyut değiştirmesi
-    When Kullanıcı görselin ortasındaki iki yönlü kaydırıcıyı sağa ve sola sürükler
-    Then "Önce" (boş oda) ve "Sonra" (mobilyalı oda) alanları pürüzsüz bir şekilde dinamik olarak boyut değiştirmelidir
+  @smoke @header @logged_in
+  Scenario: Giriş yapmış kullanıcı için Üst Menü navigasyonunun kontrolü
+    Given kullanıcı sisteme oturum açmıştır ve ana sayfadadır
+    When kullanıcı "Logo", "Ürünler", "Çözümler", "Kaynaklar" ve "Fiyatlandırma" menülerine tıklar veya hover yapar
+    And kullanıcı "Üretimlerim", "Dil Seçeneği", "Hızlı Erişim Paneli" ve "Profil İkonu"na tıklar
+    Then tüm menü öğeleri ilgili alt sayfaları, panelleri veya açılır menüleri hatasız olarak tetiklemelidir
 
-  @positive @slider
-  Scenario Outline: BR-02 - Navigasyon okları ve carousel noktaları ile oda görselleri değiştirme
-    When Kullanıcı slider alanındaki "<etkilesim_tipi>" tıklar
-    Then İlgili oda görselleri yüklenmelidir
-    And Aktif carousel noktası koyu renk ile işaretlenmelidir
+  @smoke @header @visitor
+  Scenario: Ziyaretçi (Giriş yapmamış) kullanıcı için Üst Menü ve gizli alanların kontrolü
+    Given kullanıcı sisteme oturum açmamıştır ve ana sayfadadır
+    When kullanıcı sağ üst alandaki "Giriş Yap" butonuna tıklar
+    And kullanıcı "Ücretsiz Dene" butonuna tıklar
+    And kullanıcı üst menüde "Üretimlerim" seçeneğini ve "Profil" ikonunu arar
+    Then "Giriş Yap" butonu kullanıcıyı login sayfasına yönlendirmelidir
+    And "Ücretsiz Dene" butonu kullanıcıyı register sayfasına yönlendirmelidir
+    And "Üretimlerim" seçeneği ve profil ikonu ziyaretçi görünümünde kesinlikle görünmemelidir
 
-    Examples:
-      | etkilesim_tipi |
-      | Sağ ok         |
-      | Sol ok         |
-      | Alt noktalar   |
+  @regression @gallery @positive
+  Scenario: Topluluk galerisinde filtreleme ve etkileşimler
+    Given kullanıcı ana sayfa galeri alanındadır
+    When kullanıcı spesifik oda tipi butonuna (örn. "Oturma Odası") tıklar
+    And kullanıcı listelenen bir tasarımın üzerindeki Kalp (Beğeni) ikonuna tıklar
+    And kullanıcı sayfanın altında bulunan "Daha Fazla Tasarım Yükle" butonuna tıklar
+    Then galeri sadece seçilen "Oturma Odası" tipindeki tasarımları içerecek şekilde filtrelenmelidir
+    And kalp ikonu aktifleşmeli ve beğeni sayacı bir artmalıdır
+    And "Daha Fazla Tasarım Yükle" butonuna basıldığında gelen yeni kartlar da mevcut filtre kuralına (Oturma Odası) uygun olmalıdır
 
-  @positive @navigation
-  Scenario: BR-03 - "Odanızı Yükleyin" aksiyonu ve "TR" dil seçeneği
-    When Kullanıcı "Odanızı Yükleyin" butonuna tıklar
-    Then Kullanıcı oda yükleme veya giriş arayüzüne yönlendirilmelidir
-    When Kullanıcı sayfa dilini "TR" olarak seçer
-    Then Tüm sayfa metinleri seçilen dile güncellenmelidir
+  @regression @faq @positive
+  Scenario: SSS (Sıkça Sorulan Sorular) akordeon menü mantığı ve yönlendirmeler
+    Given kullanıcı SSS alanındadır
+    When kullanıcı birinci SSS başlığına tıklar ve içeriğin açıldığını görür
+    And kullanıcı içerikte yer alan "Bize ulaşın" linkine tıklar
+    And kullanıcı birinci soru açık durumdayken ikinci bir SSS başlığına tıklar
+    Then "Bize ulaşın" linki kullanıcıyı destek sayfasına yönlendirmelidir
+    And ikinci soru açıldığında içeriği görünür olmalı ve önceki açılan ilk soru otomatik olarak kapanmalıdır
 
-  @positive @auth
-  Scenario: BR-04 - Oturum açmış kullanıcının ana sayfa ve menü erişimleri
-    Given Kullanıcı sisteme giriş yapmış durumdadır
-    When Kullanıcı Logoya tıklar
-    Then Kullanıcı ana sayfaya ("/tr") yönlendirilir
-    When Kullanıcı "Ürünler" ve "Çözümler/Kaynaklar/Fiyatlandırma" menülerine tıklar
-    Then İlgili alt sayfalar açılır
-    And "Üretimlerim", hızlı render kamera ayarları ve profil (mor yuvarlak "y" ikonu) menüleri görünür ve sorunsuz çalışır
+  @regression @newsletter @positive
+  Scenario: Bülten aboneliği formuna geçerli e-posta ile kayıt olma (Pozitif Durum)
+    Given kullanıcı Footer (Altbilgi) alanındadır
+    When kullanıcı bülten e-posta alanına geçerli bir e-posta adresi ("test@example.com") girer
+    And kullanıcı "Abone Ol" butonuna tıklar
+    Then sistem kullanıcıya "Başarıyla abone oldunuz" şeklinde yeşil ve olumlu bir uyarı mesajı göstermelidir
 
-  @positive @visitor
-  Scenario: BR-05 - Ziyaretçi kullanıcının menü ve buton kısıtlamaları
-    Given Kullanıcı sisteme giriş yapmamış (visitor) durumdadır
-    When Kullanıcı "Giriş Yap" butonuna tıklar
-    Then Kullanıcı login sayfasına yönlendirilir
-    When Kullanıcı mavi "Ücretsiz Dene" butonuna tıklar
-    Then Kullanıcı register sayfasına yönlendirilir
-    And Ziyaretçi için "Üretimlerim" menüsü ve profil ikonu ekranda görünmemelidir
-
-  @positive @gallery
-  Scenario: BR-06 - Galeri ilk açılış ve oda tipi filtreleme
-    Then Sayfa ilk açıldığında "Tüm Tipler" filtresi aktif (mor) olmalıdır
-    When Kullanıcı farklı bir oda tipi butonuna tıklar
-    Then İlgili buton aktifleşmeli ve galeri sadece o oda tipine ait tasarımları listelemelidir
-
-  @positive @gallery
-  Scenario: BR-07 - Topluluk galerisi kart etkileşimleri ve sayfalama
-    When Kullanıcı bir tasarımın üzerindeki kullanıcı adğına tıklar
-    Then İlgili topluluk üyesinin profil sayfasına gidilmelidir
-    When Kullanıcı Kalp (Beğeni) ikonuna tıklar
-    Then Kalp ikonu dolu hale gelmeli ve beğeni sayısı 1 artmalıdır
-    When Kullanıcı "Daha Fazla Tasarım Yükle" butonuna tıklar
-    Then Mevcut filtre korunarak listeye yeni tasarım kartları eklenmelidir
-
-  @positive @faq
-  Scenario: BR-08 - SSS akordeonunun açılma, kapanma ve tekli açılma kuralı
-    When Kullanıcı bir SSS sorusuna tıklar
-    Then İlgili cevap açılmalı ve soru oku yukarı bakmalıdır
-    When Kullanıcı aynı soruya tekrar tıklar
-    Then Cevap alanı kapanmalıdır
-    When Kullanıcı birinci soru açıkken ikinci bir soruya tıklar
-    Then Önceki soru otomatik olarak kapanmalı ve yeni tıklanan soru açılmalıdır
-    When Kullanıcı SSS alanındaki "Bize ulaşın" linkine tıklar
-    Then Kullanıcı doğrudan destek veya iletişim sayfasına yönlendirilmelidir
-
-  @positive @newsletter
-  Scenario: BR-09 - Geçerli e-posta ile başarılı bülten aboneliği
-    When Kullanıcı bülten alanına geçerli bir e-posta adresi girer ("test@example.com")
-    And Kullanıcı "Abone Ol" butonuna tıklar
-    Then Yeşil ve olumlu renkli "Başarıyla abone oldunuz" mesajı gösterilmelidir
-
-  @negative @newsletter @edge-case
-  Scenario Outline: BR-10 - Geçersiz veya boş e-posta ile bülten aboneliği hata yönetimi
-    When Kullanıcı bülten alanına "<gecersiz_eposta>" girer
-    And Kullanıcı "Abone Ol" butonuna tıklar
-    Then Sistem uyarıcı olarak "Geçerli bir e-posta adresi giriniz" hata mesajını göstermelidir
+  @regression @newsletter @negative @edge_case
+  Scenario Outline: Bülten aboneliği formunun geçersiz veya boş girdilerle test edilmesi (Negatif / Sınır Durum)
+    Given kullanıcı Footer (Altbilgi) alanındadır
+    When kullanıcı bülten e-posta alanına "<eposta_girdisi>" girer
+    And kullanıcı "Abone Ol" butonuna tıklar
+    Then sistem kullanıcıya "Geçerli bir e-posta adresi giriniz" şeklinde hata mesajı vermelidir
 
     Examples:
-      | gecersiz_eposta |
-      |                 |
-      | test@           |
-      | test.com        |
-      | test@com        |
+      | eposta_girdisi    |
+      |                   |
+      | test@domain       |
+      | test.domain.com   |
+      | @domain.com       |
+      | test@@domain.com  |
