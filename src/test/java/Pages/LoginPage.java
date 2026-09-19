@@ -1,42 +1,29 @@
 package Pages;
 
 import com.microsoft.playwright.Locator;
+import com.microsoft.playwright.Page;
+import Utilities.PD;
 
-public class LoginPage extends BasePage {
+public class LoginPage {
+    private Page page;
+
+    public LoginPage() {
+        this.page = PD.getPage();
+    }
 
     public Locator getEmailInput() {
-        return page.locator("input[name='email'], input[type='email']");
+        return page.locator("input[name='email']");
     }
 
     public Locator getPasswordInput() {
-        return page.locator("input[name='password'], input[type='password']");
+        return page.locator("input[name='password']");
     }
 
     public Locator getGirisYapButton() {
-        return page.locator("button:text('Giriş Yap'), button[type='submit']");
+        return page.getByRole(com.microsoft.playwright.options.AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Giriş Yap"));
     }
 
-    public Locator getZorunluAlanHataMesaji() {
-        return page.locator("text='Bu alan zorunludur'");
-    }
-
-    public Locator getEmailValidasyonHataMesaji() {
-        return page.locator("text='Geçerli bir e-posta'");
-    }
-
-    public Locator getGenelHataMesaji() {
-        return page.locator("text='E-posta veya şifre hatalı'");
-    }
-
-    public Locator getSifreGozIkonu() {
-        return page.locator(".toggle-password, .eye-icon");
-    }
-
-    public Locator getGoogleIleDevamEtButton() {
-        return page.locator("button:text('Google ile devam et')");
-    }
-
-    public Locator getAuthLink(String linkAdi) {
-        return page.locator("a:text('" + linkAdi + "')");
+    public Locator getHataMesaji() {
+        return page.locator(".error-message, text=E-posta veya şifre hatalı");
     }
 }

@@ -1,50 +1,41 @@
 package Pages;
 
 import com.microsoft.playwright.Locator;
+import com.microsoft.playwright.Page;
+import Utilities.PD;
 
-public class RegisterPage extends BasePage {
+public class RegisterPage {
+    private Page page;
+
+    public RegisterPage() {
+        this.page = PD.getPage();
+    }
 
     public Locator getEmailInput() {
-        return page.locator("input[name='email'], input[placeholder='you@example.com']");
+        return page.locator("input[name='email']");
     }
 
     public Locator getPasswordInput() {
-        return page.locator("input[name='password'], input[placeholder='Min. 8 karakter']");
+        return page.locator("input[name='password']");
     }
 
     public Locator getConfirmPasswordInput() {
-        return page.locator("input[name='confirmPassword'], input[placeholder='Şifrenizi tekrar girin']");
+        return page.locator("input[name='confirmPassword']");
     }
 
     public Locator getTermsCheckbox() {
-        return page.locator("#terms-accept, input[type='checkbox']");
+        return page.locator("#terms-accept");
     }
 
     public Locator getHesapOlusturButton() {
-        return page.locator("button:text('Hesap Oluştur')");
+        return page.getByRole(com.microsoft.playwright.options.AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Hesap Oluştur"));
     }
 
-    public Locator getSifreUzunlukHataMesaji() {
-        return page.locator("text='en az 8 karakter'");
+    public Locator getGoogleIleDevamEtButton() {
+        return page.getByRole(com.microsoft.playwright.options.AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Google ile devam et"));
     }
 
-    public Locator getSifrelerEslesmiyorHataMesaji() {
-        return page.locator("text='Şifreler eşleşmiyor'");
-    }
-
-    public Locator getEmailZatenKullanimdaMesaji() {
-        return page.locator("text='Bu e-posta adresi zaten kullanımda'");
-    }
-
-    public Locator getZorunluSozlesmeHataMesaji() {
-        return page.locator("text='sözleşme', text='zorunlu'");
-    }
-
-    public Locator getGoogleKayitOlButton() {
-        return page.locator("button:text('Google ile kayıt ol')");
-    }
-
-    public Locator getZorunluAlanUyariMesaji() {
-        return page.locator("text='Bu alan zorunludur'");
+    public Locator getHataMesaji(String errorText) {
+        return page.locator("text=" + errorText);
     }
 }
