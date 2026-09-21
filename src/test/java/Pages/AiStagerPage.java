@@ -3,6 +3,7 @@ package Pages;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import Utilities.PD;
+import com.microsoft.playwright.options.AriaRole;
 
 public class AiStagerPage {
     private Page page;
