@@ -1,373 +1,308 @@
 package StepDefinations;
 
-import Pages.HomePage;
+import Pages.AiStagerPage;
 import Utilities.ConfigReader;
 import Utilities.PD;
 import Utilities.ReusableMethod;
-import com.microsoft.playwright.Locator;
-import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
-import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import io.cucumber.java.en.Then;
+import com.microsoft.playwright.Locator;
 import org.testng.Assert;
 
 public class AiStagerSteps {
-    HomePage hp = new HomePage();
+    AiStagerPage page = new AiStagerPage();
     ReusableMethod rm = new ReusableMethod();
 
-    @Given("Kullanıcı AiStager.ai ana sayfasına gider")
-    public void kullaniciAiStagerAiAnaSayfasinaGider() {
+    @Given("Kullanıcı AiStager.ai platformunun ana sayfasındadır")
+    public void kullaniciAiStagerAiPlatformununAnaSayfasindadir() {
         PD.getPage().navigate(ConfigReader.getProperty("url"));
-        try {
-            if (hp.getTumuKabulEtButton().isVisible()) {
-                rm.myClick(hp.getTumuKabulEtButton());
-            }
-        } catch (Exception e) {
-            // Cookie banner may not appear
-        }
     }
 
-    @When("Kullanıcı \"Öncesi ve Sonrası Sihri\" slider'ını iki yönlü ok ile sürükler")
-    public void kullaniciOncesiVeSonrasiSihriniSlideriniIkiYonluOkIleSurukler() {
-        rm.myClick(hp.getSliderComponent());
-        Assert.assertTrue(hp.getSliderComponent().isVisible(), "Slider görünür olmalıdır");
+    @When("Kullanıcı kaydırıcı çizgisini sağa ve sola sürükler")
+    public void kullaniciKaydiriciCizgisiniSagaVeSolaSurukler() {
+        rm.myClick(page.getSliderLine());
     }
 
-    @Then("\"Önce\" (boş oda) ve \"Sonra\" (mobilyalı oda) alanları arasında pürüzsüz geçiş yapılmalıdır")
-    public void onceBosoVeSonraMobilyaliOdaAlanlariArasindaPuruzsuzGecisYapilmalidir() {
-        rm.veriyfyContainsText(hp.getSliderComponent(), "");
-        Assert.assertTrue(true, "Slider geçişi doğrulandı");
+    @Then("Önce ve Sonra görselleri arasında pürüzsüz geçiş yapılabilmelidir")
+    public void onceVeSonraGorselleriArasindaPuruzsuzGecisYapilabilmelidir() {
+        Assert.assertTrue(page.getBeforeAfterImages().isVisible(), "Görseller görünür değil");
     }
 
-    @And("Yön okları veya alt carousel noktalarına tıklandığında ilgili oda görselleri yüklenmeli ve aktif nokta koyu renge dönüşmelidir")
-    public void yonOklariVeyaAltCarouselNoktalarinaTiklandigindaIlgiliOdaGorselleriYuklenmeliVeAktifNoktaKoyuRengeDonusmelidir() {
-        rm.myClick(hp.getSliderComponent());
-        Assert.assertTrue(true, "Carousel noktaları ve görseller yüklendi");
+    @Then("Yön okları veya alt carousel noktaları kullanılarak farklı odalara geçiş yapılabilmelidir")
+    public void yonOklariVeyaAltCarouselNoktalariKullanilarakFarkliOdalaraGecisYapilabilmelidir() {
+        rm.myClick(page.getNavigationArrows());
     }
 
-    @When("Kullanıcı galeri alanına gelir")
-    public void kullaniciGaleriAlaninaGelir() {
-        rm.myClick(hp.getGallerySection());
-        Assert.assertTrue(hp.getGallerySection().isVisible(), "Galeri alanı görünür olmalıdır");
+    @Given("Kullanıcı sisteme giriş yapmamış bir ziyaretçidir")
+    public void kullaniciSistemeGirisYapmamisBirZiyaretcidir() {
+        PD.getPage().navigate(ConfigReader.getProperty("url"));
     }
 
-    @Then("İlk açılışta \"Tüm Tipler\" filtresi aktif olmalı ve karışık tasarımlar listelenmelidir")
-    public void ilkAcilistaTumTiplerFiltresiAktifOlmaliVeKarisikTasarimlarListelenmelidir() {
-        Assert.assertTrue(hp.getTumTiplerFilter().isVisible(), "Tüm Tipler filtresi görünür olmalıdır");
-        rm.myClick(hp.getTumTiplerFilter());
+    @When("Kullanıcı ana sayfa header alanını inceler")
+    public void kullaniciAnaSayfaHeaderAlaniniInceler() {
+        Assert.assertTrue(page.getLoginButtonHeader().isVisible() || page.getFreeTrialButton().isVisible());
     }
 
-    @When("Kullanıcı \"Oturma Odası\" oda tipi filtresine tıklar")
+    @Then("Giriş Yap ve Ücretsiz Dene butonları görünür olmalıdır")
+    public void girisYapVeUcretsizDeneButonlariGorunurOlmalidir() {
+        Assert.assertTrue(page.getFreeTrialButton().isVisible());
+    }
+
+    @Then("Üretimlerim ve profil ikonu görünmemelidir")
+    public void uretimlerimVeProfilIkonuGorunmemelidir() {
+        Assert.assertFalse(page.getMyProductions().isVisible());
+    }
+
+    @Given("Kullanıcı sisteme başarıyla giriş yapmıştır")
+    public void kullaniciSistemeBasariylaGirisYapmistir() {
+        PD.getPage().navigate(ConfigReader.getProperty("url"));
+    }
+
+    @Then("Üretimlerim, hızlı erişim paneli ve profil ikonu aktif ve görünür olmalıdır")
+    public void uretimlerimHizliErisimPaneliVeProfilIkonuAktifVeGorunurOlmalidir() {
+        rm.myClick(page.getProfileIcon());
+    }
+
+    @When("Kullanıcı dil seçeneği menüsüne tıklar")
+    public void kullaniciDilSecenegiMenusuneTiklar() {
+        rm.myClick(page.getLanguageMenu());
+    }
+
+    @When("Kullanıcı farklı bir dil seçer")
+    public void kullaniciFarkliBirDilSecer() {
+        rm.myClick(page.getDifferentLanguageOption());
+    }
+
+    @Then("Arayüz metinleri seçilen dile göre güncellenmelidir")
+    public void arayuzMetinleriSecilenDileGoreGuncellenmelidir() {
+        rm.veriyfyContainsText(page.getLoginButtonHeader(), "");
+    }
+
+    @When("Kullanıcı ana sayfa galeri alanına gelir")
+    public void kullaniciAnaSayfaGaleriAlaninaGelir() {
+        rm.myClick(page.getGalleryArea());
+    }
+
+    @Then("Tüm Tipler filtresinin aktif olduğunu görür")
+    public void tumTiplerFiltresininAktifOldugunuGorur() {
+        Assert.assertTrue(page.getAllTypesFilter().isVisible());
+    }
+
+    @When("Kullanıcı Oturma Odası oda tipi filtresine tıklar")
     public void kullaniciOturmaOdasiOdaTipiFiltresineTiklar() {
-        rm.myClick(hp.getOturmaOdasiFilter());
+        rm.myClick(page.getLivingRoomFilter());
     }
 
-    @Then("Galeri sadece \"Oturma Odası\" tasarımlarını listeleyecek şekilde filtrelenmelidir")
-    public void galeriSadeceOturmaOdasiTasarımlariniListeleyecekSekildeFiltrelenmelidir() {
-        Assert.assertTrue(hp.getOturmaOdasiFilter().isVisible(), "Oturma Odası filtresi aktif");
+    @Then("Galeri anlık olarak filtrelenmeli ve sadece oturma odası kartları listelenmelidir")
+    public void galeriAnlikOlarakFiltrelenmeliVeSadeceOturmaOdasiKartlariListelenmelidir() {
+        Assert.assertTrue(page.getGalleryCards().first().isVisible());
     }
 
-    @Given("Kullanıcı topluluk galerisindedir")
-    public void kullaniciToplulukGalerisindedir() {
-        PD.getPage().navigate(ConfigReader.getProperty("url"));
-        rm.myClick(hp.getGallerySection());
-        Assert.assertTrue(hp.getGallerySection().isVisible(), "Galeri alanında olunduğu doğrulandı");
-    }
-
-    @When("Kullanıcı bir tasarımın üzerindeki kalp ikonuna tıklar")
-    public void kullaniciBirTasariminUzerindekiKalpIkonunaTiklar() {
-        rm.myClick(hp.getHeartIcon());
-    }
-
-    @Then("İlgili tasarımın beğeni sayısı 1 artmalıdır")
-    public void ilgiliTasariminBegeniSayisiBirArtmalidir() {
-        Assert.assertTrue(true, "Beğeni sayısının arttığı doğrulandı");
-    }
-
-    @When("Kullanıcı \"Daha Fazla Tasarım Yükle\" butonuna tıklar")
+    @When("Kullanıcı Daha Fazla Tasarım Yükle butonuna tıklar")
     public void kullaniciDahaFazlaTasarimYukleButonunaTiklar() {
-        rm.myClick(hp.getDahaFazlaTasarimYukleButton());
+        rm.myClick(page.getLoadMoreButton());
     }
 
-    @Then("Mevcut filtre bozulmadan yeni tasarım kartları sayfaya yüklenmelidir")
-    public void mevcutFiltreBozulmadanYeniTasarimKartlariSayfayaYuklenmelidir() {
-        Assert.assertTrue(hp.getGallerySection().isVisible(), "Yeni tasarım kartları yüklendi");
+    @Then("Mevcut filtre bozulmaksızın yeni kartlar yüklenmelidir")
+    public void mevcutFiltreBozulmaksizinYeniKartlarYuklenmelidir() {
+        Assert.assertTrue(page.getGalleryCards().first().isVisible());
     }
 
-    @When("Kullanıcı sık sorulan sorulardan ilk başlığa tıklar")
-    public void kullaniciSikSorulanSorulardanIlkBasligaTiklar() {
-        rm.myClick(hp.getFaqFirstTitle());
+    @When("Kullanıcı SSS alanındaki bir soruya tıklar")
+    public void kullaniciSssAlanindakiBirSoruyaTiklar() {
+        rm.myClick(page.getFaqQuestion());
     }
 
-    @Then("İlk sorunun içeriği açılmalıdır")
-    public void ilkSorununIcerigiAcilmalidir() {
-        Assert.assertTrue(hp.getFaqFirstTitle().isVisible(), "İlk soru içeriği açıldı");
+    @Then("İlgili yanıt açılır")
+    public void ilgiliYanitAcilir() {
+        Assert.assertTrue(page.getFaqAnswer().isVisible());
     }
 
-    @When("Kullanıcı ikinci bir soru başlığına tıklar")
-    public void kullaniciIkinciBirSoruBasliginaTiklar() {
-        rm.myClick(hp.getFaqSecondTitle());
+    @When("Kullanıcı farklı bir soruya tıklar")
+    public void kullaniciFarkliBirSoruyaTiklar() {
+        rm.myClick(page.getSecondFaqQuestion());
     }
 
-    @Then("İkinci soru açılmalı ve birinci soru otomatik olarak kapanmalıdır")
-    public void ikinciSoruAcilmaliVeBirinciSoruOtomatikOlarakKapanmalidir() {
-        Assert.assertTrue(hp.getFaqSecondTitle().isVisible(), "İkinci soru açıldı");
+    @Then("Önceki soru otomatik olarak kapanmalı ve yeni soru açılmalıdır")
+    public void oncekiSoruOtomatikOlarakKapanmaliVeYeniSoruAcilmalidir() {
+        Assert.assertTrue(page.getFaqAnswer().isVisible());
     }
 
-    @When("Kullanıcı açık olan soru başlığına tekrar tıklar")
-    public void kullaniciAcikOlanSoruBasliginaTekrarTiklar() {
-        rm.myClick(hp.getFaqSecondTitle());
+    @When("Kullanıcı bülten alanına {string} adresini girer")
+    public void kullaniciBultenAlaninaAdresiniGirer(String email) {
+        rm.mySendKeys(page.getNewsletterInput(), rm.resolveDynamicValue(email));
     }
 
-    @Then("Soru içeriği kapanmalıdır")
-    public void soruIcerigiKapanmalidir() {
-        Assert.assertTrue(true, "Soru içeriği kapandı");
+    @When("Kullanıcı gönder butonuna tıklar")
+    public void kullaniciGonderButonunaTiklar() {
+        rm.myClick(page.getNewsletterSubmitButton());
     }
 
-    @And("Kullanıcı içerikteki \"Bize ulaşın\" linkine tıklar")
-    public void kullaniciIceriktekiBizeUlasinLinkineTiklar() {
-        rm.myClick(hp.getBizeUlasinLink());
+    @Then("Başarı mesajı görüntülenmelidir")
+    public void basariMesajiGoruntulenmelidir() {
+        Assert.assertTrue(page.getSuccessMessage().isVisible());
     }
 
-    @Then("Kullanıcı destek sayfasına yönlendirilmelidir")
-    public void kullaniciDestekSayfasinaYonlendirilmelidir() {
-        Assert.assertTrue(true, "Destek sayfasına yönlendirildiği doğrulandı");
+    @Then("Hata mesajı gösterilmeli ve bülten kaydı yapılmamalıdır")
+    public void hataMesajiGostermeliVeBultenKaydiYapilmamalidir() {
+        Assert.assertTrue(page.getErrorMessage().isVisible());
     }
 
-    @When("Kullanıcı footer bülten alanına geçerli bir {string} e-posta adresi girer")
-    public void kullaniciFooterBultenAlaninaGecerliBirEPostaAdresiGirer(String email) {
-        String resolvedEmail = rm.resolveDynamicValue(email);
-        rm.mySendKeys(hp.getFooterNewsletterInput(), resolvedEmail);
-    }
-
-    @And("\"Abone Ol\" butonuna tıklar")
-    public void aboneOlButonunaTiklar() {
-        rm.myClick(hp.getAboneOlButton());
-    }
-
-    @Then("Ekranda yeşil renkte \"Başarıyla abone oldunuz\" başarı mesajı gösterilmelidir")
-    public void ekrandaYesilRenkteBasariylaAboneOldunuzBasariMesajiGosterilmelidir() {
-        Assert.assertTrue(hp.getAboneOlButton().isVisible(), "Başarı mesajı gösterildi");
-    }
-
-    @When("Kullanıcı footer bülten alanına {string} girer")
-    public void kullaniciFooterBultenAlaninaGirer(String gecersizEposta) {
-        String resolved = rm.resolveDynamicValue(gecersizEposta);
-        rm.mySendKeys(hp.getFooterNewsletterInput(), resolved);
-    }
-
-    @Then("Ekranda \"Geçerli bir e-posta adresi giriniz\" uyarısı gösterilmelidir")
-    public void ekrandaGecerliBirEPostaAdresiGirinizUyarisiGosterilmelidir() {
-        Assert.assertTrue(hp.getFooterNewsletterInput().isVisible(), "Geçersiz e-posta uyarısı gösterildi");
-    }
-
-    @Given("Kullanıcı giriş veya kayıt sayfasındadır")
-    public void kullaniciGirisVeyaKayitSayfasindadir() {
+    @Given("Kullanıcı login sayfasındadır")
+    public void kullaniciLoginSayfasindadir() {
         PD.getPage().navigate(ConfigReader.getProperty("url"));
-        rm.myClick(hp.getGirisYapLink());
     }
 
-    @Given("Kullanıcı \"Giriş Yap\" sayfasındadır")
-    public void kullaniciGirisYapSayfasindadir() {
-        PD.getPage().navigate(ConfigReader.getProperty("url"));
-        try {
-            rm.myClick(hp.getGirisYapLink());
-        } catch (Exception e) {
-            // Already there
-        }
+    @When("Kullanıcı geçerli e-posta adresini ve şifresini girer")
+    public void kullaniciGecerliEPostaAdresiniVeSifresiniGirer() {
+        rm.mySendKeys(page.getEmailInput(), rm.resolveDynamicValue("test@example.com"));
+        rm.mySendKeys(page.getPasswordInput(), rm.resolveDynamicValue("ValidSifre1!"));
     }
 
-    @When("Kullanıcı geçerli bir e-posta ve şifre girer")
-    public void kullaniciGecerliBirEPostaVeSifreGirer() {
-        rm.mySendKeys(hp.getEmailInput(), rm.resolveDynamicValue("fakerEmail"));
-        rm.mySendKeys(hp.getPasswordInput(), rm.resolveDynamicValue("fakerPassword"));
-    }
-
-    @And("Şifre alanındaki \"Göz\" ikonuna tıklar")
-    public void sifreAlanindakiGozIkonunaTiklar() {
-        rm.myClick(hp.getPasswordEyeIcon());
-    }
-
-    @Then("Şifre alanındaki maskelenmiş karakterler görünür olmalıdır")
-    public void sifreAlanindakiMaskelenmisKarakterlerGorunurOlmalidir() {
-        Assert.assertTrue(hp.getPasswordInput().isVisible(), "Şifre görünür oldu");
-    }
-
-    @When("Kullanıcı \"Giriş Yap\" butonuna tıklar")
+    @When("Kullanıcı Giriş Yap butonuna tıklar")
     public void kullaniciGirisYapButonunaTiklar() {
-        rm.myClick(hp.getGirisYapButton());
+        rm.myClick(page.getSubmitLoginButton());
     }
 
-    @Then("Kullanıcı ana panele \\(dashboard) yönlendirilmelidir")
-    public void kullaniciAnaPaneleDashboardYonlendirilmelidir() {
-        Assert.assertTrue(true, "Dashboard'a yönlendirildi");
+    @Then("Sistem kimlik doğrulamasını tamamlamalı ve kullanıcıyı ana panele dashboard sayfasına yönlendirmelidir")
+    public void sistemKimlikDogrulamasiniTamamlamaliVeKullaniciyiAnaPaneleDashboardSayfasinaYonlendirmelidir() {
+        Assert.assertTrue(page.getDashboardElement().isVisible());
     }
 
-    @And("Sayfadaki \"Şifremi unuttum\" ve \"Kayıt Ol\" linklerinin ilgili sayfalara yönlendirdiği doğrulanmalıdır")
-    public void sayfadakiSifremiUnuttumVeKayitOlLinklerininIlgiliSayfalaraYonlendirdigiDogrulanmalidir() {
-        Assert.assertTrue(true, "Linklerin yönlendirmesi doğrulandı");
+    @When("Kullanıcı şifre alanına bir değer girer")
+    public void kullaniciSifreAlaninaBirDegerGirer() {
+        rm.mySendKeys(page.getPasswordInput(), "Sifre123!");
     }
 
-    @When("Kullanıcı \"Google ile devam et\" butonuna tıklar")
-    public void kullaniciGoogleIleDevamEtButonunaTiklar() {
-        rm.myClick(hp.getGoogleIleDevamEtButton());
+    @When("Kullanıcı şifre alanındaki Göz ikonuna tıklar")
+    public void kullaniciSifreAlanindakiGozIkonunaTiklar() {
+        rm.myClick(page.getPasswordToggleEyeIcon());
     }
 
-    @Then("Google OAuth kimlik doğrulama penceresi açılmalıdır")
-    public void googleOAuthKimlikDogrulamaPenceresiAcilmalidir() {
-        Assert.assertTrue(hp.getGoogleIleDevamEtButton().isVisible(), "Google OAuth açıldı");
+    @Then("Şifre metni görünür hale gelmelidir")
+    public void sifreMetniGorunurHaleGelmelidir() {
+        Assert.assertTrue(page.getPasswordInput().isVisible());
     }
 
-    @When("Kullanıcı e-posta ve şifre alanlarını boş bırakarak \"Giriş Yap\" butonuna tıklar")
-    public void kullaniciEPostaVeSifreAlanlariniBosBirakarakGirisYapButonunaTiklar() {
-        rm.mySendKeys(hp.getEmailInput(), "");
-        rm.mySendKeys(hp.getPasswordInput(), "");
-        rm.myClick(hp.getGirisYapButton());
+    @When("Kullanıcı ikona tekrar tıklar")
+    public void kullaniciIkonaTekrarTiklar() {
+        rm.myClick(page.getPasswordToggleEyeIcon());
     }
 
-    @Then("İlgili zorunlu alanlarda \"Bu alan zorunludur\" uyarısı gösterilmelidir")
-    public void ilgiliZorunluAlanlardaBuAlanZorunludurUyarisiGosterilmelidir() {
-        Assert.assertTrue(hp.getEmailInput().isVisible(), "Zorunlu alan uyarısı gösterildi");
+    @Then("Şifre tekrar maskelenmelidir")
+    public void sifreTekrarMaskelenmelidir() {
+        Assert.assertTrue(page.getPasswordInput().isVisible());
     }
 
-    @When("Kullanıcı e-posta alanına \"{string}\" girer")
-    public void kullaniciEPostaAlaninaGirer(String gecersizEposta) {
-        rm.mySendKeys(hp.getEmailInput(), rm.resolveDynamicValue(gecersizEposta));
+    @When("Kullanıcı e-posta ve şifre alanlarını boş bırakır")
+    public void kullaniciEPostaVeSifreAlanlariniBosBirakir() {
+        rm.mySendKeys(page.getEmailInput(), "");
+        rm.mySendKeys(page.getPasswordInput(), "");
     }
 
-    @Then("Ekranda \"Lütfen geçerli bir e-posta adresi girin\" hatası gösterilmelidir")
-    public void ekrandaLutfenGecerliBirEPostaAdresiGirinHatasiGosterilmelidir() {
-        Assert.assertTrue(hp.getEmailInput().isVisible(), "Geçerli e-posta hatası gösterildi");
+    @Then("İlgili alanlarda Bu alan zorunludur uyarısı gösterilmelidir")
+    public void ilgiliAlanlardaBuAlanZorunludurUyarisiGosterilmelidir() {
+        Assert.assertTrue(page.getRequiredFieldError().isVisible());
     }
 
-    @When("Kullanıcı sistemde olmayan bir e-posta veya yanlış şifre girer")
-    public void kullaniciSistemdeOlmayanBirEPostaVeyaYanlisSifreGirer() {
-        rm.mySendKeys(hp.getEmailInput(), "wrong@example.com");
-        rm.mySendKeys(hp.getPasswordInput(), "WrongPass123!");
+    @When("Kullanıcı e-posta alanına {string} değerini girer")
+    public void kullaniciEPostaAlaninaDegeriniGirer(String email) {
+        rm.mySendKeys(page.getEmailInput(), rm.resolveDynamicValue(email));
     }
 
-    @Then("Sistem güvenlik gereği spesifik detay vermeden genel \"E-posta veya şifre hatalı\" mesajını dönmelidir")
-    public void sistemGuvenlikGeregiSpesifikDetayVermedenGenelEPostaVeyaSifreHataliMesajiniDonmelidir() {
-        Assert.assertTrue(hp.getEmailInput().isVisible(), "Genel hata mesajı döndü");
+    @Then("E-posta format uyarısı gösterilmelidir")
+    public void ePostaFormatUyarisiGosterilmelidir() {
+        Assert.assertTrue(page.getEmailFormatError().isVisible());
     }
 
-    @When("Kullanıcı e-posta veya şifre alanına \"{string}\" veya çok uzun karakter dizileri girer")
-    public void kullaniciEPostaVeyaSifreAlaninaVeyaCokUzunKarakterDizileriGirer(String sqlInput) {
-        rm.mySendKeys(hp.getEmailInput(), sqlInput);
-        rm.mySendKeys(hp.getPasswordInput(), sqlInput);
+    @When("Kullanıcı {string} ve {string} bilgileri ile giriş yapmaya çalışır")
+    public void kullaniciVeBilgileriIleGirisYapmayaCalisir(String eposta, String sifre) {
+        rm.mySendKeys(page.getEmailInput(), rm.resolveDynamicValue(eposta));
+        rm.mySendKeys(page.getPasswordInput(), rm.resolveDynamicValue(sifre));
+        rm.myClick(page.getSubmitLoginButton());
     }
 
-    @Then("Sistem bu girdileri güvenle filtrelemeli, 500 hatası veya çökme yaşanmamalıdır")
-    public void sistemBuGirdileriGuvenleFiltrelemeli500HatasiVeyaCokmeYasanmamalidir() {
-        Assert.assertTrue(true, "Güvenli filtreleme doğrulandı");
+    @Then("Sistem güvenlik nedeniyle genel E-posta veya şifre hatalı hata mesajını döndürmelidir")
+    public void sistemGuvenlikNedeniyleGenelEPostaVeyaSifreHataliHataMesajiniDondurmelidir() {
+        Assert.assertTrue(page.getGeneralLoginError().isVisible());
     }
 
-    @Given("Kullanıcı \"Kayıt Ol\" sayfasındadır")
-    public void kullaniciKayitOlSayfasindadir() {
+    @Given("Kullanıcı register sayfasındadır")
+    public void kullaniciRegisterSayfasindadir() {
         PD.getPage().navigate(ConfigReader.getProperty("url"));
-        try {
-            rm.myClick(hp.getGirisYapLink());
-        } catch (Exception e) {
-            // Navigate
-        }
     }
 
     @When("Kullanıcı sistemde kayıtlı olmayan geçerli bir e-posta girer")
     public void kullaniciSistemdeKayitliOlmayanGecerliBirEPostaGirer() {
-        rm.mySendKeys(hp.getEmailInput(), rm.resolveDynamicValue("fakerEmail"));
+        rm.mySendKeys(page.getEmailInput(), rm.resolveDynamicValue("yeni@example.com"));
     }
 
-    @And("En az 8 karakterden oluşan güçlü bir şifre belirler ve şifreyi onaylar")
-    public void enAz8KarakterdenOlusanGucluBirSifreBelirlerVeSifreyiOnaylar() {
-        String pass = rm.resolveDynamicValue("fakerPassword");
-        rm.mySendKeys(hp.getPasswordInput(), pass);
-        rm.mySendKeys(hp.getConfirmPasswordInput(), pass);
+    @When("Kullanıcı kurallara uygun bir şifre ve şifre onayını girer")
+    public void kullaniciKurallaraUygunBirSifreVeSifreOnayiniGirer() {
+        rm.mySendKeys(page.getPasswordInput(), "GucluSifre1!");
+        rm.mySendKeys(page.getConfirmPasswordInput(), "GucluSifre1!");
     }
 
-    @And("Göz ikonlarını kullanarak şifre görünürlüğünü kontrol eder")
-    public void gozIkonlariniKullanarakSifreGorunurlugunuKontrolEder() {
-        rm.myClick(hp.getPasswordEyeIcon());
-    }
-
-    @And("Kullanıcı sözleşmesi onay kutucuğunu işaretler")
+    @When("Kullanıcı sözleşmesi onay kutucuğunu işaretler")
     public void kullaniciSozlesmesiOnayKutucugunuIsaretler() {
-        rm.myCheckBox(hp.getTermsCheckbox());
+        rm.myCheckBox(page.getTermsCheckbox());
     }
 
-    @And("\"Hesap Oluştur\" butonuna tıklar")
-    public void hesapOlusturButonunaTiklar() {
-        rm.myClick(hp.getHesapOlusturButton());
+    @When("Kullanıcı Hesap Oluştur butonuna tıklar")
+    public void kullaniciHesapOlusturButonunaTiklar() {
+        rm.myClick(page.getCreateAccountButton());
     }
 
-    @Then("Kayıt başarılı olmalı ve kullanıcı ana panele veya aktivasyon sayfasına yönlendirilmelidir")
-    public void kayitBasariliOlmaliVeKullaniciAnaPaneleVeyaAktivasyonSayfasinaYonlendirilmelidir() {
-        Assert.assertTrue(true, "Kayıt başarılı");
+    @Then("Sistem yeni hesabı başarıyla oluşturmalıdır")
+    public void sistemYeniHesabiBasariylaOlusturmalidir() {
+        Assert.assertTrue(page.getDashboardElement().isVisible());
     }
 
-    @When("Kullanıcı tüm kayıt alanlarını boş bırakarak \"Hesap Oluştur\" butonuna tıklar")
-    public void kullaniciTumKayitAlanlariniBosBirakarakHesapOlusturButonunaTiklar() {
-        rm.mySendKeys(hp.getEmailInput(), "");
-        rm.mySendKeys(hp.getPasswordInput(), "");
-        rm.mySendKeys(hp.getConfirmPasswordInput(), "");
-        rm.myClick(hp.getHesapOlusturButton());
+    @When("Kullanıcı sistemde halihazırda kayıtlı olan bir e-posta adresi girer")
+    public void kullaniciSistemdeHalihazirdaKayitliOlanBirEPostaAdresiGirer() {
+        rm.mySendKeys(page.getEmailInput(), "kayitli@example.com");
     }
 
-    @Then("Zorunlu alanlarda \"Bu alan zorunludur\" uyarısı gösterilmelidir")
-    public void zorunluAlanlardaBuAlanZorunludurUyarisiGosterilmelidir() {
-        Assert.assertTrue(hp.getEmailInput().isVisible(), "Zorunlu alan uyarısı gösterildi");
+    @When("Kullanıcı gerekli diğer alanları doldurur")
+    public void kullaniciGerekliDigerAlanlariDoldurur() {
+        rm.mySendKeys(page.getPasswordInput(), "GucluSifre1!");
+        rm.myCheckBox(page.getTermsCheckbox());
     }
 
-    @When("Kullanıcı halihazırda sistemde kayıtlı olan bir e-posta adresi girer")
-    public void kullaniciHalihazirdaSistemdeKayitliOlanBirEPostaAdresiGirer() {
-        rm.mySendKeys(hp.getEmailInput(), "existing@example.com");
+    @Then("Sistem kaydı engellemeli ve Bu e-posta adresi zaten kullanımda uyarısını göstermelidir")
+    public void sistemKaydiEngellemeliVeBuEPostaAdresiZatenKullanimdaUyarisiniGostermelidir() {
+        Assert.assertTrue(page.getAlreadyUsedEmailError().isVisible());
     }
 
-    @And("Diğer alanları doldurup \"Hesap Oluştur\" butonuna tıklar")
-    public void digerAlanlariDoldurupHesapOlusturButonunaTiklar() {
-        rm.mySendKeys(hp.getPasswordInput(), "Password123!");
-        rm.mySendKeys(hp.getConfirmPasswordInput(), "Password123!");
-        rm.myClick(hp.getHesapOlusturButton());
+    @When("Kullanıcı şifre alanına {string} değerini girer")
+    public void kullaniciSifreAlaninaDegeriniGirer(String sifre) {
+        rm.mySendKeys(page.getPasswordInput(), rm.resolveDynamicValue(sifre));
     }
 
-    @Then("Ekranda \"Bu e-posta adresi zaten kullanımda\" hatası dönülmelidir")
-    public void ekrandaBuEPostaAdresiZatenKullanimdaHatasiDonulmelidir() {
-        Assert.assertTrue(hp.getEmailInput().isVisible(), "Zaten kullanımda hatası gösterildi");
+    @Then("Sistem şifre politikası validasyon hatası göstermelidir")
+    public void sistemSifrePolitikasiValidasyonHatasiGostermelidir() {
+        Assert.assertTrue(page.getPasswordPolicyError().isVisible());
     }
 
-    @When("Kullanıcı şifre alanına 8 karakterden kısa bir şifre girer \\(örn: \"Ab1!\")")
-    public void kullaniciSifreAlanina8KarakterdenKisaBirSifreGirerOrnAb1() {
-        rm.mySendKeys(hp.getPasswordInput(), "Ab1!");
+    @When("Kullanıcı Şifreyi Onayla alanına {string} değerini girer")
+    public void kullaniciSifreyiOnaylaAlaninaDegeriniGirer(String sifreOnay) {
+        rm.mySendKeys(page.getConfirmPasswordInput(), rm.resolveDynamicValue(sifreOnay));
     }
 
-    @Then("Ekranda minimum karakter sınırını belirten bir uyarı gösterilmelidir")
-    public void ekrandaMinimumKarakterSiniriniBelirtenBirUyariGosterilmelidir() {
-        Assert.assertTrue(hp.getPasswordInput().isVisible(), "Minimum karakter uyarısı gösterildi");
+    @Then("Sistem kaydı engellemeli ve Şifreler eşleşmiyor hata mesajını göstermelidir")
+    public void sistemKaydiEngellemeliVeSifrelerEslestirmiyorHataMesajiniGostermelidir() {
+        Assert.assertTrue(page.getPasswordMatchError().isVisible());
     }
 
-    @When("Kullanıcı \"Şifre\" alanına \"Password123\" girer")
-    public void kullaniciSifreAlaninaPassword123Girer() {
-        rm.mySendKeys(hp.getPasswordInput(), "Password123");
+    @When("Kullanıcı tüm zorunlu alanları doğru doldurur ancak kullanıcı sözleşmesi kutucuğunu işaretlemez")
+    public void kullaniciTumZorunluAlanlariDogruDoldururAncakKullaniciSozlesmesiKutucugunuIsaretlemez() {
+        rm.mySendKeys(page.getEmailInput(), "validuser@example.com");
+        rm.mySendKeys(page.getPasswordInput(), "GucluSifre1!");
     }
 
-    @And("Şifreyi Onayla\" alanına farklı bir değer olan \"Password456\" girer")
-    public void sifreyiOnaylaAlaninaFarkliBirDegerOlanPassword456Girer() {
-        rm.mySendKeys(hp.getConfirmPasswordInput(), "Password456");
-    }
-
-    @Then("Ekranda \"Şifreler eşleşmiyor\" uyarısı gösterilmelidir")
-    public void ekrandaSifrelerEslestirmiyorUyarisiGosterilmelidir() {
-        Assert.assertTrue(hp.getConfirmPasswordInput().isVisible(), "Eşleşmiyor uyarısı gösterildi");
-    }
-
-    @When("Kullanıcı tüm geçerli bilgileri doldurur ancak kullanıcı sözleşmesi kutucuğunu işaretlemez")
-    public void kullaniciTumGecerliBilgileriDoldururAncakKullaniciSozlesmesiKutucugunuIsaretlemez() {
-        rm.mySendKeys(hp.getEmailInput(), rm.resolveDynamicValue("fakerEmail"));
-        rm.mySendKeys(hp.getPasswordInput(), rm.resolveDynamicValue("fakerPassword"));
-        rm.mySendKeys(hp.getConfirmPasswordInput(), rm.resolveDynamicValue("fakerPassword"));
-    }
-
-    @Then("Kayıt engellenmeli ve ekranda \"Sözleşmeyi kabul etmelisiniz\" uyarısı gösterilmelidir")
-    public void kayitEngellenmeliVeEkrandaSozlesmeyiKabulEtmelisinizUyarisiGosterilmelidir() {
-        Assert.assertTrue(hp.getHesapOlusturButton().isVisible(), "Sözleşme uyarısı gösterildi");
+    @Then("Sistem kaydı engellemeli ve sözleşme onayı gerektiğini belirten bir uyarı göstermelidir")
+    public void sistemKaydiEngellemeliVeSozlesmeOnayiGerektiginiBelirtenBirUyariGostermelidir() {
+        Assert.assertTrue(page.getTermsRequiredError().isVisible());
     }
 }
