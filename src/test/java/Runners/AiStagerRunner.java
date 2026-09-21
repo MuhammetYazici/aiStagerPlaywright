@@ -6,8 +6,8 @@ import io.cucumber.testng.CucumberOptions;
 @CucumberOptions(
     features = "src/test/java/FeatureFiles",
     glue = {"StepDefinations", "Hooks"},
-    tags = "@positive or @negative",
-    plugin = {"pretty", "html:target/cucumber-report.html"}
+    plugin = {"pretty", "html:target/cucumber-reports.html"},
+    tags = "@AiStager"
 )
 public class AiStagerRunner extends AbstractTestNGCucumberTests {
 }
