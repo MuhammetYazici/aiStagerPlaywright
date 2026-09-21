@@ -6,7 +6,7 @@ import io.cucumber.testng.CucumberOptions;
 @CucumberOptions(
     features = "src/test/java/FeatureFiles",
     glue = {"StepDefinations", "Hooks"},
-    tags = "@HP or @Login or @Register",
+    tags = "@smoke or @positive or @negative or @security or @edge-case",
     plugin = {
         "pretty",
         "html:target/cucumber-reports.html",
