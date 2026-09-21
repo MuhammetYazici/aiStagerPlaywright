@@ -2,7 +2,6 @@ package Pages;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
-import com.microsoft.playwright.options.AriaRole;
 import Utilities.PD;
 
 public class AiStagerPage {
@@ -178,101 +177,5 @@ public class AiStagerPage {
 
     public Locator getAktivasyonEkranıDogrulama() {
         return page.locator("text=aktivasyon, text=Doğrulama, text=Welcome");
-    }
-
-    public Locator getGirisYapButton() {
-        return page.getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName("Giriş yap"));
-    }
-
-    public Locator getTumunuKabulEtButton() {
-        return page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Tümünü Kabul Et"));
-    }
-
-    public Locator getVirtualStagingHeader() {
-        return page.locator("h1");
-    }
-
-    public Locator getFileUploadInput() {
-        return page.locator("input[type='file']");
-    }
-
-    public Locator getRemoveFurnitureToggle() {
-        return page.locator("input[type='checkbox']").first();
-    }
-
-    public Locator getRoomTypeDropdown() {
-        return page.locator("select, [role='combobox']").first();
-    }
-
-    public Locator getDesignStyleDropdown() {
-        return page.locator("select, [role='combobox']").nth(1);
-    }
-
-    public Locator getPublicPrivacyRadio() {
-        return page.locator("input[type='radio']").first();
-    }
-
-    public Locator getGenerateButton() {
-        return page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Dekorasyon Oluştur"));
-    }
-
-    public Locator getResultImage() {
-        return page.locator("img").last();
-    }
-
-    public Locator getErrorMessage() {
-        return page.locator(".error-message, [role='alert']");
-    }
-
-    public Locator getAiEditTab() {
-        return page.getByText("AI Edit");
-    }
-
-    public Locator getPromptInput() {
-        return page.locator("textarea, input[placeholder*='Describe']");
-    }
-
-    public Locator getEditPhotoButton() {
-        return page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Edit Photo"));
-    }
-
-    public Locator getProductsMenu() {
-        return page.getByText("Ürünler");
-    }
-
-    public Locator getVirtualTourSubMenu() {
-        return page.getByText("Yapay Zeka Sanal Tur");
-    }
-
-    public Locator getApiSubMenu() {
-        return page.getByText("Sanal Dekorasyon API");
-    }
-
-    public Locator getEarlyAccessButton() {
-        return page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Erken Erişim İsteyin"));
-    }
-
-    public Locator getEmailNewsletterInput() {
-        return page.locator("input[type='email']").first();
-    }
-
-    public Locator getContactButton() {
-        return page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("İletişime Geçin"));
-    }
-
-    public Locator getNameInput() {
-        return page.locator("input[name='name'], input[placeholder*='Ad']");
-    }
-
-    public Locator getMessageInput() {
-        return page.locator("textarea");
-    }
-
-    public Locator getSendFormButton() {
-        return page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Gönder"));
-    }
-
-    public Locator getPricingButton() {
-        return page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Fiyatlandırmayı Görüntüle"));
     }
 }
