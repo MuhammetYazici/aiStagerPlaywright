@@ -2,6 +2,7 @@ package Pages;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
+import com.microsoft.playwright.options.AriaRole;
 import Utilities.PD;
 
 public class LoginPage {
@@ -37,5 +38,17 @@ public class LoginPage {
 
     public Locator getGecisLinki(String linkMetni) {
         return page.locator("a:has-text('" + linkMetni + "')").first();
+    }
+
+    public Locator getCookiesKabulEtButton() {
+        return page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Tümünü Kabul Et"));
+    }
+
+    public Locator getGirisYapLink() {
+        return page.getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName("Giriş yap"));
+    }
+
+    public Locator getSubmitButton() {
+        return page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Hesap Oluştur"));
     }
 }
