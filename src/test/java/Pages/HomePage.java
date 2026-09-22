@@ -114,4 +114,20 @@ public class HomePage {
     public Locator getFooterLegalLinks() {
         return page.locator("footer a");
     }
+
+    public Locator getUrunlerMenusu() {
+        return page.locator("text=Ürünler");
+    }
+
+    public Locator getVayapzAekaSanalTurSecenegi() {
+        return page.locator("text=Yapay Zeka Sanal Tur");
+    }
+
+    public Locator getSanalDekorasyonApiSecenegi() {
+        return page.locator("text=Sanal Dekorasyon API");
+    }
+
+    public Locator getAltUrunlerListesi() {
+        return page.locator(".dropdown-menu, .sub-menu");
+    }
 }
