@@ -2,7 +2,6 @@ package Pages;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
-import com.microsoft.playwright.options.AriaRole;
 import Utilities.PD;
 
 public class LoginPage {
@@ -12,43 +11,35 @@ public class LoginPage {
         this.page = PD.getPage();
     }
 
-    public Locator getEmailInput() {
-        return page.locator("input[name='email'], input[placeholder='you@example.com']");
+    public Locator getEpostaInput() {
+        return page.locator("input[name='email'], input[placeholder='you@example.com']").first();
     }
 
-    public Locator getPasswordInput() {
-        return page.locator("input[name='password'], input[placeholder='Min. 8 karakter']");
+    public Locator getSifreInput() {
+        return page.locator("input[name='password'], input[placeholder='Min. 8 karakter']").first();
     }
 
-    public Locator getGozIkonu() {
-        return page.locator(".eye-icon, button[aria-label*='password'], .show-password").first();
+    public Locator getGirisYapSubmitButonu() {
+        return page.locator("button[type='submit'], button:has-text('Giriş Yap')").first();
     }
 
-    public Locator getGirisYapButonu() {
-        return page.locator("button:has-text('Giriş yap'), button:has-text('Giriş Yap')").first();
+    public Locator getPanelYonlendirmeKontrolu() {
+        return page.locator(".dashboard, text=Panel").first();
     }
 
-    public Locator getHataMesaji(String hata) {
-        return page.locator("text=" + hata).first();
+    public Locator getBosAlanUyarisi() {
+        return page.locator("text=Bu alan zorunludur, .error").first();
     }
 
-    public Locator getGoogleIleDevamEtButonu() {
-        return page.locator("button:has-text('Google ile devam et')").first();
+    public Locator getGecersizEpostaUyarisi() {
+        return page.locator("text=Lütfen geçerli bir e-posta adresi girin, .error").first();
     }
 
-    public Locator getGecisLinki(String linkMetni) {
-        return page.locator("a:has-text('" + linkMetni + "')").first();
+    public Locator getGenelHataMesaji() {
+        return page.locator("text=E-posta veya şifre hatalı, .alert-danger").first();
     }
 
-    public Locator getCookiesKabulEtButton() {
-        return page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Tümünü Kabul Et"));
-    }
-
-    public Locator getGirisYapLink() {
-        return page.getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName("Giriş yap"));
-    }
-
-    public Locator getSubmitButton() {
-        return page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Hesap Oluştur"));
+    public Locator getSifreGozIkonu() {
+        return page.locator(".password-toggle, .eye-icon, button:has(svg)").first();
     }
 }
