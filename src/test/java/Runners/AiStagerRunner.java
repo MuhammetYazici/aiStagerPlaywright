@@ -4,14 +4,10 @@ import io.cucumber.testng.AbstractTestNGCucumberTests;
 import io.cucumber.testng.CucumberOptions;
 
 @CucumberOptions(
-    features = "src/test/java/FeatureFiles",
-    glue = {"StepDefinations", "Hooks"},
-    tags = "@AiStager",
-    plugin = {
-        "pretty",
-        "html:target/cucumber-reports.html",
-        "json:target/cucumber.json"
-    }
+        features = "src/test/java/FeatureFiles",
+        glue = {"StepDefinations", "Hooks"},
+        plugin = {"pretty", "html:target/cucumber-reports.html"},
+        tags = "@positive or @negative"
 )
 public class AiStagerRunner extends AbstractTestNGCucumberTests {
 }

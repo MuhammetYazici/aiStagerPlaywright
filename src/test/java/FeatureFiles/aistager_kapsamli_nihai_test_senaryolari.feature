@@ -1,139 +1,212 @@
-# language: tr
-@US-AISTAGER-001 @AiStager
-Feature: AiStager.ai Ana Sayfa, Kimlik Doğrulama ve Navigasyon Modülleri
-  Bir platform ziyaretçisi veya kayıtlı kullanıcısı olarak, ana sayfadaki etkileşimli araçları kullanmak,
-  üst menü üzerinden sayfalara erişmek ve güvenli bir şekilde üye olmak veya giriş yapmak istiyorum.
+Feature: AiStager.ai Ana Sayfa, Navigasyon, Galeri ve Kimlik Doğrulama Yönetimi
+  Kullanıcıların ana sayfayı keşfetmesi, filtreleme yapması, bültene abone olması
+  ve sisteme kayıt olup giriş yapabilmesi süreçlerini test eder.
 
   Background:
-    Given Kullanici AiStager platformundadir
+    Given Kullanıcı AiStager platformundadır
 
-  @TC_HP_001 @Positive
-  Scenario: Oncesi ve Sonrasi Sihri slider alaninin dinamik kullanimi
-    When Kullanici Oncesi ve Sonrasi Sihri slider alaninin goruntulendigini gorur
-    And Kullanici kaydirma cubugunu veya sag veya alt oklari kullanarak gorseller arasi gecis yapar
-    Then Gecisin purussuz bir sekilde gerceklestigi dogrulanir
+  @positive @slider
+  Scenario: Öncesi ve Sonrası Slider alanının pürüzsüz çalışması
+    Given Kullanıcı Öncesi ve Sonrası Sihri alanındadır
+    When Kullanıcı slider çubuğunu sağa ve sola sürükler
+    Then Önce ve Sonra görsellerinin boyutları dinamik ve pürüzsüz şekilde değişmelidir
 
-  @TC_HP_001 @Positive
-  Scenario: Dil seceneginin degistirilmesi ve anlik uyarlama
-    When Kullanici ana sayfada dil secenegini TR olarak degistirir
-    Then Sayfadaki tum metinlerin anlik olarak Turkce dile uyarlandigi dogrulanir
+  @positive @slider
+  Scenario Outline: Slider yön okları ve carousel noktaları ile görsel değiştirme
+    Given Kullanıcı slider alanındadır
+    When Kullanıcı slider alanındaki <etkileşim> tıklar
+    Then İlgili oda görseli yüklenmelidir
+    And Aktif olan carousel noktası koyu renk ile görsel olarak vurgulanmalıdır
 
-  @TC_HP_002 @Positive
-  Scenario: Oturum acmis kullanicinin menu ve panel gorunurlugu
-    Given Gecerli kimlik bilgileriyle sisteme giris yapmis bir kullanici ana sayfadadir
-    When Ust menude Uretimlerim seceneginin hizli render veya kamera ayarla panelinin ve profil menusunun aktif olarak gorundugu dogrulanir
-    And Kullanici logoya tiklar
-    Then Ana sayfaya yonlendirildigi dogrulanir
+    Examples:
+      | etkileşim |
+      | sağ yön oku |
+      | sol yön oku |
+      | alt carousel noktası |
 
-  @TC_HP_002_VISITOR @Positive
-  Scenario: Ziyaretci durumundaki kullanicinin menu gorunurlugu
-    Given Sisteme giris yapmamis bir ziyaretci ana sayfayi ziyaret eder
-    Then Ust menude Uretimlerim menusunun ve profil ikonunun gizlenmis oldugu dogrulanir
-    And Bunun yerine Giris Yap ve Ucretsiz Dene butonlarinin yer aldigi dogrulanir
+  @positive @navigation
+  Scenario: Odanızı Yükleyin butonunun yönlendirmesi
+    Given Kullanıcı ana sayfadadır
+    When Kullanıcı Odanızı Yükleyin butonuna tıklar
+    Then Kullanıcı görsel yükleme veya kimlik doğrulama ekranına yönlendirilmelidir
 
-  @TC_HP_003_REV @Positive
-  Scenario: Galeri varsayilan gorunumu ve oda tipi filtreleme
-    When Kullanici ana sayfadaki galeri alanina gelir
-    Then Galeri ilk acildiginda varsayilan olarak Tum Tipler seceneginin aktif oldugu ve karisik oda tiplerinin listelendigi dogrulanir
-    When Kullanici belirli bir oda tipi filtre butonuna tiklar
-    Then Galerinin yalnizca secilen kategoriye ait tasarımlari filtreledigi dogrulanir
+  @positive @localization
+  Scenario: Dil seçeneğinin değiştirilmesi
+    Given Kullanıcı ana sayfadadır
+    When Kullanıcı dil seçeneğini "TR" olarak ayarlar
+    Then Sayfadaki tüm statik metinler seçilen dile güncellenmelidir
 
-  @TC_HP_003_REV @Positive
-  Scenario: Galeride Daha Fazla Tasarim Yukle aksiyonu
-    Given Kullanici galeride bir oda tipi filtresi secer
-    When Kullanici Daha Fazla Tasarim Yukle butonuna tiklar
-    Then Mevcut filtrenin korundugu ve yeni tasarım kartlarının yuklendigi dogrulanir
+  @positive @header
+  Scenario: Oturum açmış kullanıcının header menüsünü görmesi
+    Given Kullanıcı sisteme oturum açmış durumdadır
+    When Kullanıcı ana sayfayı görüntüler
+    Then Header üzerinde Logo, Ürünler, Çözümler, Kaynaklar, Fiyatlandırma, Üretimlerim, Dil Seçeneği, Hızlı Render Ayarları ve Profil İkonu yer almalıdır
+    And Header üzerinde Giriş Yap ve Ücretsiz Dene butonları yer almamalıdır
 
-  @TC_HP_003_REV @Positive
-  Scenario: Tasarim kartlari uzerinden profil ziyareti ve begeni artirma
-    When Kullanici galeri uzerindeki bir tasarim kartına ve uzerindeki kullanıcı profiline tiklar
-    Then İlgili kullanıcı profiline gidilebildigi dogrulanir
-    When Kullanici Begeni ikonuna tiklar
-    Then Sayac degerinin bir arttigi dogrulanir
+  @positive @header
+  Scenario: Ziyaretçi kullanıcının header menüsünü görmesi
+    Given Kullanıcı sisteme giriş yapmamış bir ziyaretçidir
+    When Kullanıcı ana sayfayı görüntüler
+    Then Header üzerinde Üretimlerim ve Profil alanları yer almamalıdır
+    And Header üzerinde Giriş Yap ve Ücretsiz Dene butonları görünmelidir
 
-  @TC_HP_004 @Positive
-  Scenario: Sikca Sorulan Sorular akordeon menu davranisi
-    When Kullanici SSS bolumune gelir ve bir soruyu acar
-    Then İlgili sorunun acildigi gorulur
-    When Kullanici farkli bir soruya tiklar
-    Then Yeni acilan sorunun acik kaldigi onceki sorunun ise otomatik olarak kapandigi dogrulanir
+  @positive @header
+  Scenario: Header logo ve menü linklerinin yönlendirmesi
+    Given Kullanıcı ana sayfadadır
+    When Kullanıcı header üzerindeki Logo ögesine tıklar
+    Then Kullanıcı "/tr" adresine yönlendirilmelidir
+    When Kullanıcı Ürünler veya Çözümler veya Kaynaklar veya Fiyatlandırma linklerinden birine tıklar
+    Then Kullanıcı ilgili alt sayfaya yönlendirilmelidir
 
-  @TC_HP_005 @Positive
-  Scenario: Bülten kayıt formuna geçerli e-posta girişi
-    When Kullanici bulten formuna "test@aistager.ai" adresini girer ve kaydol butonuna tiklar
-    Then Basari mesajinin goruntulendigi dogrulanir
+  @positive @gallery
+  Scenario: Galeri ilk açılış durumu ve varsayılan filtre
+    Given Kullanıcı ana sayfadadır
+    When Kullanıcı Topluluk Galerisi alanına kaydırır
+    Then Tüm Tipler filtresi varsayılan olarak aktif ve mor renkli olmalıdır
+    And Galeri karışık oda tasarımlarını listelemelidir
 
-  @TC_HP_005 @Negative @EdgeCase
-  Scenario Outline: Bülten kayıt formuna geçersiz veya boş e-posta girişi
-    When Kullanici bulten formuna "<gecersiz_eposta>" adresini girer ve kaydol butonuna tiklar
-    Then Kayit isleminin engellendigi ve uygun bir hata mesaji gosterildigi dogrulanir
+  @positive @gallery
+  Scenario: Oda tipi filtreleme butonlarının çalışması
+    Given Kullanıcı Topluluk Galerisi alanındadır
+    When Kullanıcı farklı bir oda tipi filtre butonuna tıklar
+    Then Tıklanan buton aktifleşmelidir
+    And Galeri sadece ilgili oda tipine ait tasarımları filtrelemelidir
+
+  @positive @gallery
+  Scenario: Tasarım kartı kullanıcı adı ve beğeni etkileşimi
+    Given Kullanıcı Topluluk Galerisi alanındadır
+    When Kullanıcı bir tasarım kartı üzerindeki kullanıcı adına tıklar
+    Then Kullanıcı ilgili profil sayfasına yönlendirilmelidir
+    When Kullanıcı aynı kart üzerindeki Kalp ikonuna tıklar
+    Then Beğeni sayısı 1 artmalı ve kalp ikonu aktif hale gelmelidir
+
+  @positive @gallery
+  Scenario: Daha fazla tasarım yükleme
+    Given Kullanıcı Topluluk Galerisi alanındadır ve tasarımlar listelenmektedir
+    When Kullanıcı Daha Fazla Tasarım Yükle butonuna tıklar
+    Then Mevcut filtreleme bozulmadan alt alta yeni tasarım kartları yüklenmelidir
+
+  @positive @faq
+  Scenario: SSS akordeon yapısının çalışması
+    Given Kullanıcı Sıkça Sorulan Sorular alanındadır
+    When Kullanıcı bir soruya tıklar
+    Then İlgili cevap açılmalı ve soru oku yukarı bakmalıdır
+    When Kullanıcı farklı bir başka soruya tıklar
+    Then Önceki soru otomatik olarak kapanmalı ve yeni soru açılmalıdır
+
+  @positive @faq
+  Scenario: Bize ulaşın linkinin yönlendirmesi
+    Given Kullanıcı Sıkça Sorulan Sorular alanındadır
+    When Kullanıcı Bize ulaşın linkine tıklar
+    Then Kullanıcı destek ve iletişim sayfasına yönlendirilmelidir
+
+  @positive @newsletter
+  Scenario: Bültene geçerli e-posta ile abone olma
+    Given Kullanıcı footer bülten alanındadır
+    When Kullanıcı bülten alanına "test@example.com" e-posta adresini girer
+    And Abone Ol butonuna tıklar
+    Then Başarı mesajı gösterilmelidir
+
+  @negative @newsletter @edge-case
+  Scenario Outline: Bültene boş veya geçersiz e-posta ile abone olma denemesi
+    Given Kullanıcı footer bülten alanındadır
+    When Kullanıcı bülten alanına "<gecersiz_eposta>" girer
+    And Abone Ol butonuna tıklar
+    Then Geçerli bir e-posta adresi giriniz hata mesajı gösterilmelidir
 
     Examples:
       | gecersiz_eposta |
       |                 |
-      | test@           |
-      | test.com        |
-      | @aistager.ai    |
+      | testuser        |
+      | test@.com       |
+      | @domain.com     |
 
-  @TC_LOG_001 @Positive
-  Scenario: Geçerli bilgilerle başarılı giriş yapma
-    Given Kullanici Giris Yap sayfasindadir
-    When Kullanici gecerli e-posta ve sifre bilgilerini girer
-    And Sifre alanindaki maskelemenin calistigini test eder
-    And Giris butonuna tiklar
-    Then Kullanicinin panele yonlendirildigi dogrulanir
+  @positive @footer
+  Scenario: Footer kurumsal linkler ve sosyal medya yönlendirmeleri
+    Given Kullanıcı footer alanındadır
+    When Kullanıcı Gizlilik Politikası veya Kullanım Şartları yasal metin linklerine tıklar
+    Then İlgili yasal sayfalar açılmalıdır
+    When Kullanıcı sosyal medya ikonlarına tıklar
+    Then İlgili sosyal medya hesapları yeni sekmede açılmalıdır
 
-  @TC_LOG_001 @Positive
-  Scenario: Google ile OAuth üzerinden giriş yapma
-    Given Kullanici Giris Yap sayfasindadir
-    When Kullanici Google ile Giris Yap butonuna tiklar
-    Then Google hesap secim ekraninin acildigi ve basarili giris sonrasi panele yonlendirildigi dogrulanir
+  @positive @login
+  Scenario: Kayıtlı geçerli bilgilerle başarılı giriş yapma ve şifre görünürlüğü
+    Given Kullanıcı Giriş Yap sayfasındadır
+    When Kullanıcı sisteme kayıtlı geçerli e-postasını ve şifresini girer
+    And Şifre alanındaki Göz ikonuna tıklar
+    Then Şifrenin düz metin olarak görünür olduğu doğrulanır
+    When Kullanıcı Giriş Yap butonuna tıklar
+    Then Kullanıcı panele yönlendirilmelidir
 
-  @TC_LOG_002 @Negative @Security
-  Scenario Outline: Geçersiz veya eksik bilgilerle giriş denemesi
-    Given Kullanici Giris Yap sayfasindadir
-    When E-posta alanina "<eposta>" sifre alanina "<sifre>" girer
-    And Giris butonuna tiklar
-    Then Guvenlik amaciyla spesifik hata yerine genel e-posta veya sifre hatali mesajinin gosterildigi dogrulanir
+  @negative @login @edge-case
+  Scenario: Giriş formunda boş bırakılan zorunlu alanlar
+    Given Kullanıcı Giriş Yap sayfasındadır
+    When Kullanıcı e-posta ve şifre alanlarını boş bırakıp Giriş Yap butonuna tıklar
+    Then Zorunlu alanlar için Bu alan zorunludur uyarı mesajı gösterilmelidir
 
-    Examples:
-      | eposta              | sifre       |
-      |                     |             |
-      | kayitli@aistager.ai | yanlissifre |
-      | olmasimail@test.com | dogrusifre  |
-
-  @TC_LOG_002 @EdgeCase @Security
-  Scenario: Giriş sayfasında SQL Injection ve aşırı uzun karakter testi
-    Given Kullanici Giris Yap sayfasindadir
-    When E-posta alanina sql enjeksiyonu veya bin karakterlik uzun bir metin girer
-    Then Sistemin cokmedigi guvenli bir sekilde filtrelendigi ve hata mesaji dondurdugu dogrulanir
-
-  @TC_REG_001 @Positive
-  Scenario: Yeni kullanıcı kaydı oluşturma
-    Given Kullanici Kayit Ol sayfasindadir
-    When Kullanici gecerli bir e-posta en az sekiz karakterli birbiriyle eslesen iki sifre girer
-    And Kullanici sozlesmesi onay kutucugunu secer
-    And Kayit Ol butonuna tiklar
-    Then Hesabin basariyla olusturuldugu dogrulanir
-
-  @TC_REG_001 @Negative
-  Scenario Outline: Eksik veya hatalı kurallarla kayıt olma denemeleri
-    Given Kullanici Kayit Ol sayfasindadir
-    When Formu "<eposta>" "<sifre>" "<sifre_tekrar>" ve sozlesme durumu "<sozlesme>" ile doldurur
-    And Kayit Ol butonuna tiklar
-    Then İlgili validasyon hata mesajinin alindigi dogrulanir
+  @negative @login @edge-case
+  Scenario Outline: Giriş formunda geçersiz e-posta formatı
+    Given Kullanıcı Giriş Yap sayfasındadır
+    When Kullanıcı e-posta alanına "<gecersiz_format>" girer ve şifreyi doldurur
+    And Giriş Yap butonuna tıklar
+    Then Uygun format uyarısı gösterilmelidir
 
     Examples:
-      | eposta           | sifre    | sifre_tekrar | sozlesme |
-      | yeni@aistager.ai | 12345    | 12345        | true     |
-      | yeni@aistager.ai | Sifre123 | SifreABC     | true     |
-      | yeni@aistager.ai | Sifre123 | Sifre123     | false    |
-      |                  | Sifre123 | Sifre123     | true     |
+      | gecersiz_format |
+      | user.com        |
+      | user@domain     |
+      | user@@domain.com|
 
-  @TC_REG_002 @Negative
-  Scenario: Halihazırda kayıtlı e-posta adresi ile mükerrer kayıt engelleme
-    Given Kullanici Kayit Ol sayfasindadir
-    When Sistemde halihazirda kayitli olan bir e-posta adresini girer
-    And Sifre kurallarina uygun sifre girer ve sozlesmeyi onaylar
-    And Kayit Ol butonuna tiklar
-    Then Bu e-posta adresi zaten kullanimda uyarisinin gosterildigi dogrulanir
+  @negative @login @security
+  Scenario Outline: Hatalı kimlik bilgileri ile tutarlı hata mesajı
+    Given Kullanıcı Giriş Yap sayfasındadır
+    When Kullanıcı "<eposta>" ve "<sifre>" bilgilerini girer
+    And Giriş Yap butonuna tıklar
+    Then Sistem spesifik bilgi sızdırmadan E-posta veya şifre hatalı genel hata mesajını göstermelidir
+
+    Examples:
+      | eposta               | sifre             |
+      | kayitli@domain.com   | yanlissifre       |
+      | kayitliolmayan@d.com | dogrusifre        |
+      | kayitli@domain.com   | yanlisKombinasyon |
+
+  @negative @login @security @edge-case
+  Scenario: Giriş formunda SQL Injection ve uzun karakter girdileri testi
+    Given Kullanıcı Giriş Yap sayfasındadır
+    When Kullanıcı e-posta alanına SQL Injection karakterleri girer
+    And Giriş Yap butonuna tıklar
+    Then Sistem bu girdileri güvenli şekilde filtrelemelidir
+    And Sunucu hatası üretilmeden uygun hata mesajı dönülmelidir
+
+  @positive @register
+  Scenario: Yeni ve geçerli bilgilerle başarılı kayıt olma
+    Given Kullanıcı Kayıt Ol sayfasındadır
+    When Kullanıcı sistemde kayıtlı olmayan yeni bir e-posta adresi girer
+    And En az 8 karakterli eşleşen güçlü şifreleri Şifre ve Şifre Tekrar alanlarına girer
+    And Kullanım sözleşmesi onay kutusunu işaretler
+    And Kayıt Ol butonuna tıklar
+    Then Başarılı kayıt oluşturularak aktivasyon veya panele yönlendirme yapılmalıdır
+
+  @negative @register @edge-case
+  Scenario Outline: Kayıt formunda eksik ve hatalı veri girdileri
+    Given Kullanıcı Kayıt Ol sayfasındadır
+    When Kullanıcı kayıt formunu şu verilerle doldurur: e-posta "<eposta>", şifre "<sifre>", şifre tekrar "<sifre_tekrar>", sözleşme onay durumu "<sozlesme_onay>"
+    And Kayıt Ol butonuna tıklar
+    Then İlgili "<hata_mesaji>" tetiklenmeli ve kayıt engellenmelidir
+
+    Examples:
+      | eposta             | sifre    | sifre_tekrar | sozlesme_onay | hata_mesaji                       |
+      |                    | Pass1234 | Pass1234     | true          | Bu alan zorunludur                |
+      | gecersiz-eposta    | Pass1234 | Pass1234     | true          | Geçerli bir e-posta adresi giriniz|
+      | mevcut@domain.com  | Pass1234 | Pass1234     | true          | Bu e-posta adresi zaten kullanımda|
+      | yeni@domain.com    | 12345    | 12345        | true          | En az 8 karakter olmalıdır        |
+      | yeni@domain.com    | Pass1234 | Pass5678     | true          | Şifreler eşleşmiyor               |
+      | yeni@domain.com    | Pass1234 | Pass1234     | false         | Bu alan zorunludur                |
+
+  @positive @auth
+  Scenario: OAuth entegrasyonu ve formlar arası geçiş linklerinin çalışması
+    Given Kullanıcı kimlik doğrulama sayfasındadır
+    When Kullanıcı Google ile devam et butonuna tıklar
+    Then Google kimlik doğrulama ekranı açılmalıdır
+    When Kullanıcı sayfa üzerindeki geçiş linklerine tıklar
+    Then İlgili form veya sayfa sorunsuz şekilde açılmalıdır
