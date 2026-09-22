@@ -1,8 +1,8 @@
 package Pages;
+import com.microsoft.playwright.options.AriaRole;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
-import com.microsoft.playwright.options.AriaRole;
 import Utilities.PD;
 
 public class AiStagerPage {
@@ -12,267 +12,123 @@ public class AiStagerPage {
         this.page = PD.getPage();
     }
 
-    public Locator getOncesiVeSonrasiKaydirici() {
-        return page.locator(".before-after-slider, [class*='slider'], [class*='comparison']");
+    public Locator getTumunuKabulEtButton() {
+        return page.getByRole(com.microsoft.playwright.options.AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Tümünü Kabul Et"));
     }
 
-    public Locator getOnceVeSonraGorselleri() {
-        return page.locator(".before-after-image, img[alt*='Before'], img[alt*='After']");
+    public Locator getSliderAlani() {
+        return page.locator(".slider-container, [class*='slider']").first();
     }
 
-    public Locator getCarouselNoktalariVeyaOklar() {
-        return page.locator(".carousel-dots button, .carousel-arrow, button[class*='arrow']");
+    public Locator getDilSecenegi() {
+        return page.locator("text=TR").first();
     }
 
-    public Locator getAktifVeyaYeniOdaGorselleri() {
-        return page.locator(".carousel-item.active img, .room-gallery img");
+    public Locator getUretimlerimMenu() {
+        return page.locator("text=Uretimlerim").first();
     }
 
-    public Locator getOdaniziYukleyinButonu() {
-        return page.locator("button:has-text('Odanızı Yükleyin'), a:has-text('Odanızı Yükleyin')");
+    public Locator getKameraAyarlaPaneli() {
+        return page.locator("[class*='camera'], [class*='panel']").first();
     }
 
-    public Locator getDilSecimiMenusu() {
-        return page.locator(".language-selector, select[name*='lang'], button:has-text('TR')");
+    public Locator getProfilMenu() {
+        return page.locator("[class*='profile'], img[alt*='profile']").first();
     }
 
-    public Locator getDinamikMetinler() {
-        return page.locator("body");
-    }
-
-    public Locator getUrunlerMenu() {
-        return page.locator("nav a:has-text('Ürünler'), button:has-text('Ürünler')");
-    }
-
-    public Locator getAltMenu() {
-        return page.locator(".dropdown-menu, .submenu");
-    }
-
-    public Locator getUstMenuDetayLinki(String detayAdi) {
-        return page.locator("nav a:has-text('" + detayAdi + "'), button:has-text('" + detayAdi + "')");
-    }
-
-    public Locator getProfilIkonu() {
-        return page.locator(".profile-icon, img[alt*='profile'], [aria-label*='profile']");
-    }
-
-    public Locator getUretimlerimButonu() {
-        return page.locator("nav a:has-text('Üretimlerim'), button:has-text('Üretimlerim')");
-    }
-
-    public Locator getGirisYapButonu() {
-        return page.locator("a:has-text('Giriş yap'), button:has-text('Giriş Yap')");
-    }
-
-    public Locator getUcretsizDeneButonu() {
-        return page.locator("a:has-text('Ücretsiz Dene'), button:has-text('Ücretsiz Dene')");
-    }
-
-    public Locator getGaleriBolumu() {
-        return page.locator(".community-gallery, section:has-text('Galeri')");
-    }
-
-    public Locator getTumTiplerFiltresi() {
-        return page.locator("button:has-text('Tüm Tipler'), .filter-all");
-    }
-
-    public Locator getOturmaOdasiFiltreButonu() {
-        return page.locator("button:has-text('Oturma Odası'), button:has-text('Living Room')");
-    }
-
-    public Locator getGaleriKartlari() {
-        return page.locator(".gallery-card, .design-card");
-    }
-
-    public Locator getKalpIkonu() {
-        return page.locator(".heart-icon, button[aria-label*='Like']");
-    }
-
-    public Locator getBegeniSayisi() {
-        return page.locator(".like-count, span[class*='like']");
-    }
-
-    public Locator getDahaFazlaTasarimYukleButonu() {
-        return page.locator("button:has-text('Daha Fazla Tasarım Yükle')");
-    }
-
-    public Locator getSssBolumu() {
-        return page.locator(".faq-section, section:has-text('Sıkça Sorulan Sorular')");
-    }
-
-    public Locator getSoruBasligi() {
-        return page.locator(".faq-item h3, .faq-question");
-    }
-
-    public Locator getSssCevabi() {
-        return page.locator(".faq-answer, .faq-content");
-    }
-
-    public Locator getBultenAlani() {
-        return page.locator(".newsletter-section, input[placeholder*='e-posta']");
-    }
-
-    public Locator getBultenEpostaInput() {
-        return page.locator("input[placeholder*='e-posta'], input[type='email']");
-    }
-
-    public Locator getAboneOlButonu() {
-        return page.locator("button:has-text('Abone Ol'), button:has-text('Subscribe')");
-    }
-
-    public Locator getBultenSonucMesaji() {
-        return page.locator(".newsletter-message, .alert, .toast");
-    }
-
-    public Locator getEmailInput() {
-        return page.locator("input[name='email']");
-    }
-
-    public Locator getPasswordInput() {
-        return page.locator("input[name='password']");
-    }
-
-    public Locator getConfirmPasswordInput() {
-        return page.locator("input[name='confirmPassword']");
-    }
-
-    public Locator getGirisYapSubmitButonu() {
-        return page.locator("button[type='submit']:has-text('Giriş Yap')");
-    }
-
-    public Locator getAnaPanelDogrulama() {
-        return page.locator(".dashboard, .main-panel, h1:has-text('Panel')");
-    }
-
-    public Locator getSifreGozIkonu() {
-        return page.locator(".password-toggle-icon, button[aria-label*='Show password']");
-    }
-
-    public Locator getKayitOlLink() {
-        return page.locator("a:has-text('Kayıt Ol'), a:has-text('Kayıt ol')");
-    }
-
-    public Locator getKayitOlSayfasiDogrulama() {
-        return page.locator("form:has-text('Hesap Oluştur'), h1:has-text('Kayıt Ol')");
-    }
-
-    public Locator getSifremiUnuttumLink() {
-        return page.locator("a:has-text('Şifremi Unuttum')");
-    }
-
-    public Locator getSifreSifirlamaSayfasiDogrulama() {
-        return page.locator("form:has-text('Şifre'), h1:has-text('Şifre')");
-    }
-
-    public Locator getHataMesajiLocator() {
-        return page.locator(".error-message, .invalid-feedback, text=Bu alan zorunludur, text=Lütfen, text=E-posta, text=şifre");
-    }
-
-    public Locator getSartlarCheckbox() {
-        return page.locator("#terms-accept, input[type='checkbox']");
-    }
-
-    public Locator getHesapOlusturButonu() {
-        return page.locator("button:has-text('Hesap Oluştur')");
-    }
-
-    public Locator getAktivasyonEkranıDogrulama() {
-        return page.locator("text=aktivasyon, text=Doğrulama, text=Welcome");
+    public Locator getLogo() {
+        return page.locator("header img, nav img, a.logo").first();
     }
 
     public Locator getGirisYapButton() {
-        return page.getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName("Giriş yap"));
+        return page.getByRole(com.microsoft.playwright.options.AriaRole.LINK, new Page.GetByRoleOptions().setName("Giriş yap"));
     }
 
-    public Locator getTumunuKabulEtButton() {
-        return page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Tümünü Kabul Et"));
+    public Locator getUcretsizDeneButton() {
+        return page.locator("text=Ucretsiz Dene").first();
     }
 
-    public Locator getVirtualStagingHeader() {
-        return page.locator("h1");
+    public Locator getGaleriAlani() {
+        return page.locator("[class*='gallery'], section.galeri").first();
     }
 
-    public Locator getFileUploadInput() {
-        return page.locator("input[type='file']");
+    public Locator getTumTiplerFiltre() {
+        return page.locator("text=Tum Tipler").first();
     }
 
-    public Locator getRemoveFurnitureToggle() {
-        return page.locator("input[type='checkbox']").first();
+    public Locator getOdaTipiFiltreButonu() {
+        return page.locator("[class*='filter-btn'], button.category").first();
     }
 
-    public Locator getRoomTypeDropdown() {
-        return page.locator("select, [role='combobox']").first();
+    public Locator getDahaFazlaTasarimYukleButton() {
+        return page.locator("text=Daha Fazla Tasarim Yukle").first();
     }
 
-    public Locator getDesignStyleDropdown() {
-        return page.locator("select, [role='combobox']").nth(1);
+    public Locator getTasarimKarti() {
+        return page.locator("[class*='design-card'], [class*='card']").first();
     }
 
-    public Locator getPublicPrivacyRadio() {
-        return page.locator("input[type='radio']").first();
+    public Locator getKullaniciProfili() {
+        return page.locator("[class*='user-profile'], .author-name").first();
     }
 
-    public Locator getGenerateButton() {
-        return page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Dekorasyon Oluştur"));
+    public Locator getBegeniIkonu() {
+        return page.locator("[class*='like'], svg[class*='heart']").first();
     }
 
-    public Locator getResultImage() {
-        return page.locator("img").last();
+    public Locator getSayacDegeri() {
+        return page.locator("[class*='count'], .like-count").first();
     }
 
-    public Locator getErrorMessage() {
-        return page.locator(".error-message, [role='alert']");
+    public Locator getSssBolumu() {
+        return page.locator("[class*='faq'], section.accordion").first();
     }
 
-    public Locator getAiEditTab() {
-        return page.getByText("AI Edit");
+    public Locator getSssSorusu() {
+        return page.locator("[class*='accordion-item'], .faq-question").first();
     }
 
-    public Locator getPromptInput() {
-        return page.locator("textarea, input[placeholder*='Describe']");
+    public Locator getBultenFormu() {
+        return page.locator("input[type='email'], input[placeholder*='mail'], input[placeholder*='e-posta']").first();
     }
 
-    public Locator getEditPhotoButton() {
-        return page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Edit Photo"));
+    public Locator getKaydolButton() {
+        return page.locator("button:has-text('Kaydol'), button:has-text('Abone Ol')").first();
     }
 
-    public Locator getProductsMenu() {
-        return page.getByText("Ürünler");
+    public Locator getBasariMesaji() {
+        return page.locator("text=Basarili, text=Tesekkurler, [class*='success']").first();
     }
 
-    public Locator getVirtualTourSubMenu() {
-        return page.getByText("Yapay Zeka Sanal Tur");
+    public Locator getHataMesaji() {
+        return page.locator("[class*='error'], [class*='alert'], text=hata").first();
     }
 
-    public Locator getApiSubMenu() {
-        return page.getByText("Sanal Dekorasyon API");
+    public Locator getEmailInput() {
+        return page.locator("input[name='email'], input[type='email']").first();
     }
 
-    public Locator getEarlyAccessButton() {
-        return page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Erken Erişim İsteyin"));
+    public Locator getPasswordInput() {
+        return page.locator("input[name='password'], input[type='password']").first();
     }
 
-    public Locator getEmailNewsletterInput() {
-        return page.locator("input[type='email']").first();
+    public Locator getConfirmPasswordInput() {
+        return page.locator("input[name='confirmPassword']").first();
     }
 
-    public Locator getContactButton() {
-        return page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("İletişime Geçin"));
+    public Locator getGirisButonu() {
+        return page.locator("button:has-text('Giriş'), button[type='submit']").first();
     }
 
-    public Locator getNameInput() {
-        return page.locator("input[name='name'], input[placeholder*='Ad']");
+    public Locator getGoogleIleGirisYapButton() {
+        return page.getByRole(com.microsoft.playwright.options.AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Google ile devam et"));
     }
 
-    public Locator getMessageInput() {
-        return page.locator("textarea");
+    public Locator getTermsCheckbox() {
+        return page.locator("#terms-accept");
     }
 
-    public Locator getSendFormButton() {
-        return page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Gönder"));
-    }
-
-    public Locator getPricingButton() {
-        return page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Fiyatlandırmayı Görüntüle"));
+    public Locator getHesapOlusturButton() {
+        return page.getByRole(com.microsoft.playwright.options.AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Hesap Oluştur"));
     }
 }
