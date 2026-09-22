@@ -11,43 +11,27 @@ public class RegisterPage {
         this.page = PD.getPage();
     }
 
-    public Locator getRegisterEmailInput() {
-        return page.locator("input[name='email'], input[type='email']");
+    public Locator getEpostaInput() {
+        return page.locator("input[name='email'], input[placeholder='you@example.com']");
     }
 
-    public Locator getRegisterPasswordInput() {
-        return page.locator("input[name='password'], input[type='password']").first();
+    public Locator getSifreInput() {
+        return page.locator("input[name='password'], input[placeholder='Min. 8 karakter']");
     }
 
-    public Locator getConfirmPasswordInput() {
-        return page.locator("input[name='confirmPassword'], input[placeholder*='Şifrenizi tekrar']");
+    public Locator getSifreOnaylaInput() {
+        return page.locator("input[name='confirmPassword'], input[placeholder='Şifrenizi tekrar girin']");
     }
 
-    public Locator getTermsCheckbox() {
+    public Locator getSozlesmeCheckbox() {
         return page.locator("#terms-accept, input[type='checkbox']");
     }
 
-    public Locator getRegisterSubmitButton() {
+    public Locator getKayitOlButton() {
         return page.locator("button:has-text('Hesap Oluştur'), button:has-text('Kayıt Ol')");
     }
 
-    public Locator getAlreadyInUseError() {
-        return page.locator("text=zaten kullanımda, text=already in use");
-    }
-
-    public Locator getPasswordLengthError() {
-        return page.locator("text=en az 8 karakter, text=minimum 8");
-    }
-
-    public Locator getPasswordMismatchError() {
-        return page.locator("text=şifreler eşleşmiyor, text=match");
-    }
-
-    public Locator getTermsError() {
-        return page.locator("text=Sözleşmeyi kabul etmelisiniz, text=terms");
-    }
-
-    public Locator getSuccessCreationMessage() {
-        return page.locator("text=başarıyla oluşturuldu, text=success");
+    public Locator getHataMesaji(String hataMesaji) {
+        return page.locator("text=" + hataMesaji);
     }
 }

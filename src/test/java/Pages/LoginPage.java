@@ -11,35 +11,27 @@ public class LoginPage {
         this.page = PD.getPage();
     }
 
-    public Locator getEmailInput() {
-        return page.locator("input[name='email'], input[type='email']");
+    public Locator getEpostaInput() {
+        return page.locator("input[name='email'], input[placeholder='you@example.com']");
     }
 
-    public Locator getPasswordInput() {
-        return page.locator("input[name='password'], input[type='password']");
+    public Locator getSifreInput() {
+        return page.locator("input[name='password'], input[placeholder='Min. 8 karakter']");
     }
 
-    public Locator getLoginSubmitButton() {
-        return page.locator("button[type='submit']:has-text('Giriş'), button:has-text('Giriş Yap')");
+    public Locator getGirisYapSubmitButton() {
+        return page.locator("button:has-text('Giriş Yap'), button[type='submit']").first();
     }
 
-    public Locator getRequiredFieldWarning() {
-        return page.locator("text=Bu alan zorunludur, [class*='error']:has-text('zorunlu')");
+    public Locator getHataMesaji(String hataMesaji) {
+        return page.locator("text=" + hataMesaji);
     }
 
-    public Locator getFormatErrorWarning() {
-        return page.locator("text=format, [class*='error']:has-text('geçersiz')");
+    public Locator getGozIkonu() {
+        return page.locator(".password-toggle-icon, [aria-label='Show password']");
     }
 
-    public Locator getGeneralErrorMessage() {
-        return page.locator("text=hatalı, text=E-posta veya şifre, [class*='alert']");
-    }
-
-    public Locator getPasswordEyeIcon() {
-        return page.locator("[class*='eye-icon'], [class*='toggle-password']");
-    }
-
-    public Locator getGoogleLoginButton() {
+    public Locator getGoogleIleDevamEtButton() {
         return page.locator("button:has-text('Google ile devam et')");
     }
 }
