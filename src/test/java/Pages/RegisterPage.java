@@ -11,35 +11,43 @@ public class RegisterPage {
         this.page = PD.getPage();
     }
 
-    public Locator getKayitEpostaInput() {
-        return page.locator("input[name='email'], input[placeholder='you@example.com']").first();
+    public Locator getRegisterEmailInput() {
+        return page.locator("input[name='email'], input[type='email']");
     }
 
-    public Locator getKayitSifreInput() {
-        return page.locator("input[name='password'], input[placeholder='Min. 8 karakter']").first();
+    public Locator getRegisterPasswordInput() {
+        return page.locator("input[name='password'], input[type='password']").first();
     }
 
-    public Locator getSifreyiOnaylaInput() {
-        return page.locator("input[name='confirmPassword'], input[placeholder='Şifrenizi tekrar girin']").first();
+    public Locator getConfirmPasswordInput() {
+        return page.locator("input[name='confirmPassword'], input[placeholder*='Şifrenizi tekrar']");
     }
 
-    public Locator getKullaniciSozlesmesiCheckbox() {
-        return page.locator("input#terms-accept, input[type='checkbox']").first();
+    public Locator getTermsCheckbox() {
+        return page.locator("#terms-accept, input[type='checkbox']");
     }
 
-    public Locator getKayitOlButonu() {
-        return page.locator("button[type='submit']:has-text('Hesap Oluştur'), button:has-text('Kayıt Ol')").first();
+    public Locator getRegisterSubmitButton() {
+        return page.locator("button:has-text('Hesap Oluştur'), button:has-text('Kayıt Ol')");
     }
 
-    public Locator getBasariliKayitYonlendirme() {
-        return page.locator(".welcome-message, text=Hoş geldiniz").first();
+    public Locator getAlreadyInUseError() {
+        return page.locator("text=zaten kullanımda, text=already in use");
     }
 
-    public Locator getZatenKullanimdaUyarisi() {
-        return page.locator("text=Bu e-posta adresi zaten kullanımda, .error").first();
+    public Locator getPasswordLengthError() {
+        return page.locator("text=en az 8 karakter, text=minimum 8");
     }
 
-    public Locator getAlanBazliHataMesaji() {
-        return page.locator(".error, text=en az 8 karakter, text=eşleşmiyor, text=onaylamalısınız").first();
+    public Locator getPasswordMismatchError() {
+        return page.locator("text=şifreler eşleşmiyor, text=match");
+    }
+
+    public Locator getTermsError() {
+        return page.locator("text=Sözleşmeyi kabul etmelisiniz, text=terms");
+    }
+
+    public Locator getSuccessCreationMessage() {
+        return page.locator("text=başarıyla oluşturuldu, text=success");
     }
 }

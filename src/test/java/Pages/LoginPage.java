@@ -11,35 +11,35 @@ public class LoginPage {
         this.page = PD.getPage();
     }
 
-    public Locator getEpostaInput() {
-        return page.locator("input[name='email'], input[placeholder='you@example.com']").first();
+    public Locator getEmailInput() {
+        return page.locator("input[name='email'], input[type='email']");
     }
 
-    public Locator getSifreInput() {
-        return page.locator("input[name='password'], input[placeholder='Min. 8 karakter']").first();
+    public Locator getPasswordInput() {
+        return page.locator("input[name='password'], input[type='password']");
     }
 
-    public Locator getGirisYapSubmitButonu() {
-        return page.locator("button[type='submit'], button:has-text('Giriş Yap')").first();
+    public Locator getLoginSubmitButton() {
+        return page.locator("button[type='submit']:has-text('Giriş'), button:has-text('Giriş Yap')");
     }
 
-    public Locator getPanelYonlendirmeKontrolu() {
-        return page.locator(".dashboard, text=Panel").first();
+    public Locator getRequiredFieldWarning() {
+        return page.locator("text=Bu alan zorunludur, [class*='error']:has-text('zorunlu')");
     }
 
-    public Locator getBosAlanUyarisi() {
-        return page.locator("text=Bu alan zorunludur, .error").first();
+    public Locator getFormatErrorWarning() {
+        return page.locator("text=format, [class*='error']:has-text('geçersiz')");
     }
 
-    public Locator getGecersizEpostaUyarisi() {
-        return page.locator("text=Lütfen geçerli bir e-posta adresi girin, .error").first();
+    public Locator getGeneralErrorMessage() {
+        return page.locator("text=hatalı, text=E-posta veya şifre, [class*='alert']");
     }
 
-    public Locator getGenelHataMesaji() {
-        return page.locator("text=E-posta veya şifre hatalı, .alert-danger").first();
+    public Locator getPasswordEyeIcon() {
+        return page.locator("[class*='eye-icon'], [class*='toggle-password']");
     }
 
-    public Locator getSifreGozIkonu() {
-        return page.locator(".password-toggle, .eye-icon, button:has(svg)").first();
+    public Locator getGoogleLoginButton() {
+        return page.locator("button:has-text('Google ile devam et')");
     }
 }
