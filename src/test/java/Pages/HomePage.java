@@ -90,4 +90,32 @@ public class HomePage {
     public Locator getBirinciSoruIcerik() {
         return page.locator(".faq-item:nth-child(1) .faq-answer");
     }
+
+    public Locator getUrunlerDropdown() {
+        return page.locator("text=Ürünler");
+    }
+
+    public Locator getUrunSecenegi(String urunAdi) {
+        return page.locator("a:has-text('" + urunAdi + "'), button:has-text('" + urunAdi + "')");
+    }
+
+    public Locator getErkenErisimIsteyinButton() {
+        return page.locator("button:has-text('Erken Erişim İsteyin'), a:has-text('Erken Erişim İsteyin')");
+    }
+
+    public Locator getEmailInput() {
+        return page.locator("input[type='email'], input[placeholder*='email']");
+    }
+
+    public Locator getGonderButton() {
+        return page.locator("button:has-text('Gönder'), button[type='submit']");
+    }
+
+    public Locator getBasariOnayMesaji() {
+        return page.locator("text=başarı, text=success, text=Gönderildi");
+    }
+
+    public Locator getEmailFormatHatasi() {
+        return page.locator("text=geçersiz, text=format, text=Invalid");
+    }
 }
