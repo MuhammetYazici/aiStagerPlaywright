@@ -1,8 +1,8 @@
 package Pages;
-import com.microsoft.playwright.options.AriaRole;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
+import com.microsoft.playwright.options.AriaRole;
 import Utilities.PD;
 
 public class HomePage {
@@ -41,7 +41,7 @@ public class HomePage {
     }
 
     public Locator getOdaniziYukleyinButonu() {
-        return page.getByRole(com.microsoft.playwright.options.AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Odanızı Yükleyin"));
+        return page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Odanızı Yükleyin"));
     }
 
     public Locator getOdaYuklemeArayuzu() {
@@ -81,7 +81,7 @@ public class HomePage {
     }
 
     public Locator getGirisYapButonu() {
-        return page.getByRole(com.microsoft.playwright.options.AriaRole.LINK, new Page.GetByRoleOptions().setName("Giriş yap"));
+        return page.getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName("Giriş yap"));
     }
 
     public Locator getUcretsizDeneButonu() {
@@ -150,5 +150,13 @@ public class HomePage {
 
     public Locator getFormValidasyonHatasi() {
         return page.locator(".error-message, [class*='error']");
+    }
+
+    public Locator getVirtualTourOption() {
+        return page.locator("text='Yapay Zeka Sanal Tur', a:has-text('Sanal Tur')");
+    }
+
+    public Locator getApiOption() {
+        return page.locator("text='Sanal Dekorasyon API', a:has-text('API')");
     }
 }
