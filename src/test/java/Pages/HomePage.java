@@ -1,9 +1,9 @@
 package Pages;
-
 import com.microsoft.playwright.options.AriaRole;
-import Utilities.PD;
+
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
+import Utilities.PD;
 
 public class HomePage {
     private Page page;
@@ -12,143 +12,143 @@ public class HomePage {
         this.page = PD.getPage();
     }
 
-    public Locator getSliderAlani() {
-        return page.locator(".slider-container, [class*='slider']");
+    public Locator getSihirSliderCizgisi() {
+        return page.locator(".before-after-slider, [class*='slider']");
     }
 
-    public Locator getSliderCubugu() {
-        return page.locator("[class*='slider-handle'], [class*='range']");
+    public Locator getMobilyaliOdaAlani() {
+        return page.locator(".after-image, [class*='after']");
     }
 
-    public Locator getOdaGorseli() {
-        return page.locator("[class*='room-image'], img[alt*='room']");
+    public Locator getBosOdaAlani() {
+        return page.locator(".before-image, [class*='before']");
     }
 
-    public Locator getSagSolOkTuslari() {
-        return page.locator("button[class*='arrow'], button[class*='nav']");
+    public Locator getSliderSonrakiOk() {
+        return page.locator("button.carousel-next, [class*='next']");
     }
 
-    public Locator getCarouselNoktalari() {
-        return page.locator("[class*='dot'], [class*='indicator']");
+    public Locator getCarouselNoktasi() {
+        return page.locator(".carousel-dot, [class*='dot']");
     }
 
-    public Locator getGirisYapButton() {
-        return page.getByRole(com.microsoft.playwright.options.AriaRole.LINK, new Page.GetByRoleOptions().setName("Giriş yap"));
+    public Locator getYuklenenOdaGorselleri() {
+        return page.locator(".comparison-container, [class*='comparison']");
     }
 
-    public Locator getUcretsizDeneButton() {
-        return page.getByRole(com.microsoft.playwright.options.AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Ücretsiz Dene"));
+    public Locator getAktifCarouselNoktasi() {
+        return page.locator(".carousel-dot.active, [class*='active']");
     }
 
-    public Locator getUretimlerimMenu() {
-        return page.locator("text=Üretimlerim");
+    public Locator getOdaniziYukleyinButonu() {
+        return page.getByRole(com.microsoft.playwright.options.AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Odanızı Yükleyin"));
     }
 
-    public Locator getProfilIkonu() {
-        return page.locator("[class*='profile-icon'], [data-testid='profile']");
+    public Locator getOdaYuklemeArayuzu() {
+        return page.locator(".upload-container, [class*='upload']");
     }
 
-    public Locator getKameraAyarlari() {
-        return page.locator("text=Kamera Ayarları");
+    public Locator getDilSecenegiDropdown() {
+        return page.locator(".language-selector, [class*='lang']");
     }
 
-    public Locator getLogo() {
+    public Locator getDilSecenegiEn() {
+        return page.locator("text=EN");
+    }
+
+    public Locator getStatikDinamikMetinler() {
+        return page.locator("body");
+    }
+
+    public Locator getSiteLogosu() {
         return page.locator("header img, .logo");
     }
 
-    public Locator getUrunlerLink() {
+    public Locator getUrunlerMenusu() {
         return page.locator("text=Ürünler");
     }
 
-    public Locator getCozumlerLink() {
-        return page.locator("text=Çözümler");
+    public Locator getAltUrunSecenekleriDropdown() {
+        return page.locator(".dropdown-menu, [class*='dropdown']");
     }
 
-    public Locator getKaynaklarLink() {
-        return page.locator("text=Kaynaklar");
+    public Locator getUretimlerimPaneli() {
+        return page.locator("text=Üretimlerim");
     }
 
-    public Locator getFiyatlandirmaLink() {
-        return page.locator("text=Fiyatlandırma");
+    public Locator getProfilMenusuYIkonu() {
+        return page.locator(".profile-icon, [class*='profile']");
     }
 
-    public Locator getCokluDilDestegi() {
-        return page.locator("[class*='language'], select[class*='lang']");
+    public Locator getGirisYapButonu() {
+        return page.getByRole(com.microsoft.playwright.options.AriaRole.LINK, new Page.GetByRoleOptions().setName("Giriş yap"));
     }
 
-    public Locator getGaleriAlani() {
-        return page.locator("[class*='gallery']");
+    public Locator getUcretsizDeneButonu() {
+        return page.locator("text=Ücretsiz Dene");
     }
 
-    public Locator getTumTiplerFiltresi() {
+    public Locator getToplulukGalerisiAlani() {
+        return page.locator(".community-gallery, [class*='gallery']");
+    }
+
+    public Locator getTumTipleriFiltresi() {
         return page.locator("text=Tüm Tipler");
     }
 
-    public Locator getYatakOdasiFiltresi() {
-        return page.locator("text=Yatak Odası");
+    public Locator getTasarimKartlari() {
+        return page.locator(".design-card, [class*='card']");
     }
 
-    public Locator getDahaFazlaTasarimYukleButton() {
+    public Locator getOdaTipiFiltreButonu() {
+        return page.locator(".filter-btn, [class*='filter']");
+    }
+
+    public Locator getDahaFazlaTasarimYukleButonu() {
         return page.locator("text=Daha Fazla Tasarım Yükle");
     }
 
-    public Locator getTasarimKartiKullaniciAdi() {
-        return page.locator("[class*='designer-name'], [class*='card'] a");
-    }
-
     public Locator getKalpIkonu() {
-        return page.locator("[class*='heart'], [class*='like']");
+        return page.locator(".heart-icon, [class*='heart']");
     }
 
     public Locator getBegeniSayisi() {
-        return page.locator("[class*='likes-count']");
+        return page.locator(".like-count, [class*='count']");
     }
 
-    public Locator getSssAlani() {
-        return page.locator("[class*='faq'], text=Sıkça Sorulan Sorular");
+    public Locator getDoluKalpIkonu() {
+        return page.locator(".heart-icon.active, [class*='heart-filled']");
     }
 
-    public Locator getIlkAkordeonBasligi() {
-        return page.locator("[class*='accordion-item']:first-child, [class*='faq-item']:first-child");
+    public Locator getFaqAlani() {
+        return page.locator(".faq-section, [class*='faq']");
     }
 
-    public Locator getFarkliAkordeonBasligi() {
-        return page.locator("[class*='accordion-item']:nth-child(2), [class*='faq-item']:nth-child(2)");
+    public Locator getBirinciSoru() {
+        return page.locator(".faq-item").first();
     }
 
-    public Locator getFooterAlani() {
-        return page.locator("footer");
+    public Locator getIkinciSoru() {
+        return page.locator(".faq-item").nth(1);
     }
 
-    public Locator getBultenEpostaInput() {
-        return page.locator("footer input[type='email'], [placeholder*='eposta']");
+    public Locator getBultenFormu() {
+        return page.locator(".newsletter-form, [class*='newsletter']");
     }
 
-    public Locator getAboneOlButton() {
-        return page.locator("footer button, text=Abone Ol");
+    public Locator getBultenInputAlani() {
+        return page.locator("input[type='email'], input[placeholder*='example']");
     }
 
-    public Locator getOlumluGeriBildirimMesaji() {
-        return page.locator("text=Başarıyla abone oldunuz, text=Teşekkürler");
+    public Locator getBultenGonderButonu() {
+        return page.locator(".newsletter-form button, [class*='subscribe']");
     }
 
-    public Locator getHataMesaji() {
-        return page.locator("[class*='error'], text=geçersiz, text=zorunludur");
+    public Locator getBasariliAbonelikMesaji() {
+        return page.locator("text=Başarıyla abone oldunuz");
     }
 
-    public Locator getKurumsalLinkler() {
-        return page.locator("footer a");
-    }
-
-    public Locator getUrunlerMenu() {
-        return page.locator("text=Ürünler");
-    }
-
-    public Locator getAiVirtualTourSecenegi() {
-        return page.locator("text=Yapay Zeka Sanal Tur");
-    }
-
-    public Locator getSanalDekorasyonApiSecenegi() {
-        return page.locator("text=Sanal Dekorasyon API");
+    public Locator getFormValidasyonHatasi() {
+        return page.locator(".error-message, [class*='error']");
     }
 }
