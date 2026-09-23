@@ -1,191 +1,143 @@
-Feature: Epic 1 ve Epic 2 - Ana Sayfa Navigasyon, Medya Yönetimi ve Kimlik Doğrulama
+Feature: AiStager Platformu Ana Sayfa Navigasyon Kimlik Doğrulama ve Yönetim Modülleri
 
   Background:
-    Given Kullanıcı AiStager platformundadır
+    Given Kullanici AiStager platformundadir
 
-  @positive @US-HP-001
-  Scenario: Kaydırıcı çizgisini sağa ve sola sürükleyerek görsel değişimi inceleme
-    Given Kullanıcı ana sayfada bulunur ("/tr")
-    When Kullanıcı Öncesi ve Sonrası Sihri slider çizgisini sağa doğru sürükler
-    Then Sonra mobilyalı oda alanının boyutu dinamik olarak artmalıdır
-    When Kullanıcı slider çizgisini sola doğru sürükler
-    Then Önce boş oda alanının boyutu dinamik olarak artmalıdır
+  Scenario: Oncesi ve Sonrasi Sihri slider alaninin sag sol ok butonlariyla kontrol edilmesi
+    Given Kullanici ana sayfada Oncesi ve Sonrasi Sihri slider alanindadir
+    When Kullanici sag ok butonuna tiklar
+    Then Slider görseli bir sonraki adıma pürüzsüz bir şekilde geçmelidir
+    When Kullanici sol ok butonuna tiklar
+    Then Slider görseli bir önceki adıma geri dönmelidir
 
-  @positive @US-HP-001
-  Scenario: Carousel okları ve noktaları ile görsel değiştirme
-    Given Kullanıcı ana sayfada bulunur ("/tr")
-    When Kullanıcı slider altındaki sonraki ok simgesine veya farklı bir carousel noktasına tıklar
-    Then İlgili odanın öncesi ve sonrası görselleri yüklenmelidir
-    And Tıklanan carousel noktası koyu renk ile aktif olarak işaretlenmelidir
+  Scenario: Oncesi ve Sonrasi Sihri slider alaninin surukleme hareketiyle kontrol edilmesi
+    Given Kullanici ana sayfada Oncesi ve Sonrasi Sihri slider alanindadir
+    When Kullanici slider tutamagini saga dogru surukler
+    Then Görselin "Öncesi" ve "Sonrası" oranları sürükleme hareketiyle senkronize şekilde değişmelidir
 
-  @positive @US-HP-001
-  Scenario: Odanızı Yükleyin butonuna tıklama
-    Given Kullanıcı ana sayfada bulunur ("/tr")
-    When Kullanıcı Odanızı Yükleyin butonuna tıklar
-    Then Kullanıcı oda yükleme veya kimlik doğrulama giriş arayüzüne yönlendirilmelidir
+  Scenario: Oncesi ve Sonrasi Sihri slider alaninin alt carousel noktalariyla kontrol edilmesi
+    Given Kullanici ana sayfada Oncesi ve Sonrasi Sihri slider alanindadir
+    When Kullanici alt kisimdaki ikinci carousel noktasina tiklar
+    Then Slider dogrudan ilgili ikinci gorsel kombinasyonuna gecmelidir
 
-  @positive @US-HP-001
-  Scenario: Dil seçeneğini değiştirme
-    Given Kullanıcı ana sayfada bulunur ("/tr")
-    When Kullanıcı dil seçeneğini TR den farklı bir dile örn EN değiştirir
-    Then Sayfadaki tüm statik ve dinamik metinler seçilen dile güncellenmelidir
+  Scenario: Oturum acmamis ziyaretcinin ust menu gorunumu
+    Given Ziyaretci sisteme giris yapmamistir
+    When Ziyaretci ana sayfayi ziyaret eder
+    Then Üst menüde "Giriş Yap" ve "Ücretsiz Dene" butonları görünmelidir
+    And Üst menüde "Üretimlerim" ve profil ikonları gizli olmalıdır
 
-  @positive @US-HP-002
-  Scenario: Logoya tıklayarak ana sayfaya yönlendirilme
-    Given Kullanıcı alt sayfalardan birindedir
-    When Kullanıcı üst menüdeki site logosuna tıklar
-    Then Kullanıcı ana sayfaya yönlendirilmeli veya sayfa yenilenmelidir
+  Scenario: Oturum acmis kullanicinin ust menu gorunumu
+    Given Kullanici gecerli kimlik bilgileriyle sisteme giris yapmistir
+    When Kullanici ana sayfayi ziyaret eder
+    Then Üst menüde "Üretimlerim", hızlı erişim araçları ve profil menüsü aktif olarak görünmelidir
 
-  @positive @US-HP-002
-  Scenario: Ürünler menüsü açılır penceresini dropdown görüntüleme
-    Given Kullanıcı ana sayfada bulunur ("/tr")
-    When Kullanıcı Ürünler menüsünün üzerine gelir veya tıklar
-    Then Alt ürün seçeneklerini içeren açılır menü dropdown açılmalıdır
+  Scenario: Galeri alaninin varsayilan olarak Tum Tipler ile gelmesi ve oda tipine gore filtrelenmesi
+    Given Kullanici ana sayfadaki galeri alanindadir
+    Then Varsayılan olarak "Tüm Tipler" filtresinin aktif olduğu görülmelidir
+    When Kullanici "Oturma Odası" filtre seçeneğine tıklar
+    Then Galeri listesi yalnızca "Oturma Odası" kategorisine ait içerikleri göstermelidir
 
-  @positive @US-HP-002
-  Scenario: Oturum açmış kullanıcı için üst menü görünürlüğü
-    Given Kullanıcı sistemde oturum açmıştır
-    When Kullanıcı ana sayfayı görüntüler
-    Then Üst menüde Üretimlerim hızlı render paneli ve profil menüsü mor yuvarlak y ikonu görünür olmalıdır
+  Scenario: Daha Fazla Tasarim Yukle butonunun mevcut filtreyi korumasi
+    Given Kullanici "Oturma Odası" filtresini seçmiştir ve galeri filtrelenmiştir
+    When Kullanici "Daha Fazla Tasarım Yükle" butonuna tıklar
+    Then Mevcut "Oturma Odası" filtresi korunarak yeni tasarım kartları listeye yüklenmelidir
 
-  @positive @US-HP-002
-  Scenario: Ziyaretçi oturum açmamış kullanıcı için üst menü görünürlüğü
-    Given Kullanıcı sistemde oturum açmamıştır ziyaretçidir
-    When Kullanıcı ana sayfayı görüntüler
-    Then Üst menüde Üretimlerim ve profil ikonu gizli olmalıdır
-    And "Giriş Yap" ve "Ücretsiz Dene" butonları görünür olmalıdır
+  Scenario: SSS bolumunde ayni anda yalnizca bir akordeon basliginin acik kalmasi
+    Given Kullanici SSS (Sıkça Sorulan Sorular) bölümündedir
+    When Kullanici "Birinci Soru" başlıklı akordeona tıklar ve soru açılır
+    And Kullanıcı ardından "İkinci Soru" başlıklı akordeona tıklar
+    Then "İkinci Soru" açılmalı ve "Birinci Soru" otomatik olarak kapanmalıdır
 
-  @positive @US-HP-003
-  Scenario: Sayfa ilk açılışında varsayılan filtre durumu
-    Given Kullanıcı ana sayfadaki topluluk galerisi alanındadır
-    Then "Tüm Tipler" filtresi aktif (mor renkte) olmalıdır
-    And Tüm oda tiplerine ait tasarım kartları galeride listelenmelidir
+  Scenario: Bulten aboneligine gecerli e-posta adresi ile kayit olma
+    Given Kullanici footer alanindaki bulten abonelik formundadir
+    When Kullanici e-posta alanina "test.kullanici@example.com" girer
+    And Kullanici abone ol butonuna tiklar
+    Then Başarılı abonelik mesajı görüntülenmelidir
 
-  @positive @US-HP-003
-  Scenario: Oda tipine göre filtreleme yapma
-    Given Kullanıcı ana sayfadaki topluluk galerisi alanındadır
-    When Kullanıcı belirli bir oda tipi filtre butonuna tıklar
-    Then Galeri yalnızca seçilen kategoriye ait tasarımlarla güncellenmelidir
+  Scenario Outline: Bulten aboneligine gecersiz veya bos e-posta adresi girilmesi
+    Given Kullanici footer alanindaki bulten abonelik formundadir
+    When Kullanici e-posta alanina "<gecersiz_ep_osta>" girer
+    And Kullanici abone ol butonuna tiklar
+    Then Sistem hata mesaji tetiklemelidir
 
-  @edge @US-HP-003
-  Scenario: Filtrelenmiş görünümde Daha Fazla Tasarım Yükle aksiyonu
-    Given Kullanıcı ana sayfadaki topluluk galerisi alanındadır
-    And Kullanıcı spesifik bir oda tipi filtresi seçmiştir
-    When Kullanıcı Daha Fazla Tasarım Yükle butonuna tıklar
-    Then Yüklenen yeni tasarımlar da aktif filtrenin dışına çıkmamalı aynı kategoride olmalıdır
+    Examples:
+      | gecersiz_ep_osta |
+      |                  |
+      | eksik-format.com |
+      | @domain.com      |
+      | test@.com        |
 
-  @positive @US-HP-003
-  Scenario: Tasarım kartını beğenme Like
-    Given Kullanıcı ana sayfadaki topluluk galerisi alanındadır
-    When Kullanıcı bir tasarım kartı üzerindeki Kalp ikonuna tıklar
-    Then İlgili tasarımın beğeni sayısı anlık olarak 1 artmalıdır
-    And Kalp ikonu dolu aktif hale gelmelidir
+  Scenario: Footer yasal metin baglantilarinin calismasi
+    Given Kullanici footer alanindadir
+    When Kullanici "Gizlilik Politikası" bağlantısına tıklar
+    Then "Gizlilik Politikası" sayfası açılmalıdır
+    When Kullanici ana sayfaya donup "Kullanım Şartları" bağlantısına tıklar
+    Then "Kullanım Şartları" sayfası açılmalıdır
 
-  @positive @US-HP-004
-  Scenario: FAQ akordeon alanında tekli soru açılabilmesi kuralı
-    Given Kullanıcı ana sayfadaki FAQ alanındadır
-    When Kullanıcı birinci soruya tıklayarak açar
-    And Kullanıcı ikinci bir soruya tıklar
-    Then İkinci soru açılmalı ve birinci soru otomatik olarak kapanmalıdır
+  Scenario: Sosyal medya ikonlarinin yeni sekmede acilmasi
+    Given Kullanici footer alanindadir
+    When Kullanıcı sosyal medya ikonlarından "Instagram" simgesine tıklar
+    Then Platformun resmi Instagram sayfasi yeni bir tarayici sekmesinde acilmalidir
 
-  @positive @US-HP-004
-  Scenario: Bülten formuna geçerli e-posta ile abone olma
-    Given Kullanıcı footer alanındaki bülten formundadır
-    When Kullanıcı bülten input alanına geçerli bir e-posta adresi girer "test@example.com"
-    And Kullanıcı gönder butonuna tıklar
-    Then Başarılı abonelik mesajı Başarıyla abone oldunuz görüntülenmelidir
+  Scenario: Giris ve kayit formlarinda zorunlu alanlarin bos birakilmasi
+    Given Kullanici "Giriş Yap / Kayıt Ol" sayfasındadır
+    When Kullanıcı tüm zorunlu alanları boş bırakarak formları gönderir
+    Then Sistem tüm zorunlu alanlar için "Bu alan zorunludur" uyarısı vermelidir
 
-  @negative @US-HP-004
-  Scenario Outline: Bülten formuna geçersiz veya boş giriş yapılması
-    Given Kullanıcı footer alanındaki bülten formundadır
-    When Kullanıcı bülten input alanına "<gecersiz_email>" girer
-    And Kullanıcı gönder butonuna tıklar
-    Then Form validasyon hatası tetiklenmeli ve abonelik gerçekleşmemelidir
+  Scenario Outline: Kayit formunda gecersiz e-posta formati girilmesi
+    Given Kullanici "Kayıt Ol" sayfasındadır
+    When Kullanici e-posta alanina "<gecersiz_email>" girer
+    And Kayit formunu gondermeye calisir
+    Then E-posta formatinin gecersiz olduguna dair uyari mesaji alinmalidir
 
     Examples:
       | gecersiz_email |
-      |                |
-      | test-email     |
-      | test@.com      |
+      | kullanici      |
+      | kullanici@     |
       | @domain.com    |
 
-  @negative @US-LOG-001
-  Scenario Outline: Boş alan bırakılması veya geçersiz e-posta formatı girilmesi
-    Given Kullanıcı giriş sayfasındadır
-    When Kullanıcı e-posta alanına "<email>" ve şifre alanına "<sifre>" girer
-    And Kullanıcı giriş yap butonuna tıklar
-    Then Form gönderimi engellenmeli ve ilgili alan altında zorunluluk veya format uyarısı gösterilmelidir
+  Scenario: Sifre alaninda maskeleme Goz ikonu ozelliginin kullanilmasi
+    Given Kullanıcı şifre alanına bir parola girmiştir ve parola maskelidir (gizlidir)
+    When Kullanıcı "Göz" ikonuna tıklar
+    Then Parola metin olarak gorunur hale gelmelidir
+    When Kullanıcı tekrar "Göz" ikonuna tıklar
+    Then Parola tekrar maskelenmelidir
+
+  Scenario Outline: Kayit sirasinda zayif sifre veya uyusmayan sifre onayi girilmesi
+    Given Kullanıcı "Kayıt Ol" sayfasındadır
+    When Kullanıcı şifre alanına "<sifre>", şifreyi onayla alanına "<sifre_onay>" girer
+    And Kayit ol butonuna tıklar
+    Then Sistem sifre politikasi veya eslesme hatasi vermelidir
 
     Examples:
-      | email          | sifre        |
-      |                | Password123! |
-      | test@          | Password123! |
-      | test.com       |              |
-      |                |              |
+      | sifre     | sifre_onay |
+      | 123456    | 123456     |
+      | Password1 | Password2  |
 
-  @negative @US-LOG-001
-  Scenario: Hatalı şifre veya kayıtlı olmayan e-posta ile giriş denemesi User Enumeration Önlemi
-    Given Kullanıcı giriş sayfasındadır
-    When Kullanıcı sisteme kayıtlı olmayan bir e-posta veya yanlış şifre girer
-    And Kullanıcı giriş yap butonuna tıklar
-    Then Sistem genel bir hata mesajı E-posta veya şifre hatalı döndürmelidir
+  Scenario: Kayit sirasinda Kullanici Sozlesmesi onay kutucugunun isaretlenmemesi
+    Given Kullanıcı "Kayıt Ol" sayfasında tüm zorunlu alanları ve geçerli şifreyi girmiştir
+    When Kullanıcı "Kullanıcı Sözleşmesi" onay kutucuğunu işaretlemeden kayıt olmaya çalışır
+    Then Sistem sözleşmenin onaylanması gerektiğine dair bir hata uyarısı vermelidir
 
-  @positive @US-LOG-001
-  Scenario: Şifre alanındaki Göz ikonu ile şifre maskeleme yönetimi
-    Given Kullanıcı giriş sayfasındadır
-    When Kullanıcı şifre alanına bir değer yazar
-    Then Şifre maskelenmiş gizli olarak görünmelidir
-    When Kullanıcı şifre alanının yanındaki Göz ikonuna tıklar
-    Then Şifre düz metin olarak görünür hale gelmelidir
-    When Kullanıcı tekrar Göz ikonuna tıklar
-    Then Şifre tekrar maskelenmelidir
+  Scenario: Sistemde kayitli olmayan e-posta veya yanlis sifre ile giris denemesi
+    Given Kullanıcı "Giriş Yap" sayfasındadır
+    When Kullanici sisteme kayitli olmayan "bilinmeyen@example.com" ve yanlis sifre "YanlisSifre123" girer
+    And Giriş yap butonuna tıklar
+    Then Sistem güvenlik gereği spesifik bir açık vermeden genel *"E-posta veya şifre hatalı"* mesajı dönmelidir
 
-  @edge @US-LOG-001
-  Scenario: Güvenlik testi SQL Injection denemeleri
-    Given Kullanıcı giriş sayfasındadır
-    When Kullanıcı e-posta alanına "' OR '1'='1" ve şifre alanına "' OR '1'='1" girer
-    And Kullanıcı giriş yap butonuna tıklar
-    Then Sistem zararlı girdiyi güvenli şekilde filtrelemeli giriş başarısız olmalı ve sunucu 500 hatası üretmemelidir
+  Scenario: Zaten kayitli bir e-posta adresi ile tekrar kayit olunmaya calisilmasi
+    Given Sistemde "kayitli.kullanici@example.com" adresiyle halihazirda bir hesap bulunmaktadir
+    When Kullanıcı "Kayıt Ol" sayfasında aynı e-posta adresini kullanarak yeni kayıt oluşturmaya çalışır
+    Then Sistem Bu e-posta adresi zaten kullanimda uyarisi vermelidir
 
-  @negative @US-REG-001
-  Scenario Outline: Şifre kuralı ve eşleşmeme kontrolü
-    Given Kullanıcı kayıt sayfasındadır
-    When Kullanıcı kayıt formunu doldururken şifreye "<sifre>", şifreyi onayla alanına "<sifre_onay>" girer
-    And Kullanıcı kayıt ol butonuna tıklar
-    Then "<hata_mesaji>" uyarısı alınmalıdır
+  Scenario Outline: Form alanlarina SQL Injection veya asiri uzun karakter girdilerinin denenmesi
+    Given Kullanici "Giriş Yap / Kayıt Ol" sayfasındadır
+    When Kullanıcı form alanlarına güvenlik tehditi içeren "<zararli_girdi>" karakterlerini girer
+    And İşlemi gönderir
+    Then Sistem bu girdileri güvenle filtrelemeli ve sunucu 500 hatası (Internal Server Error) üretmeden uygun bir validasyon hatası dönmelidir
 
     Examples:
-      | sifre     | sifre_onay | hata_mesaji                |
-      | 123456    | 123456     | En az 8 karakter olmalıdır |
-      | Pass123!  | Pass1234!  | Şifreler eşleşmiyor        |
-
-  @negative @US-REG-001
-  Scenario: Kullanıcı sözleşmesi onaylanmadan kayıt olma denemesi
-    Given Kullanıcı kayıt sayfasındadır
-    When Kullanıcı tüm zorunlu alanları geçerli verilerle doldurur
-    And Kullanıcı Kullanıcı Sözleşmesi onay kutucuğunu işaretlemez
-    And Kullanıcı kayıt ol butonuna tıklar
-    Then Kayıt işlemi gerçekleşmemeli ve sözleşme onaylama uyarısı gösterilmelidir
-
-  @negative @US-REG-001
-  Scenario: Sistemde halihazırda kayıtlı bir e-posta ile kayıt olma
-    Given Kullanıcı kayıt sayfasındadır
-    When Kullanıcı halihazırda sistemde var olan bir e-posta adresini girer
-    And Tüm diğer alanları geçerli doldurup sözleşmeyi onaylar
-    And Kullanıcı kayıt ol butonuna tıklar
-    Then Bu e-posta adresi zaten kullanımda uyarısı alınmalıdır
-
-  @positive @US-REG-001
-  Scenario: Başarılı e-posta ve şifre ile kayıt olma
-    Given Kullanıcı kayıt sayfasındadır
-    When Kullanıcı benzersiz geçerli bir e-posta adresi ve kurallara uygun şifre girer
-    And Şifreyi Onayla alanına aynı şifreyi yazar
-    And Kullanıcı Sözleşmesi onay kutucuğunu işaretler
-    And Kullanıcı kayıt ol butonuna tıklar
-    Then Hesabınız başarıyla oluşturuldu mesajı alınmalı ve kullanıcı paneline yönlendirilmelidir
-
-  @positive @US-REG-001
-  Scenario: Google OAuth kullanarak hızlı kayıt olma
-    Given Kullanıcı kayıt sayfasındadır
-    When Kullanıcı Google ile Devam Et butonuna tıklar
-    Then Google kimlik doğrulama penceresi açılmalı ve başarılı giriş sonrasında sistemde hesap oluşturularak kullanıcı oturum açmış olmalıdır
+      | zararli_girdi                                                                  |
+      | ' OR '1'='1                                                                    |
+      | <script>alert('test')</script>                                                 |
+      | BuMetinFormSinirlariniTestEtmekAmaciylaAsiriDerecedeUzunTutulmusBirGirdidir... |
