@@ -1,116 +1,127 @@
-Feature: Ana Sayfa, Navigasyon ve Kimlik Doğrulama US-AI-001
-  Kullanıcıların ana sayfayı gezinebilmesi, slider, galeri, SSS ve bülten özelliklerini 
-  kullanabilmesi, ayrıca güvenli bir şekilde Giriş Yapıp Kayıt Olabilmesi
+# language: tr
+Feature: AiStager.ai Çekirdek Modülleri, Navigasyon ve Kimlik Doğrulama
+  Kullanıcıların ana sayfa bileşenlerini kullanabilmesi, çoklu dil desteğinden yararlanabilmesi,
+  galeriyi filtreleyebilmesi, bültene abone olabilmesi ve güvenli bir şekilde
+  giriş/kayıt işlemlerini gerçekleştirebilmesi amaçlanmaktadır.
 
   Background:
     Given Kullanıcı AiStager platformundadır
+    And Şu anki dil seçeneği "TR" olarak ayarlanmıştır
 
-  Scenario: Kullanıcı slider alanını interaktif olarak kullanabilmelidir Pozitif
-    When Kullanıcı Öncesi ve Sonrası Sihri alanındaki kaydırıcıyı sağa ve sola sürükler
-    Then Mobilyalı ve boş oda görselleri arasında pürüzsüz geçiş sağlanmalıdır
-    When Kullanıcı yön oklarına veya nokta göstergelerine tıklar
-    Then Görsel değişimi sorunsuz bir şekilde gerçekleşmelidir
+  Scenario: Ziyaretçi için header menü görünürlüğü
+    Given Kullanıcı ana sayfadadır
+    And Kullanıcı sisteme giriş yapmamıştır
+    Then Giriş Yap ve Ücretsiz Dene butonları görünür olmalıdır
+    And Üretimlerim ve profil menüleri gizli olmalıdır
 
-  Scenario: Ziyaretçi konumundaki kullanıcı üst menüyü doğru görmelidir Pozitif
-    Given Kullanıcı sisteme giriş yapmamıştır ziyaretçi
-    Then Üst menüde Giriş Yap ve Ücretsiz Dene butonları görünmelidir
-    And Üst menüde Üretimlerim menüsü ve profil ikonu kesinlikle görünmemelidir
+  Scenario: Oturum açmış kullanıcı için hızlı erişim menülerinin aktif olması
+    Given Kullanıcı ana sayfadadır
+    And Kullanıcı geçerli kimlik bilgileriyle sisteme giriş yapmıştır
+    Then Hızlı erişim panelleri, Üretimlerim ve profil menüleri aktif ve görünür olmalıdır
 
-  Scenario: Oturum açmış kullanıcı üst menüyü tam yetkiyle görmelidir Pozitif
-    Given Kullanıcı geçerli kimlik bilgileriyle oturum açmıştır
-    Then Üst menüde logo, ürünler, çözümler, kaynaklar ve fiyatlandırma menüleri görünmelidir
-    And Üst menüde Üretimlerim, hızlı render paneli ve profil menüsü aktif olarak çalışmalıdır
+  Scenario: Slider görsel geçişlerinin test edilmesi
+    Given Kullanıcı ana sayfadaki slider alanındadır
+    When Kullanıcı kaydırıcıyı sağa ve sola çeker
+    Then Mobilyalı ve boş oda geçişleri pürüzsüz görünmelidir
+    And Oklar ile alt carousel noktaları görsellerle senkronize çalışmalıdır
 
-  Scenario: Topluluk tasarımları filtrelenebilmeli ve detaylarına gidilebilmelidir Pozitif
-    When Kullanıcı Topluluk Tasarımlarımızı Keşfedin alanına gider
-    And Kullanıcı oda tiplerine göre bir filtre seçer Yatak Odası
-    Then Sadece seçilen oda tipine ait tasarım kartları listelenmelidir
-    When Kullanıcı bir tasarım kartı üzerindeki tasarımcı profiline tıklar
-    Then İlgili tasarımcının profil sayfasına yönlendirilmelidir
-    When Kullanıcı bir içeriği beğenir
-    Then Beğeni sayısı anlık olarak artmalıdır
+  Scenario: Oda tipi filtreleme ve Daha Fazla Yükle aksiyonu
+    Given Kullanıcı ana sayfadaki galeri alanındadır
+    When Kullanıcı Oturma Odası oda tipi filtresini seçer
+    Then Galeri dinamik olarak sadece Oturma Odası tasarımlarını filtrelemelidir
+    And Kullanıcı Daha Fazla Yükle butonuna tıkladığında mevcut filtre korunarak yeni kartlar listeye eklenmelidir
 
-  Scenario: Filtreleme yapılmışken yeni tasarımlar yüklenebilmelidir Edge Case
-    Given Kullanıcı topluluk galerisinde bir oda tipine göre filtreleme yapmıştır
-    When Kullanıcı Daha Fazla Tasarım Yükle butonuna tıklar
-    Then Mevcut filtre bozulmaksızın alt kısma yeni tasarım kartları yüklenmelidir
+  Scenario: Sıkça Sorulan Sorular akordeonunun tekli çalışma kuralı
+    Given Kullanıcı ana sayfadaki SSS bölümündedir
+    When Kullanıcı birinci soruya tıklayarak açmıştır
+    And Kullanıcı ikinci bir soruya tıklamıştır
+    Then İkinci soru açılmalı ve birinci soru otomatik olarak kapanmalıdır
 
-  Scenario: SSS alanındaki akordeon menüler tekil olarak çalışmalıdır Pozitif
-    When Kullanıcı SSS alanından bir soruya tıklar ve akordeon açılır
-    And Kullanıcı farklı bir soruya tıklar
-    Then Yeni tıklanan soru açılmalı ve daha önce açık olan soru otomatik olarak kapanmalıdır
+  Scenario: Dil değişimi ile anlık metin güncellemesi
+    Given Kullanıcı ana sayfadadır
+    When Kullanıcı header alanındaki dil seçeneğine tıklar
+    And Dil seçeneği EN olarak değiştirilir
+    Then Sayfadaki tüm statik metinler anlık olarak İngilizceye güncellenmelidir
 
-  Scenario: Geçerli e-posta ile bülten aboneliği başarılı olmalıdır Pozitif
-    When Kullanıcı footer bülten alanına geçerli bir e-posta adresi "test@example.com" girer
+  Scenario: Geçerli e-posta ile başarılı bülten aboneliği
+    Given Kullanıcı footer bülten alanındadır
+    When Kullanıcı bülten formuna "test@ornek.com" geçerli e-postasını girer
     And Kullanıcı abone ol butonuna tıklar
-    Then Başarılı bülten aboneliği mesajı görüntülenmelidir
+    Then Başarılı abonelik belirten yeşil uyarı mesajı görüntülenmelidir
 
-  Scenario: Geçersiz e-posta formatı ile bülten aboneliği engellenmelidir Negatif
-    When Kullanıcı footer bülten alanına geçersiz bir e-posta adresi "gecersiz-eposta" girer
+  Scenario: Boş e-posta ile bülten aboneliği denemesi
+    Given Kullanıcı footer bülten alanındadır
+    When Kullanıcı e-posta alanını boş bırakarak abone ol butonuna tıklar
+    Then Sistem Bu alan zorunludur veya geçerli bir hata mesajı dönmelidir
+
+  Scenario: Geçersiz e-posta formatı ile bülten aboneliği denemesi
+    Given Kullanıcı footer bülten alanındadır
+    When Kullanıcı bülten formuna "gecersiz-eposta" formatında metin girer
     And Kullanıcı abone ol butonuna tıklar
-    Then Sistem geçerli e-posta formatı uyarısı vermelidir
+    Then Sistem geçersiz e-posta formatı hatası vermelidir
 
-  Scenario: Kayıtlı ve doğru bilgilerle başarılı giriş yapılabilmelidir Pozitif
+  Scenario: Geçerli bilgilerle başarılı giriş yapılması
     Given Kullanıcı giriş sayfasındadır
-    When Kullanıcı kayıtlı e-posta adresini ve doğru şifresini girer
+    When Kullanıcı geçerli "eposta@ornek.com" ve "GuvenliSifre1." girer
     And Kullanıcı Giriş Yap butonuna tıklar
-    Then Kullanıcı başarılı bir şekilde ana panele yönlendirilmelidir
+    Then Kullanıcı başarılı şekilde ana panele yönlendirilmelidir
 
-  Scenario Outline: Boş alan veya hatalı giriş denemelerinde uygun hata mesajı alınmalıdır Negatif
+  Scenario: Giriş sayfasında zorunlu alanların boş bırakılması
     Given Kullanıcı giriş sayfasındadır
-    When Kullanıcı e-posta alanına "<eposta>" ve şifre alanına "<sifre>" girer
-    And Kullanıcı Giriş Yap butonuna tıklar
-    Then Sistem "<hata_mesaji>" uyarısını göstermelidir
+    When Kullanıcı e-posta ve şifre alanlarını boş bırakarak giriş yapmaya çalışır
+    Then İlgili alanların altında Bu alan zorunludur uyarı mesajı görünmelidir
 
-    Examples:
-      | eposta               | sifre       | hata_mesaji                |
-      |                      |             | Bu alan zorunludur         |
-      | gecersiz-format      | 123456      | Geçersiz e-posta formatı   |
-      | dogru@example.com    | yanlissifre | E-posta veya şifre hatalı  |
-
-  Scenario: SQL Injection girişimleri güvenlik amacıyla filtrelenmelidir Edge Case
+  Scenario: Geçersiz e-posta formatı ile giriş denemesi
     Given Kullanıcı giriş sayfasındadır
-    When Kullanıcı e-posta alanına "'OR '1'='1" ve şifre alanına "'OR '1'='1" girer
-    And Kullanıcı Giriş Yap butonuna tıklar
-    Then Sistem girdileri filtreleyerek girişe izin vermemeli ve hata mesajı göstermelidir
+    When Kullanıcı e-posta alanına "hatali-format" yazar
+    Then Sistem standart e-posta formatı uyarısı vermelidir
 
-  Scenario: Şifre alanındaki maskeleme Göz ikonu ile yönetilebilmelidir Pozitif
+  Scenario: Yanlış şifre veya kayıtlı olmayan e-posta ile giriş
     Given Kullanıcı giriş sayfasındadır
-    When Kullanıcı şifre alanına bir değer girer
-    And Şifrenin varsayılan olarak maskelenmiş yıldızlı noktalı olduğu görülür
-    When Kullanıcı şifre alanının yanındaki Göz ikonuna tıklar
-    Then Şifre düz metin olarak görünür olmalıdır
-    When Kullanıcı tekrar Göz ikonuna tıklar
-    Then Şifre tekrar maskelenmelidir
+    When Kullanıcı yanlış şifre veya sistemde kayıtlı olmayan bir e-posta girer
+    And Giriş yap butonuna tıklar
+    Then Güvenlik amacıyla genel bir hata mesajı olan E-posta veya şifre hatalı gösterilmelidir
 
-  Scenario: Google ile OAuth üzerinden giriş yapılabilmelidir Pozitif
-    Given Kullanıcı giriş sayfasındadır
-    When Kullanıcı Google ile devam et butonuna tıklar
-    Then Kullanıcı Google kimlik doğrulama ekranına yönlendirilmeli ve izin sonrası sisteme giriş yapabilmelidir
+  Scenario: Şifre alanında göz ikonu ile maskeleme ve açma fonksiyonu
+    Given Kullanıcı giriş sayfasındaki şifre alanına metin girer
+    When Kullanıcı şifre alanındaki göz ikonuna tıklar
+    Then Şifre karakterleri okunabilir hale gelmeli, tekrar tıklandığında maskelenmelidir
 
-  Scenario: Kurallara uygun yeni kullanıcı kaydı başarılı olabilmelidir Pozitif
+  Scenario: Geçerli bilgilerle başarılı kayıt oluşturulması
     Given Kullanıcı kayıt sayfasındadır
-    When Kullanıcı benzersiz yeni bir e-posta adresi girer
-    And Kullanıcı en az 8 karakterden oluşan güçlü bir şifre girer ve Şifreyi Onayla alanına aynı şifreyi yazar
-    And Kullanıcı Kullanıcı Sözleşmesi ni onaylar
-    And Kullanıcı Kayıt Ol butonuna tıklar
-    Then Hesap başarıyla oluşturulmalı ve kullanıcı sisteme yönlendirilmelidir
+    When Kullanıcı geçerli ad, soyad, "yeni@ornek.com" e-posta ve "GuvenliSifre1." şifresini girer
+    And Kullanıcı kullanıcı sözleşmesini onaylar
+    And Kayıt Ol butonuna tıklar
+    Then Hesap başarıyla oluşturulmalı ve aktivasyon geçişi sağlanmalıdır
 
-  Scenario Outline: Kayıt ol kurallarına uymayan durumlarda hata alınmalıdır Negatif ve Edge Case
+  Scenario: Kayıt olurken şifre politikasının ihlal edilmesi
     Given Kullanıcı kayıt sayfasındadır
-    When Kullanıcı formu şu verilerle doldurur: eposta "<eposta>", sifre "<sifre>", sifre_tekrar "<sifre_tekrar>", sozlesme <sozlesme>
-    And Kullanıcı Kayıt Ol butonuna tıklar
-    Then Sistem ilgili "<hata_mesaji>" uyarısını göstermelidir
+    When Kullanıcı şifre alanına 8 karakterden kısa bir değer girer
+    Then Sistem şifrenin en az 8 karakter olması gerektiğine dair hata mesajı vermelidir
 
-    Examples:
-      | eposta             | sifre    | sifre_tekrar | sozlesme | hata_mesaji                             |
-      | yeni@example.com   | 12345    | 12345        | True     | Şifre en az 8 karakterden oluşmalıdır   |
-      | yeni@example.com   | Password1| Password2    | True     | Şifreler eşleşmiyor                     |
-      | yeni@example.com   | Password1| Password1    | False    | Kullanıcı Sözleşmesi onaylanmalıdır     |
-
-  Scenario: Sistemde kayıtlı e-posta adresi ile tekrar kayıt olunamamalıdır Negatif
+  Scenario: Kayıt olurken şifrelerin eşleşmemesi
     Given Kullanıcı kayıt sayfasındadır
-    And Sistemde hali hazırda kayıtlı olan bir e-posta adresi bulunmaktadır "kayitli@example.com"
-    When Kullanıcı e-posta alanına "kayitli@example.com" yazar ve diğer zorunlu alanları kurallara uygun doldurur
-    And Kullanıcı Kayıt Ol butonuna tıklar
-    Then Sistem Bu e-posta adresi zaten kullanımda uyarısını dönmelidir
+    When Kullanıcı Şifre alanına "GuvenliSifre1." ve Şifreyi Onayla alanına "FarkliSifre2." girer
+    Then Sistem iki şifrenin eşleşmediğine dair hata mesajı vermelidir
+
+  Scenario: Zaten kayıtlı e-posta adresi ile kayıt denemesi
+    Given Kullanıcı kayıt sayfasındadır
+    When Kullanıcı sistemde halihazırda kayıtlı olan bir e-posta adresi girer
+    And Kayıt ol butonuna tıklar
+    Then Sistem net bir şekilde Bu e-posta adresi zaten kullanımda uyarısı vermelidir
+
+  Scenario: Kullanıcı sözleşmesi onaylanmadan kayıt denemesi
+    Given Kullanıcı kayıt sayfasındadır
+    When Kullanıcı tüm zorunlu alanları doğru doldurur ancak kullanıcı sözleşmesini onaylamaz
+    Then Kayıt işlemi engellenmeli ve sözleşme onay uyarısı gösterilmelidir
+
+  Scenario: Form alanlarına SQL Injection veya zararlı özel karakterler girilmesi
+    Given Kullanıcı giriş sayfasındadır
+    When Kullanıcı form alanlarına SQL Injection denemesi içeren metinler girer
+    Then Sistem bu girdileri güvenli bir şekilde filtrelemelidir
+    And Sunucu tarafında hata üretmek yerine uygun bir validasyon hatası dönmelidir
+
+  Scenario: Google ile devam et entegrasyonunun tetiklenmesi
+    Given Kullanıcı giriş sayfasındadır
+    When Kullanıcı Google ile Devam Et butonuna tıklar
+    Then Google kimlik doğrulama ekranı başarılı bir şekilde tetiklenmelidir

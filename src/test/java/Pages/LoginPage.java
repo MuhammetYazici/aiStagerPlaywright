@@ -11,27 +11,35 @@ public class LoginPage {
         this.page = PD.getPage();
     }
 
-    public Locator getEpostaInput() {
-        return page.locator("input[name='email'], input[placeholder='you@example.com']");
+    public Locator getEmailInput() {
+        return page.locator("input[name='email']");
     }
 
-    public Locator getSifreInput() {
-        return page.locator("input[name='password'], input[placeholder='Min. 8 karakter']");
+    public Locator getPasswordInput() {
+        return page.locator("input[name='password']");
     }
 
     public Locator getGirisYapSubmitButton() {
-        return page.locator("button:has-text('Giriş Yap'), button[type='submit']").first();
+        return page.locator("button[type='submit']:has-text('Giriş Yap')");
     }
 
-    public Locator getHataMesaji(String hataMesaji) {
-        return page.locator("text=" + hataMesaji);
+    public Locator getAnaPanel() {
+        return page.locator(".dashboard-main-panel");
     }
 
-    public Locator getGozIkonu() {
-        return page.locator(".password-toggle-icon, [aria-label='Show password']");
+    public Locator getGenelHataMesaji() {
+        return page.locator(".alert-danger:has-text('hatalı')");
+    }
+
+    public Locator getSifreGozIkonu() {
+        return page.locator(".password-toggle-icon");
     }
 
     public Locator getGoogleIleDevamEtButton() {
         return page.locator("button:has-text('Google ile devam et')");
+    }
+
+    public Locator getGoogleAuthEkran() {
+        return page.locator("iframe[src*='accounts.google.com']");
     }
 }
