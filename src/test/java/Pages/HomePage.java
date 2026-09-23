@@ -118,4 +118,16 @@ public class HomePage {
     public Locator getHataMesajiGostergesi() {
         return page.locator(".error-message, text=zorunludur, text=hatalı");
     }
+
+    public Locator getAiVirtualTourSecenegi() {
+        return page.locator("text=Yapay Zeka Sanal Tur");
+    }
+
+    public Locator getSanalDekorasyonApiSecenegi() {
+        return page.locator("text=Sanal Dekorasyon API");
+    }
+
+    public Locator getGirisYapLink() {
+        return page.locator("text=Giriş Yap");
+    }
 }
