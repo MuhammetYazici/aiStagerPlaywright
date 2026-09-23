@@ -1,138 +1,166 @@
-@AiStager @US-AI-001
-Feature: AiStager.ai Temel Modüller, Ana Sayfa, Kimlik Doğrulama ve Navigasyon
-  Kullanıcıların ana sayfayı deneyimlemesi, header yetkilendirmelerini görmesi,
-  galeri/akordeon/bülten ile etkileşime geçmesi ve kimlik doğrulama işlemlerini
-  güvenli ve kurallara uygun şekilde yapabilmesi.
+# language: tr
+Feature: AiStager.ai - Ana Sayfa, Kimlik Doğrulama ve Temel Navigasyon
+  Kullanıcı olarak ana sayfadaki bileşenleri kullanabilmek,
+  sisteme güvenli giriş yapabilmek ve yeni hesap oluşturabilmek istiyorum.
 
   Background:
     Given Kullanıcı AiStager platformundadır
 
-  @Positive @Homepage @Slider
-  Scenario: Öncesi ve Sonrası Slider bileşeninin interaktif çalışması
-    Given Kullanıcı ana sayfadadır ve /tr adresindedir
-    When Kullanıcı Öncesi ve Sonrası Sihri slider çubuğunu iki yönlü sürüklerse veya ok alt nokta butonlarına tıklarsa
-    Then Görseller pürüzsüz şekilde boyutlanmalı ve senkronize olarak değişmelidir
+  @regression @home @positive
+  Scenario: Öncesi ve Sonrası Sihri slider alanının dinamik çalışması
+    Given Kullanıcı AiStager.ai ana sayfasındadır
+    When Kullanıcı Öncesi ve Sonrası Sihri slider alanındaki görseli sağa sola sürükler veya ok butonlarına tıklar
+    Then Mobilyalı ve boş oda arasındaki görsel geçiş pürüzsüz bir şekilde gerçekleşmelidir
+    And Kullanıcı alt carousel noktalarını kullanarak da görseller arasında geçiş yapabilmelidir
 
-  @Positive @Homepage @Localization
-  Scenario: Dil seçeneğinin anlık olarak değişmesi
-    Given Kullanıcı ana sayfadadır ve /tr adresindedir
-    When Kullanıcı dil seçeneğini EN olarak değiştirirse
-    Then Sayfadaki tüm statik metinler anında İngilizce diline uyarlanmalıdır
+  @regression @home @positive
+  Scenario: Giriş yapmış kullanıcının üst menü görünümü
+    Given Kullanıcı sisteme geçerli kimlik bilgileriyle giriş yapmıştır
+    When Kullanıcı AiStager.ai ana sayfasına gider
+    Then Üst menüde Üretimlerim menüsü ve Profil ikonu görünür olmalıdır
+    And "Giriş Yap" ve "Ücretsiz Dene" butonları görünmemelidir
 
-  @Positive @Header @Visitor
-  Scenario: Ziyaretçi durumunda header görünürlük kuralları
-    Given Kullanıcı sisteme giriş yapmamış bir ziyaretçidir
-    When Kullanıcı ana sayfayı ziyaret ederse
-    Then Header alanında Giriş Yap ve Ücretsiz Dene butonları görünür olmalıdır
-    And Üretimlerim ve profil ikonu menüsü gizli olmalıdır
+  @regression @home @positive
+  Scenario: Ziyaretçi kullanıcının üst menü görünümü
+    Given Kullanıcı sisteme giriş yapmamıştır ziyaretçidir
+    When Kullanıcı AiStager.ai ana sayfasına gider
+    Then Üst menüde Giriş Yap ve Ücretsiz Dene butonları görünür olmalıdır
+    And Üretimlerim ve profil alanları gizli olmalıdır
 
-  @Positive @Header @Member
-  Scenario: Kayıtlı kullanıcı durumunda header görünürlük kuralları
-    Given Kullanıcı sisteme başarıyla giriş yapmış kayıtlı bir üyedir
-    When Kullanıcı ana sayfayı ziyaret ederse
-    Then Header alanında logo ürünler çözümler kaynaklar fiyatlandırma görünür olmalıdır
-    And Üretimlerim hızlı render paneli dil seçeneği ve profil menüsü aktif olmalıdır
+  @regression @home @positive
+  Scenario: Topluluk tasarımları galerisinde filtreleme ve etkileşimler
+    Given Kullanıcı AiStager.ai ana sayfasındaki galeri alanındadır
+    When Kullanıcı oda tiplerinden Oturma Odası filtresini seçer
+    Then Galeri kartları sadece Oturma Odası tasarımlarını gösterecek şekilde güncellenmelidir
+    When Kullanıcı bir kart üzerinden beğeni kalp ikonuna tıklar
+    Then Tasarımın beğeni sayısı artmalıdır
+    And Kullanıcı Daha Fazla Tasarım Yükle butonuna tıklandığında yeni tasarımlar yüklenmelidir
 
-  @Positive @Gallery
-  Scenario: Galeri ilk açılış ve oda tipi filtreleme
-    Given Kullanıcı ana sayfa galeri alanındadır
-    When Galeri ilk yüklendiğinde
-    Then Varsayılan olarak Tüm Tipler filtresi seçili gelmelidir
-    When Kullanıcı Oturma Odası oda tipi filtresine tıklarsa
-    Then Galeri listesi dinamik olarak sadece oturma odası tasarımlarını gösterecek şekilde filtrelenmelidir
+  @regression @home @positive
+  Scenario: SSS Akordeon alanının tekli açılma kuralı
+    Given Kullanıcı ana sayfadaki SSS Akordeon alanındadır
+    When Kullanıcı birinci akordeon başlığına tıklayarak içeriği açar
+    And Kullanıcı ikinci bir akordeon başlığına tıklar
+    Then İkinci akordeonun içeriği açılmalı ve birinci akordeon otomatik olarak kapanmalıdır
 
-  @Positive @Gallery
-  Scenario: Beğeni aksiyonunun anlık yansıması
-    Given Kullanıcı galeri alanındaki bir tasarım kartını incelemektedir
-    When Kullanıcı tasarım üzerindeki Beğeni Kalp ikonuna tıklarsa
-    Then Beğeni sayısı anlık olarak bir artmalı ve ikon aktif duruma gelmelidir
+  @regression @home @positive
+  Scenario: Footer bülten alanına geçerli e-posta kaydı
+    Given Kullanıcı ana sayfanın footer bölümündeki bülten alanındadır
+    When Kullanıcı bülten alanına geçerli bir "test@example.com" e-posta adresi girer ve gönder butonuna tıklar
+    Then Başarılı bülten kayıt mesajı görüntülenmelidir
 
-  @Positive @Gallery @EdgeCase
-  Scenario: Filtre state i korunarak daha fazla tasarım yükleme
-    Given Kullanıcı galeri alanında Oturma Odası filtresini seçmiştir
-    When Kullanıcı Daha Fazla Tasarım Yükle butonuna tıklarsa
-    Then Mevcut Oturma Odası filtre state i bozulmadan listeye yeni tasarım kartları eklenmelidir
-
-  @Positive @Accordion
-  Scenario: Sıkça Sorulan Sorular akordeonunun tekli çalışması
-    Given Kullanıcı Sıkça Sorulan Sorular SSS alanındadır
-    When Kullanıcı bir akordeon başlığına tıklayarak açarsa
-    And Kullanıcı farklı bir akordeon başlığına tıklarsa
-    Then Yeni tıklanan başlık açılmalı ve önceden açık olan akordeon başlığı otomatik olarak kapanmalıdır
-
-  @Positive @Newsletter
-  Scenario: Bülten kaydının geçerli e-posta ile yapılması
-    Given Kullanıcı bülten kayıt alanındadır
-    When Kullanıcı geçerli bir e-posta adresi girip bülten kayıt butonuna tıklarsa
-    Then Başarılı abonelik mesajı gösterilmelidir
-
-  @Negative @Newsletter @EdgeCase
-  Scenario Outline: Bülten kaydının boş veya geçersiz e-posta ile engellenmesi
-    Given Kullanıcı bülten kayıt alanındadır
-    When Kullanıcı bülten alanına "<GecersizEposta>" girip kayıt butonuna tıklarsa
-    Then Sistem bülten kaydını engellemeli ve uygun hata mesajı göstermelidir
+  @regression @home @negative @edge-case
+  Scenario Outline: Footer bülten alanına geçersiz e-posta girilmesi
+    Given Kullanıcı ana sayfanın footer bölümündeki bülten alanındadır
+    When Kullanıcı bülten alanına "<gecersiz_eposta>" girer ve gönder butonuna tıklar
+    Then Hatalı e-posta uyarı mesajı görüntülenmelidir
 
     Examples:
-      | GecersizEposta |
-      |                |
-      | testuser       |
-      | test@          |
-      | @domain.com    |
+      | gecersiz_eposta |
+      | test.com        |
+      | test@.com       |
+      | @example.com    |
+      | boş_değer       |
 
-  @Positive @Login
-  Scenario: Başarılı kullanıcı girişi
-    Given Kullanıcı /login sayfasındadır
-    When Kullanıcı geçerli e-posta adresini ve şifresini girer
-    And "Giriş Yap" butonuna tıklarsa
-    Then Sistem kullanıcıyı başarıyla ana panele Dashboard yönlendirmelidir
+  @smoke @login @positive
+  Scenario: Kayıtlı kullanıcı ile başarılı giriş yapma Pozitif
+    Given Kullanıcı Giriş Yap sayfasındadır
+    When Kullanıcı geçerli "kayitli_kullanici@example.com" e-posta adresini girer
+    And Kullanıcı doğru şifresini şifre alanına yazar
+    And Kullanıcı şifre alanındaki göz ikonuna tıklayarak şifrenin maskesini kaldırır ve görünür olduğunu doğrular
+    And Kullanıcı Giriş Yap butonuna tıklar
+    Then Kullanıcı başarıyla ana panele dashboard yönlendirilmelidir
 
-  @Negative @Login @Validation
-  Scenario Outline: Giriş sayfasında zorunlu alan validasyonları
-    Given Kullanıcı /login sayfasındadır
-    When Kullanıcı e-posta alanına "<Eposta>" ve şifre alanına "<Sifre>" girer
-    And "Giriş Yap" butonuna tıklarsa
-    Then Sistem Bu alan zorunludur hata mesajını göstermelidir
+  @login @positive
+  Scenario: Google ile OAuth üzerinden başarılı giriş yapma
+    Given Kullanıcı Giriş Yap sayfasındadır
+    When Kullanıcı Google ile Giriş Yap butonuna tıklar
+    And Google hesap seçimi ve yetkilendirme adımlarını tamamlar
+    Then Kullanıcı başarıyla sisteme giriş yaparak ana panele yönlendirilmelidir
 
-    Examples:
-      | Eposta           | Sifre       |
-      |                  | ValidPass123|
-      | test@example.com |             |
-      |                  |             |
+  @login @negative
+  Scenario: Giriş formunda boş alan bırakılması
+    Given Kullanıcı Giriş Yap sayfasındadır
+    When Kullanıcı e-posta ve şifre alanlarını boş bırakarak Giriş Yap butonuna tıklar
+    Then İlgili alanların altında Bu alan zorunludur uyarı mesajları görünmelidir
 
-  @Negative @Login @Security
-  Scenario: Hatalı giriş denemelerinde User Enumeration engelleme Generic Hata
-    Given Kullanıcı /login sayfasındadır
-    When Kullanıcı sistemde kayıtlı olmayan bir e-posta veya yanlış şifre girer
-    And "Giriş Yap" butonuna tıklarsa
-    Then Sistem güvenlik gereği generic E-posta veya şifre hatalı mesajını göstermelidir
-
-  @Negative @Register @Validation
-  Scenario Outline: Kayıt olurken eksik veya geçersiz alan validasyonları
-    Given Kullanıcı /register sayfasındadır
-    When Kullanıcı kayıt formunu e-posta "<Eposta>", şifre "<Sifre>", şifre onay "<SifreOnay>", sözleşme onay <SozlesmeOnay> ile doldurur
-    And Kayıt ol butonuna tıklarsa
-    Then Sistem ilgili validasyon hata mesajını göstermelidir "<HataMesaji>"
+  @login @negative
+  Scenario Outline: Giriş formunda geçersiz e-posta formatı girilmesi
+    Given Kullanıcı Giriş Yap sayfasındadır
+    When Kullanıcı e-posta alanına "<hatali_eposta>" girer
+    And Kullanıcı Giriş Yap butonuna tıklar
+    Then Lütfen geçerli bir e-posta adresi girin uyarı mesajı alınmalıdır
 
     Examples:
-      | Eposta           | Sifre       | SifreOnay   | SozlesmeOnay | HataMesaji                  |
-      |                  | ValidPass12 | ValidPass12 | true         | Bu alan zorunludur          |
-      | test@example.com | short1      | short1      | true         | min 8 karakter              |
-      | test@example.com | Pass12345   | Different9  | true         | şifre eşleşmiyor            |
-      | test@example.com | ValidPass12 | ValidPass12 | false        | Kullanıcı Sözleşmesi zorunlu|
-      | invalid-email    | ValidPass12 | ValidPass12 | true         | Geçerli e-posta zorunludur  |
+      | hatali_eposta   |
+      | yalniseposta    |
+      | eposta@domain   |
+      | eposta..com     |
 
-  @Negative @Register @EdgeCase
-  Scenario: Sistemde kayıtlı e-posta ile tekrar kayıt olmayı engelleme
-    Given Kullanıcı /register sayfasındadır
-    And Sistemde halihazırda kayıtlı bir existing@example.com e-posta adresi bulunmaktadır
-    When Kullanıcı existing@example.com adresi ve geçerli diğer bilgilerle kayıt olmaya çalışırsa
-    Then Sistem zaten kullanımda hata mesajını dönmeli ve kaydı engellemelidir
+  @login @negative @security
+  Scenario Outline: Hatalı şifre veya kayıtlı olmayan e-posta ile giriş denemesi Güvenlik
+    Given Kullanıcı Giriş Yap sayfasındadır
+    When Kullanıcı e-posta alanına "<eposta>" ve şifre alanına "<sifre>" girer
+    And Kullanıcı Giriş Yap butonuna tıklar
+    Then Sistem kullanıcı güvenliği User Enumeration gereği genel olarak E-posta veya şifre hatalı mesajı döndürmelidir
 
-  @Positive @UI @PasswordMask
-  Scenario: Şifre alanlarında göz ikonu ile maskeleme kontrolü
-    Given Kullanıcı /login veya /register sayfasındadır
-    When Kullanıcı şifre alanına bir metin girer ve şifre maskeleme Göz ikonuna tıklarsa
-    Then Header alanında logo, ürünler, çözümler, kaynaklar, fiyatlandırma görünür olmalıdır
-    And Şifre karakterleri düz metin olarak görünür olmalıdır
-    When Kullanıcı Göz ikonuna tekrar tıklarsa
-    Then Şifre karakterleri maskelenmiş yıldız nokta hale gelmelidir
+    Examples:
+      | eposta                       | sifre          |
+      | kayitli_kullanici@example.com| YanlisSifre123 |
+      | kayitsiz_eposta@example.com  | DogruSifre123  |
+
+  @login @security @edge-case
+  Scenario: Giriş formunda SQL Injection ve anormal uzunlukta girdi testi
+    Given Kullanıcı Giriş Yap sayfasındadır
+    When Kullanıcı e-posta alanına "' OR '1'='1" veya çok uzun karakter dizileri girer
+    And Kullanıcı Giriş Yap butonuna tıklar
+    Then Sistem güvenlik açıklarına karşı girdileri filtrelemeli ve E-posta veya şifre hatalı veya format hatası döndürerek güvenle engellemelidir
+
+  @smoke @register @positive
+  Scenario: Yeni ve geçerli bilgilerle başarılı kayıt olma Pozitif
+    Given Kullanıcı Kayıt Ol sayfasındadır
+    When Kullanıcı sistemde kayıtlı olmayan yeni bir e-posta adresi girer
+    And Kullanıcı minimum 8 karakterden oluşan şifresini Şifre ve Şifreyi Onayla alanlarına aynı şekilde girer
+    And Kullanıcı Kullanıcı sözleşmesi Terms and Conditions onay kutucuğunu işaretler
+    And Kullanıcı Kayıt Ol butonuna tıklar
+    Then Hesap başarıyla oluşturulmalı ve kullanıcıya yönlendirme yapılmalıdır
+
+  @register @positive
+  Scenario: Google ile hızlı kayıt OAuth olma
+    Given Kullanıcı Kayıt Ol sayfasındadır
+    When Kullanıcı Google ile Kayıt Ol butonuna tıklar
+    And Google hesap izinlerini onaylar
+    Then Yeni hesap başarıyla oluşturulmalı ve sisteme giriş yapılmalıdır
+
+  @register @negative
+  Scenario: Zorunlu alanların boş bırakılması ile kayıt denemesi
+    Given Kullanıcı Kayıt Ol sayfasındadır
+    When Kullanıcı tüm kayıt alanlarını boş bırakarak Kayıt Ol butonuna tıklar
+    Then Zorunlu alanlar için Bu alan zorunludur uyarı mesajları gösterilmelidir
+
+  @register @negative
+  Scenario: Sistemde zaten kayıtlı olan e-posta ile kayıt olma
+    Given Sistemde hali hazırda kayıtlı olan bir "mevcut_kullanici@example.com" adresi bulunmaktadır
+    When Kullanıcı Kayıt Ol sayfasındaki e-posta alanına "mevcut_kullanici@example.com" girer
+    And Diğer tüm alanları geçerli doldurup sözleşmeyi onaylayarak Kayıt Ol butonuna tıklar
+    Then Bu e-posta adresi zaten kullanımda hata mesajı gösterilmelidir
+
+  @register @negative @edge-case
+  Scenario Outline: Şifre kuralları ve uyuşmazlığı validasyonları
+    Given Kullanıcı Kayıt Ol sayfasındadır
+    When Kullanıcı şifre alanına "<sifre>" ve şifreyi onayla alanına "<sifre_onayla>" girer
+    And Diğer zorunlu alanları doldurup sözleşmeyi onaylayarak Kayıt Ol butonuna tıklar
+    Then "<hata_mesaji>" uyarısı alınmalıdır
+
+    Examples:
+      | sifre       | sifre_onayla | hata_mesaji                      |
+      | Ab1!        | Ab1!         | Şifre en az 8 karakter olmalıdır |
+      | Sifre1234   | Sifre1235    | Şifreler birbiriyle uyuşmuyor    |
+
+  @register @negative
+  Scenario: Kullanıcı sözleşmesi onaylanmadan kayıt olma denemesi
+    Given Kullanıcı Kayıt Ol sayfasındadır
+    When Kullanıcı geçerli e-posta ve şifre bilgilerini girer
+    But Kullanıcı Kullanıcı sözleşmesi Terms and Conditions onay kutucuğunu işaretlemez
+    And Kullanıcı Kayıt Ol butonuna tıklar
+    Then Kayıt işlemi tamamlanmamalı ve sözleşmenin onaylanması gerektiğine dair uyarı alınmalıdır

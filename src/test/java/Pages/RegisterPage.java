@@ -11,31 +11,43 @@ public class RegisterPage {
         this.page = PD.getPage();
     }
 
-    public Locator getRegisterEpostaInput() {
+    public Locator getEmailInput() {
         return page.locator("input[name='email'], input[placeholder='you@example.com']");
     }
 
-    public Locator getRegisterSifreInput() {
+    public Locator getPasswordInput() {
         return page.locator("input[name='password'], input[placeholder='Min. 8 karakter']");
     }
 
-    public Locator getRegisterSifreOnayInput() {
+    public Locator getConfirmPasswordInput() {
         return page.locator("input[name='confirmPassword'], input[placeholder='Şifrenizi tekrar girin']");
     }
 
-    public Locator getSozlesmeCheckbox() {
-        return page.locator("#terms-accept, input[type='checkbox']");
+    public Locator getTermsCheckbox() {
+        return page.locator("input#terms-accept, input[type='checkbox']");
     }
 
-    public Locator getKayitOlButton() {
-        return page.locator("button:has-text('Hesap Oluştur'), button:has-text('Kayıt Ol')");
+    public Locator getHesapOlusturButton() {
+        return page.locator("button[type='submit']:has-text('Hesap Oluştur'), button:has-text('Kayıt Ol')");
     }
 
-    public Locator getValidasyonHataMesaji(String hataMesaji) {
-        return page.locator("text=" + hataMesaji);
+    public Locator getGoogleKayıtButton() {
+        return page.locator("button:has-text('Google ile devam et'), button:has-text('Google ile Kayıt Ol')");
     }
 
-    public Locator getZatenKullanimdaMesaji() {
-        return page.locator("text=zaten kullanımda, text=kayıtlı, text=already in use");
+    public Locator getZorunluAlanUyarisi() {
+        return page.locator("text=Bu alan zorunludur");
+    }
+
+    public Locator getAyniEmailHataMesaji() {
+        return page.locator("text=Bu e-posta adresi zaten kullanımda");
+    }
+
+    public Locator getHataMesajiDinamik(String mesaj) {
+        return page.locator("text=" + mesaj);
+    }
+
+    public Locator getSozlesmeUyarisi() {
+        return page.locator("text=sözleşme, text=onaylanması gerektiği");
     }
 }
