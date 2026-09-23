@@ -9,5 +9,5 @@ import io.cucumber.testng.CucumberOptions;
     plugin = {"pretty", "html:target/cucumber-reports.html"},
     tags = ""
 )
-public class AiStagerRunner extends AbstractTestNGCucumberTests {
+public class AistagerKapsamliNihaiTestSenaryolariRunner extends AbstractTestNGCucumberTests {
 }
