@@ -1,8 +1,8 @@
 package Pages;
 
+import Utilities.PD;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
-import Utilities.PD;
 
 public class HomePage {
     private Page page;
@@ -11,111 +11,99 @@ public class HomePage {
         this.page = PD.getPage();
     }
 
-    public Locator getSagOkButonu() {
-        return page.locator("button.next-slide, [aria-label='Next']");
+    public Locator getBeforeAfterSlider() {
+        return page.locator(".before-after-slider, input[type='range']").first();
     }
 
-    public Locator getSolOkButonu() {
-        return page.locator("button.prev-slide, [aria-label='Previous']");
+    public Locator getFurnishedAndEmptyRoomIndicators() {
+        return page.locator(".room-indicator, .slider-marker");
     }
 
-    public Locator getSliderGorseli() {
-        return page.locator(".slider-image-container");
+    public Locator getLanguageDropdown() {
+        return page.locator("button:has-text('EN'), select#language, .lang-selector");
     }
 
-    public Locator getSliderTutamagi() {
-        return page.locator(".slider-handle");
+    public Locator getStaticAndDynamicTexts() {
+        return page.locator("body");
     }
 
-    public Locator getOncesiSonrasiOrani() {
-        return page.locator(".comparison-ratio");
+    public Locator getGalleryMenu() {
+        return page.locator("a:has-text('Galeri'), a[href*='gallery']");
     }
 
-    public Locator getIkinciCarouselNoktasi() {
-        return page.locator(".carousel-dot:nth-child(2)");
+    public Locator getLivingRoomFilter() {
+        return page.locator("button:has-text('Oturma Odası'), label:has-text('Oturma Odası')");
     }
 
-    public Locator getGirisYapButonu() {
-        return page.locator("a:has-text('Giriş yap'), a:has-text('Giriş Yap')");
+    public Locator getLivingRoomDesignsList() {
+        return page.locator(".design-card, .gallery-item");
     }
 
-    public Locator getUcretsizDeneButonu() {
+    public Locator getLoadMoreDesignsButton() {
+        return page.locator("button:has-text('Daha Fazla Tasarım Yükle'), button:has-text('Load More')");
+    }
+
+    public Locator getFaqSection() {
+        return page.locator("#faq, .faq-section");
+    }
+
+    public Locator getFaqAccordionOne() {
+        return page.locator(".accordion-item:nth-child(1) button, .faq-item:nth-child(1)");
+    }
+
+    public Locator getFaqContentOne() {
+        return page.locator(".accordion-item:nth-child(1) .content, .faq-content-1");
+    }
+
+    public Locator getFaqAccordionTwo() {
+        return page.locator(".accordion-item:nth-child(2) button, .faq-item:nth-child(2)");
+    }
+
+    public Locator getFaqContentTwo() {
+        return page.locator(".accordion-item:nth-child(2) .content, .faq-content-2");
+    }
+
+    public Locator getLoginButtonHeader() {
+        return page.locator("a:has-text('Giriş Yap'), button:has-text('Giriş Yap')");
+    }
+
+    public Locator getFreeTrialButtonHeader() {
         return page.locator("a:has-text('Ücretsiz Dene'), button:has-text('Ücretsiz Dene')");
     }
 
-    public Locator getUretimlerimMenu() {
-        return page.locator("a:has-text('Üretimlerim')");
+    public Locator getProductionsMenu() {
+        return page.locator("a:has-text('Üretimlerim'), .productions-menu");
     }
 
-    public Locator getProfilIkonu() {
-        return page.locator(".profile-icon, [aria-label='Profil']");
+    public Locator getProfileIcon() {
+        return page.locator(".profile-icon, img[alt='Profile']");
     }
 
-    public Locator getGaleriAlani() {
-        return page.locator(".gallery-container");
+    public Locator getFastRenderMenu() {
+        return page.locator("a:has-text('Hızlı Render')");
     }
 
-    public Locator getTumTiplerFiltresi() {
-        return page.locator("button:has-text('Tüm Tipler'), .filter-all");
+    public Locator getCameraPanel() {
+        return page.locator("a:has-text('Kamera Paneli')");
     }
 
-    public Locator getOturmaOdasiFiltresi() {
-        return page.locator("button:has-text('Oturma Odası'), [data-filter='oturma-odasi']");
+    public Locator getNewsletterSection() {
+        return page.locator(".newsletter-section, footer");
     }
 
-    public Locator getGaleriListesi() {
-        return page.locator(".gallery-item.oturma-odasi, .gallery-grid");
+    public Locator getNewsletterInput() {
+        return page.locator("input[type='email'], input[placeholder*='e-posta'], input[placeholder*='Email']");
     }
 
-    public Locator getDahaFazlaTasarimYukleButonu() {
-        return page.locator("button:has-text('Daha Fazla Tasarım Yükle'), a:has-text('Daha Fazla Tasarım Yükle')");
+    public Locator getNewsletterSubmitButton() {
+        return page.locator("button:has-text('Kayıt Ol'), button:has-text('Abone Ol'), button[type='submit']");
     }
 
-    public Locator getSssBolumu() {
-        return page.locator(".faq-section");
+    public Locator getSuccessNewsletterMessage() {
+        return page.locator(".success-message, text=Başarıyla kayıt oldunuz");
     }
 
-    public Locator getBirinciSoruAkordeon() {
-        return page.locator(".faq-item:nth-child(1) .faq-question, button:has-text('Birinci Soru')");
-    }
-
-    public Locator getIkinciSoruAkordeon() {
-        return page.locator(".faq-item:nth-child(2) .faq-question, button:has-text('İkinci Soru')");
-    }
-
-    public Locator getIkinciSoruIcerik() {
-        return page.locator(".faq-item:nth-child(2) .faq-answer");
-    }
-
-    public Locator getBirinciSoruIcerik() {
-        return page.locator(".faq-item:nth-child(1) .faq-answer");
-    }
-
-    public Locator getUrunlerDropdown() {
-        return page.locator("text=Ürünler");
-    }
-
-    public Locator getUrunSecenegi(String urunAdi) {
-        return page.locator("a:has-text('" + urunAdi + "'), button:has-text('" + urunAdi + "')");
-    }
-
-    public Locator getErkenErisimIsteyinButton() {
-        return page.locator("button:has-text('Erken Erişim İsteyin'), a:has-text('Erken Erişim İsteyin')");
-    }
-
-    public Locator getEmailInput() {
-        return page.locator("input[type='email'], input[placeholder*='email']");
-    }
-
-    public Locator getGonderButton() {
-        return page.locator("button:has-text('Gönder'), button[type='submit']");
-    }
-
-    public Locator getBasariOnayMesaji() {
-        return page.locator("text=başarı, text=success, text=Gönderildi");
-    }
-
-    public Locator getEmailFormatHatasi() {
-        return page.locator("text=geçersiz, text=format, text=Invalid");
+    public Locator getInvalidEmailWarning() {
+        return page.locator("text=Geçerli bir e-posta adresi giriniz, .error-message");
     }
 }
