@@ -1,8 +1,8 @@
 package Pages;
 
+import Utilities.PD;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
-import Utilities.PD;
 
 public class LoginPage {
     private Page page;
@@ -11,28 +11,36 @@ public class LoginPage {
         this.page = PD.getPage();
     }
 
-    public Locator getEmailInput() {
-        return page.locator("input[name='email'], input[placeholder='you@example.com']");
+    public Locator getEpostaInput() {
+        return page.locator("input[name='email'], input[type='email']");
     }
 
-    public Locator getPasswordInput() {
-        return page.locator("input[name='password'], input[placeholder='Min. 8 karakter']");
+    public Locator getSifreInput() {
+        return page.locator("input[name='password'], input[type='password']");
     }
 
-    public Locator getGozIkonu() {
-        return page.locator(".toggle-password, button:has-text('göz'), .password-eye-icon");
+    public Locator getSifreGozIkonu() {
+        return page.locator("[class*='eye'], [class*='password-toggle']");
     }
 
     public Locator getGirisYapSubmitButton() {
-        return page.locator("button[type='submit']:has-text('Giriş Yap'), button:has-text('Giriş yap')");
+        return page.locator("button[type='submit'], text=Giriş Yap");
     }
 
-    public Locator getDashboardPanel() {
-        return page.locator(".dashboard-container, text=Panel, text=Üretimlerim");
+    public Locator getGoogleIleGirisButton() {
+        return page.locator("text=Google ile");
     }
 
-    public Locator getGoogleGirisButton() {
-        return page.locator("button:has-text('Google ile devam et'), button:has-text('Google ile Giriş')");
+    public Locator getGoogleHesapSecimEkranı() {
+        return page.locator("[id*='account'], [class*='google']");
+    }
+
+    public Locator getSifremiUnuttumLink() {
+        return page.locator("text=Şifremi unuttum");
+    }
+
+    public Locator getKayıtOlLink() {
+        return page.locator("text=Kayıt ol, text=Hesabınız yok mu");
     }
 
     public Locator getZorunluAlanUyarisi() {
@@ -40,10 +48,14 @@ public class LoginPage {
     }
 
     public Locator getGecersizEpostaUyarisi() {
-        return page.locator("text=Lütfen geçerli bir e-posta adresi girin");
+        return page.locator("text=Geçersiz e-posta");
     }
 
     public Locator getGenelHataMesaji() {
         return page.locator("text=E-posta veya şifre hatalı");
+    }
+
+    public Locator getSqlEnjeksiyonEngelMesaji() {
+        return page.locator("text=Hata, [class*='error']");
     }
 }

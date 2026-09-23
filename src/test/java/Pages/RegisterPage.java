@@ -1,8 +1,8 @@
 package Pages;
 
+import Utilities.PD;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
-import Utilities.PD;
 
 public class RegisterPage {
     private Page page;
@@ -11,43 +11,47 @@ public class RegisterPage {
         this.page = PD.getPage();
     }
 
-    public Locator getEmailInput() {
-        return page.locator("input[name='email'], input[placeholder='you@example.com']");
+    public Locator getEpostaInput() {
+        return page.locator("input[name='email'], input[type='email']");
     }
 
-    public Locator getPasswordInput() {
-        return page.locator("input[name='password'], input[placeholder='Min. 8 karakter']");
+    public Locator getSifreInput() {
+        return page.locator("input[name='password'], input[type='password']");
     }
 
-    public Locator getConfirmPasswordInput() {
-        return page.locator("input[name='confirmPassword'], input[placeholder='Şifrenizi tekrar girin']");
+    public Locator getSifreyiOnaylaInput() {
+        return page.locator("input[name='confirmPassword'], input[placeholder*='tekrar']");
     }
 
-    public Locator getTermsCheckbox() {
-        return page.locator("input#terms-accept, input[type='checkbox']");
+    public Locator getKullanimSozlesmesiCheckbox() {
+        return page.locator("input[type='checkbox'], #terms-accept");
     }
 
-    public Locator getHesapOlusturButton() {
-        return page.locator("button[type='submit']:has-text('Hesap Oluştur'), button:has-text('Kayıt Ol')");
+    public Locator getKayıtOlButton() {
+        return page.locator("button[type='submit'], text=Hesap Oluştur");
     }
 
-    public Locator getGoogleKayıtButton() {
-        return page.locator("button:has-text('Google ile devam et'), button:has-text('Google ile Kayıt Ol')");
+    public Locator getGoogleIleKayıtButton() {
+        return page.locator("text=Google ile devam et");
+    }
+
+    public Locator getBasariMesaji() {
+        return page.locator("text=başarılı, text=oluşturuldu");
     }
 
     public Locator getZorunluAlanUyarisi() {
         return page.locator("text=Bu alan zorunludur");
     }
 
-    public Locator getAyniEmailHataMesaji() {
-        return page.locator("text=Bu e-posta adresi zaten kullanımda");
+    public Locator getZatenKullanimdaUyarisi() {
+        return page.locator("text=zaten kullanımda, text=kayıtlı");
     }
 
-    public Locator getHataMesajiDinamik(String mesaj) {
-        return page.locator("text=" + mesaj);
+    public Locator getSifreKriterUyarisi() {
+        return page.locator("text=en az 8 karakter, text=eşleşmiyor");
     }
 
-    public Locator getSozlesmeUyarisi() {
-        return page.locator("text=sözleşme, text=onaylanması gerektiği");
+    public Locator getSozlesmeOnayUyarisi() {
+        return page.locator("text=sözleşme, text=onaylanması");
     }
 }
