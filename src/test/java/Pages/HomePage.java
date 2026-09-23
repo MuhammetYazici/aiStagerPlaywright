@@ -1,6 +1,6 @@
 package Pages;
-import com.microsoft.playwright.options.AriaRole;
 
+import com.microsoft.playwright.options.AriaRole;
 import Utilities.PD;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
@@ -138,5 +138,17 @@ public class HomePage {
 
     public Locator getKurumsalLinkler() {
         return page.locator("footer a");
+    }
+
+    public Locator getUrunlerMenu() {
+        return page.locator("text=Ürünler");
+    }
+
+    public Locator getAiVirtualTourSecenegi() {
+        return page.locator("text=Yapay Zeka Sanal Tur");
+    }
+
+    public Locator getSanalDekorasyonApiSecenegi() {
+        return page.locator("text=Sanal Dekorasyon API");
     }
 }
