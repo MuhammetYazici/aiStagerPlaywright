@@ -1,5 +1,4 @@
 package Pages;
-import com.microsoft.playwright.options.AriaRole;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
@@ -13,26 +12,34 @@ public class LoginPage {
     }
 
     public Locator getEpostaInput() {
-        return page.locator("input[type='email'], input[name='email']").first();
+        return page.locator("input[name='email']");
     }
 
     public Locator getSifreInput() {
-        return page.locator("input[type='password'], input[name='password']").first();
+        return page.locator("input[name='password']");
     }
 
-    public Locator getGirisYapButton() {
-        return page.getByRole(com.microsoft.playwright.options.AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Giriş Yap")).first();
+    public Locator getGozIkonu() {
+        return page.locator(".password-toggle, button.toggle-password, .eye-icon");
     }
 
-    public Locator getZorunluAlanUyarisi() {
-        return page.locator("text=Bu alan zorunludur").first();
+    public Locator getGirisYapButonu() {
+        return page.locator("button:has-text('Giriş Yap'), button[type='submit']");
     }
 
-    public Locator getGecersizEpostaUyarisi() {
-        return page.locator("text=Geçerli bir e-posta adresi girin").first();
+    public Locator getHataMesaji() {
+        return page.locator(".error-message, .alert-danger");
     }
 
-    public Locator getGenelHataUyarisi() {
-        return page.locator(".alert-danger, [class*='error']").first();
+    public Locator getSifreOnaylaInput() {
+        return page.locator("input[name='confirmPassword']");
+    }
+
+    public Locator getTermsCheckbox() {
+        return page.locator("#terms-accept");
+    }
+
+    public Locator getHesapOlusturButonu() {
+        return page.locator("button:has-text('Hesap Oluştur')");
     }
 }

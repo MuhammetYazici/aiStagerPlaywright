@@ -1,156 +1,160 @@
-@AiStager_Core @Regression
-Feature: AiStager.ai Temel Modüller, Kimlik Doğrulama ve Ana Sayfa Deneyimi
-  Platform genelinde ziyaretçi ve kayıtlı kullanıcı deneyimlerinin,
-  ana sayfa etkileşimlerinin, galeri filtrelerinin ve kimlik doğrulama süreçlerinin test edilmesi.
+Feature: US-AISTAGER-001 Ana Sayfa, Kimlik Doğrulama ve Temel Navigasyon
 
   Background:
     Given Kullanıcı AiStager platformundadır
 
-  @Positive @Homepage @Slider
-  Scenario: Öncesi ve Sonrası slider alanının çift yönlü senkronize çalışması
-    When Kullanıcı slider üzerindeki orta çizgiyi sağa veya sola sürükler
-    Then Önce ve Sonra görselleri pürüzsüz bir şekilde değişir
-    And İlgili oda tipine ait carousel noktası aktifleşir
+  @pozitif @slider
+  Scenario: Öncesi ve Sonrası Slider alanının pürüzsüz çalışması
+    Given Kullanıcı AiStager ana sayfasındadır
+    When Kullanıcı Öncesi ve Sonrası Sihri alanındaki kaydırıcıyı sağa ve sola sürükler
+    Then Önce ve Sonra görselleri orantılı ve dinamik olarak değişmelidir
 
-  @Positive @Homepage @Slider
-  Scenario: Slider yön okları ve nokta butonları ile görsel değişimi
-    When Kullanıcı slider üzerindeki ok veya nokta butonlarına tıklar
-    Then Önce ve Sonra görselleri değişir ve ilgili nokta aktifleşir
+  @pozitif @slider
+  Scenario: Carousel navigasyon okları ve noktaları ile görsel değiştirme
+    Given Kullanıcı AiStager ana sayfasındadır
+    When Kullanıcı slider alanındaki sağ yön okuna veya alt kısımdaki carousel noktasına tıklar
+    Then İlgili oda görseli yüklenmeli ve ilgili nokta aktif olarak vurgulanmalıdır
 
-  @Positive @Navigation @Guest
-  Scenario: Ziyaretçi kullanıcının üst menü görünümü
-    Given Kullanıcı oturum açmamış bir ziyaretçidir
-    Then Üst menüde "Giriş Yap" ve "Ücretsiz Dene" butonları görünür
-    And Üretimlerim ve profil ikonu menüde yer almaz
+  @pozitif @navigation
+  Scenario: Odanızı Yükleyin butonunun yönlendirmesi
+    Given Kullanıcı AiStager ana sayfasındadır
+    When Kullanıcı Odanızı Yükleyin butonuna tıklar
+    Then Kullanıcı ilgili yükleme veya kimlik doğrulama arayüzüne yönlendirilmelidir
 
-  @Positive @Navigation @Authenticated
-  Scenario: Oturum açmış kullanıcının üst menü ve panel erişimi
+  @pozitif @dil
+  Scenario: Dil seçeneği üzerinden dil değiştirme
+    Given Kullanıcı AiStager ana sayfasındadır
+    When Kullanıcı dil menüsünden "TR" seçeneğine tıklar
+    Then Sayfadaki tüm metinler seçilen dile göre güncellenmelidir
+
+  @pozitif @header
+  Scenario: Oturum açmış kullanıcının üst menü görünümü
     Given Kullanıcı sisteme başarılı bir şekilde giriş yapmıştır
-    Then Üst menüde ürünler ve çözümler dropdown menüleri görünür
-    And Hızlı render ikonu ve profil menüsü aktif olarak görüntülenir
-    When Kullanıcı platform logosuna tıklar
-    Then Kullanıcı ana sayfaya yönlendirilir
+    When Kullanıcı ana sayfayı görüntüler
+    Then Üst menüde Ürünler, Çözümler, Kaynaklar, Fiyatlandırma, Üretimlerim, dil seçeneği, hızlı render ayarları ve profil ikonu görünür olmalıdır
+    And Logo tıklandığında ana sayfaya yönlendirme yapılmalıdır
 
-  @Positive @Gallery
-  Scenario: Galeri alanında varsayılan filtre ve oda tipi filtreleme
-    Given Kullanıcı ana sayfa galeri alanındadır
-    Then Varsayılan olarak Tüm Tipler filtresi aktif gelmelidir
-    When Kullanıcı Oturma Odası oda tipi filtresini seçer
-    Then Liste anlık olarak sadece Oturma Odası tasarımlarını gösterecek şekilde filtrelenir
+  @pozitif @header
+  Scenario: Ziyaretçi kullanıcının üst menü görünümü
+    Given Kullanıcı sisteme giriş yapmamış bir ziyaretçidir
+    When Kullanıcı ana sayfayı görüntüler
+    Then Üst menüde Giriş Yap ve Ücretsiz Dene butonları yer almalıdır
+    And Üretimlerim menüsü ve profil ikonu gizli olmalıdır
+
+  @pozitif @galeri
+  Scenario: Galeri ilk açılış ve kategori filtreleme
+    Given Kullanıcı AiStager ana sayfasındadır
+    When Sayfa ilk açıldığında Tüm Tipler filtresinin aktif olduğu görülür
+    And Kullanıcı Oturma Odası filtre butonuna tıklar
+    Then Galeri yalnızca oturma odası tasarımlarını listelemelidir
+
+  @pozitif @galeri @sosyal
+  Scenario: Galeri kartı sosyal etkileşimleri ve beğeni artışı
+    Given Kullanıcı AiStager ana sayfasındadır
+    When Kullanıcı bir galeri kartındaki kullanıcı adını tıklar
+    Then İlgili profil sayfasına yönlendirilmelidir
+    When Kullanıcı galeri kartındaki Kalp Beğeni ikonuna tıklar
+    Then Beğeni sayısı 1 artmalı ve ikon aktif duruma gelmelidir
+
+  @pozitif @galeri @lazyload
+  Scenario: Daha Fazla Tasarım Yükle ile sayfalama
+    Given Kullanıcı ana sayfadaki galeri alanındadır ve filtre uygulanmıştır
     When Kullanıcı Daha Fazla Tasarım Yükle butonuna tıklar
-    Then Seçili olan oda tipi filtresi korunarak yeni tasarım kartları yüklenir
+    Then Mevcut filtreleme kuralı bozulmadan alt alta yeni tasarım kartları yüklenmelidir
 
-  @Positive @FAQ
-  Scenario: SSS alanında aynı anda tek akordeonun açık kalması
-    When Kullanıcı SSS alanından bir soruya tıklayarak akordeonu açar
-    And Kullanıcı farklı bir soruya tıklar
-    Then İlk açılan soru otomatik olarak kapanır
-    And Yeni tıklanan soru açılır
+  @pozitif @akordeon
+  Scenario: SSS Akordeon mantığı ve tekli açık kalma kuralı
+    Given Kullanıcı ana sayfadaki SSS alanındadır
+    When Kullanıcı birinci soruya tıklar
+    Then İlgili cevap açılmalı ve ok yukarı dönmelidir
+    When Kullanıcı farklı bir ikinci soruya tıklar
+    Then İkinci sorunun cevabı açılmalı ve önceki açık olan soru otomatik olarak kapanmalıdır
+    And Bize ulaşın linkine tıklandığında destek sayfasına yönlendirilmelidir
 
-  @Positive @Newsletter
-  Scenario: Bülten aboneliğinin başarılı bir şekilde tamamlanması
-    When Kullanıcı bülten alanına geçerli bir e-posta adresi girer
-    And "Abone Ol" butonuna tıklar
-    Then Başarılı kayıt yapıldığı yeşil uyarı mesajı ile teyit edilir
+  @pozitif @bulten
+  Scenario: Bülten alanına geçerli e-posta ile abone olma
+    Given Kullanıcı footer alanındaki bülten formundadır
+    When Kullanıcı geçerli bir e-posta adresi girer ve Abone Ol butonuna tıklar
+    Then Başarı mesajı görüntülenmelidir
+    And Footer linkleri, yasal metinler ve sosyal medya ikonları yeni sekmede doğru adreslere yönlendirmelidir
 
-  @Negative @Newsletter @EdgeCase
-  Scenario: Bülten alanına boş veya geçersiz e-posta girilmesi
-    When Kullanıcı bülten alanını boş bırakır veya geçersiz bir e-posta girer
-    And "Abone Ol" butonuna tıklar
-    Then Form validasyon uyarı mesajı görüntülenir
+  @negatif @bulten @edge-case
+  Scenario Outline: Bülten alanına geçersiz e-posta girişi
+    Given Kullanıcı footer alanındaki bülten formundadır
+    When Kullanıcı bülten alanına "<gecersiz_eposta>" girer ve Abone Ol butonuna tıklar
+    Then Geçerli bir e-posta adresi giriniz validasyon hatası gösterilmelidir
 
-  @Positive @Login
-  Scenario: Kullanıcının geçerli bilgilerle sisteme giriş yapması
-    Given Kullanıcı https://aistager.ai/tr/login adresindedir
-    And Kullanıcı "/login" sayfasındadır
-    When Kullanıcı kayıtlı e-posta adresini ve doğru şifresini girer
-    And "Giriş Yap" butonuna tıklar
-    Then Kullanıcı başarılı bir şekilde panele yönlendirilir
+    Examples:
+      | gecersiz_eposta |
+      |                 |
+      | test            |
+      | test@           |
+      | test@domain     |
 
-  @Negative @Login @Validation
-  Scenario: Giriş sayfasında zorunlu alanların boş bırakılması
-    Given Kullanıcı https://aistager.ai/tr/login adresindedir
-    And Kullanıcı "/login" sayfasındadır
-    When Kullanıcı e-posta ve şifre alanlarını boş bırakarak "Giriş Yap" butonuna tıklar
-    Then İlgili alanların altında Bu alan zorunludur uyarı mesajı gösterilir
+  @pozitif @login
+  Scenario: Başarılı kullanıcı girişi ve şifre görünürlüğü
+    Given Kullanıcı giriş sayfasındadır
+    When Kullanıcı geçerli e-posta ve şifresini girer
+    And Kullanıcı Göz ikonuna tıklayarak şifrenin görünür olmasını sağlar
+    And Kullanıcı Giriş Yap butonuna tıklar
+    Then Kullanıcı ana panele yönlendirilmelidir
 
-  @Negative @Login @Validation
-  Scenario: Giriş sayfasında geçersiz e-posta formatı girilmesi
-    Given Kullanıcı https://aistager.ai/tr/login adresindedir
-    And Kullanıcı "/login" sayfasındadır
-    When Kullanıcı geçersiz formatta bir e-posta adresi girer
-    And "Giriş Yap" butonuna tıklar
-    Then Geçerli bir e-posta adresi girin uyarı mesajı gösterilir
+  @negatif @login @validasyon
+  Scenario: Giriş sayfasında zorunlu alan bırakılması
+    Given Kullanıcı giriş sayfasındadır
+    When Kullanıcı e-posta ve şifre alanlarını boş bırakıp Giriş Yap butonuna tıklar
+    Then Bu alan zorunludur uyarı mesajı alınmalıdır
 
-  @Negative @Login @Security
-  Scenario: Hatalı şifre veya kayıtlı olmayan e-posta ile giriş denemesi
-    Given Kullanıcı https://aistager.ai/tr/login adresindedir
-    And Kullanıcı "/login" sayfasındadır
-    When Kullanıcı hatalı şifre veya sistemde kayıtlı olmayan bir e-posta girer
-    And "Giriş Yap" butonuna tıklar
-    Then Sistem güvenlik gereği spesifik bilgi vermeyerek genel bir E-posta veya şifre hatalı uyarısı döner
+  @negatif @login @validasyon
+  Scenario: Giriş sayfasında geçersiz e-posta formatı
+    Given Kullanıcı giriş sayfasındadır
+    When Kullanıcı formata uygun olmayan e-posta girer ve Giriş Yap butonuna tıklar
+    Then E-posta format hatası gösterilmelidir
 
-  @Negative @Login @Security @EdgeCase
-  Scenario: Giriş formunda SQL Injection ve zararlı girdilerin filtrelenmesi
-    Given Kullanıcı https://aistager.ai/tr/login adresindedir
-    And Kullanıcı "/login" sayfasındadır
-    When Kullanıcı e-posta veya şifre alanına SQL Injection karakterleri girer
-    And "Giriş Yap" butonuna tıklar
-    Then Sistem girdileri filtreler, 500 sunucu hatasına sebep olmaz ve uygun hata mesajı gösterilir
+  @negatif @login @guvenlik
+  Scenario: Hatalı e-posta veya şifre kombinasyonu ile giriş denemesi
+    Given Kullanıcı giriş sayfasındadır
+    When Kullanıcı kayıtlı olmayan veya hatalı bir şifre kombinasyonu girer ve Giriş Yap butonuna tıklar
+    Then Genel bir E-posta veya şifre hatalı mesajı gösterilmelidir
+    And Sistem spesifik bir bilgi sızdırmamalıdır
 
-  @Positive @Register
-  Scenario: Kullanıcının kurallara uygun bilgilerle hesap oluşturması
-    Given Kullanıcı https://aistager.ai/tr/register adresindedir
-    And Kullanıcı "/register" sayfasındadır
-    When Kullanıcı geçerli bir e-posta adresi girer
-    And Kullanıcı en az 8 karakterden oluşan ve birbiriyle eşleşen şifreler girer
-    And Kullanıcı sözleşme onay kutucuğunu işaretler
-    And "Kayıt Ol" butonuna tıklar
-    Then Hesap başarıyla oluşturulur ve yönlendirme gerçekleştirilir
+  @edge-case @login @guvenlik
+  Scenario: Giriş alanlarında SQL Injection ve uzun karakter testleri
+    Given Kullanıcı giriş sayfasındadır
+    When Kullanıcı e-posta ve şifre alanlarına SQL Injection metinleri veya aşırı uzun karakterler girer
+    Then Sistem girdileri güvenle filtrelemeli ve 500 sunucu hatası alınmamalıdır
 
-  @Positive @Register @UI
-  Scenario: Kayıt olurken şifre maskeleme işlevselliği
-    Given Kullanıcı https://aistager.ai/tr/register adresindedir
-    And Kullanıcı "/register" sayfasındadır
-    When Kullanıcı şifre alanına bir değer yazar ve göz ikonuna tıklar
-    Then Şifre karakterleri görünür hale gelir
-    When Kullanıcı tekrar göz ikonuna tıklar
-    Then Şifre tekrar maskelenir (yıldız veya nokta ile gizlenir)
+  @pozitif @register
+  Scenario: Başarılı hesap oluşturma Kayıt Ol
+    Given Kullanıcı kayıt sayfasındadır
+    When Kullanıcı sistemde kayıtlı olmayan bir e-posta adresi girer
+    And Kullanıcı kurallara uygun en az 8 karakterli bir şifre girer
+    And Kullanıcı zorunlu kullanıcı sözleşmesi onay kutucuğunu işaretler
+    And Kullanıcı Hesap Oluştur butonuna tıklar
+    Then Kayıt başarılı olmalı ve aktivasyon veya ana panele yönlendirme yapılmalıdır
 
-  @Negative @Register @Validation
-  Scenario: Kayıt sayfasında zorunlu alanların eksik bırakılması
-    Given Kullanıcı https://aistager.ai/tr/register adresindedir
-    And Kullanıcı "/register" sayfasındadır
-    When Kullanıcı formu boş bırakarak "Kayıt Ol" butonuna tıklar
-    Then İlgili zorunlu alanlarda Bu alan zorunludur uyarı mesajı gösterilir
+  @negatif @register @validasyon
+  Scenario: Mevcut kullanımda olan e-posta ile kayıt denemesi
+    Given Kullanıcı kayıt sayfasındadır
+    When Kullanıcı sistemde halihazırda kayıtlı olan bir e-posta adresi girer
+    And Diğer alanları doldurup Hesap Oluştur butonuna tıklar
+    Then Bu e-posta adresi zaten kullanımda hatası alınmalıdır
 
-  @Negative @Register @Validation @EdgeCase
+  @negatif @register @validasyon
   Scenario: 8 karakterden kısa şifre ile kayıt denemesi
-    Given Kullanıcı https://aistager.ai/tr/register adresindedir
-    And Kullanıcı "/register" sayfasındadır
-    When Kullanıcı 8 karakterden kısa bir şifre girer ve kayıt olmaya çalışır
-    Then Sistem şifre uzunluğu kuralı ile ilgili uyarı mesajı gösterilir
+    Given Kullanıcı kayıt sayfasındadır
+    When Kullanıcı 8 karakterden kısa bir şifre girer ve Hesap Oluştur butonuna tıklar
+    Then Şifre uzunluk uyarısı verilmelidir
 
-  @Negative @Register @Validation
-  Scenario: Birbiriyle eşleşmeyen şifrelerle kayıt denemesi
-    Given Kullanıcı https://aistager.ai/tr/register adresindedir
-    And Kullanıcı "/register" sayfasındadır
-    When Kullanıcı Şifre ve Şifreyi Onayla alanlarına farklı değerler girer
-    And "Kayıt Ol" butonuna tıklar
-    Then Sistem Şifreler eşleşmiyor uyarı mesajını gösterir
+  @negatif @register @validasyon
+  Scenario: Şifrelerin uyuşmaması durumu
+    Given Kullanıcı kayıt sayfasındadır
+    When Kullanıcı şifre ve şifreyi onayla alanlarına farklı değerler girer ve Hesap Oluştur butonuna tıklar
+    Then Şifreler eşleşmiyor uyarı mesajı gösterilmelidir
 
-  @Negative @Register @Validation
+  @negatif @register @validasyon
   Scenario: Sözleşme onay kutucuğu işaretlenmeden kayıt denemesi
-    Given Kullanıcı https://aistager.ai/tr/register adresindedir
-    And Kullanıcı "/register" sayfasındadır
-    When Kullanıcı tüm alanları doğru doldurur ancak onay kutucuğunu boş bırakır
-    And "Kayıt Ol" butonuna tıklar
-    Then Sistem Sözleşmeyi kabul etmelisiniz uyarı mesajını gösterir
-
-  @Negative @Register @Security @EdgeCase
-  Scenario: Sistemde zaten kayıtlı olan bir e-posta adresi ile kayıt denemesi
-    Given Kullanıcı https://aistager.ai/tr/register adresindedir
-    And Kullanıcı "/register" sayfasındadır
-    When Kullanıcı halihazırda sistemde kayıtlı olan bir e-posta adresini girer
-    And Diğer alanları kurallara uygun doldurarak "Kayıt Ol" butonuna tıklar
-    Then Sistem Bu e-posta adresi zaten kullanımda uyarı mesajını gösterir
+    Given Kullanıcı kayıt sayfasındadır
+    When Kullanıcı tüm alanları geçerli doldurur ancak kullanıcı sözleşmesi kutucuğunu işaretlemez
+    And Kullanıcı Hesap Oluştur butonuna tıklar
+    Then Sözleşmeyi kabul etmelisiniz uyarısı gösterilmelidir
