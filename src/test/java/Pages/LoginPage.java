@@ -11,59 +11,39 @@ public class LoginPage {
         this.page = PD.getPage();
     }
 
-    public Locator getEpostaInput() {
-        return page.locator("input[name='email'], input[placeholder='you@example.com']");
+    public Locator emailInput() {
+        return page.locator("input[type='email'], #email");
     }
 
-    public Locator getSifreInput() {
-        return page.locator("input[name='password'], input[placeholder*='karakter']");
+    public Locator passwordInput() {
+        return page.locator("input[type='password'], #password");
     }
 
-    public Locator getSifreyiOnaylaInput() {
-        return page.locator("input[name='confirmPassword'], input[placeholder*='tekrar']");
+    public Locator passwordToggleVisibilityIcon() {
+        return page.locator(".password-toggle, svg.fa-eye, svg.fa-eye-slash");
     }
 
-    public Locator getSozlesmeCheckbox() {
-        return page.locator("#terms-accept, input[type='checkbox']");
+    public Locator submitLoginButton() {
+        return page.locator("button[type='submit'], button:has-text('Giriş Yap'), button:has-text('Login')");
     }
 
-    public Locator getFormGonderimButonu() {
-        return page.locator("button[type='submit']");
+    public Locator dashboardElement() {
+        return page.locator(".dashboard, .main-panel, #dashboard");
     }
 
-    public Locator getKayitOlButonu() {
-        return page.locator("button:has-text('Hesap Oluştur'), button:has-text('Kayıt Ol')");
+    public Locator requiredFieldError() {
+        return page.locator(":text('bu alan zorunlu'), :text('required')");
     }
 
-    public Locator getGirisYapGonderButonu() {
-        return page.locator("button:has-text('Giriş Yap'), button:has-text('Giriş yap')");
+    public Locator invalidEmailFormatError() {
+        return page.locator(":text('geçerli e-posta'), :text('valid email')");
     }
 
-    public Locator getBuAlanZorunludurUyarisi() {
-        return page.locator("text=Bu alan zorunludur, .error:has-text('zorunlu')");
+    public Locator generalAuthError() {
+        return page.locator(".auth-error, :text('hatalı'), :text('invalid credentials')");
     }
 
-    public Locator getGecerliEpostaUyarisi() {
-        return page.locator("text=Lütfen geçerli bir e-posta adresi girin");
-    }
-
-    public Locator getSifrelerEslesmiyorUyarisi() {
-        return page.locator("text=Şifreler eşleşmiyor, text=uzunluk kuralı");
-    }
-
-    public Locator getZatenKullanimdaUyarisi() {
-        return page.locator("text=Bu e-posta adresi zaten kullanımda");
-    }
-
-    public Locator getGozIkonu() {
-        return page.locator(".eye-icon, button[aria-label*='şifre'], [class*='password-toggle']");
-    }
-
-    public Locator getGoogleIleDevamEtButonu() {
-        return page.locator("button:has-text('Google ile devam et')");
-    }
-
-    public Locator getGenelHataMesaji() {
-        return page.locator("text=E-posta veya şifre hatalı, text=güvenlik gereği");
+    public Locator googleOAuthButton() {
+        return page.locator("button:has-text('Google ile devam et'), button:has-text('Continue with Google')");
     }
 }
