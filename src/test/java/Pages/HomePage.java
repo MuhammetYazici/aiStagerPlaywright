@@ -154,4 +154,52 @@ public class HomePage {
     public Locator getValidasyonHataMesaji() {
         return page.locator(".error-message, .invalid-feedback");
     }
+
+    public Locator getProductsMenu() {
+        return page.locator("text='Ürünler', span:has-text('Ürünler')");
+    }
+
+    public Locator getSubMenuVirtualTour() {
+        return page.locator("text='Yapay Zeka Sanal Tur'");
+    }
+
+    public Locator getSubMenuAPI() {
+        return page.locator("text='Sanal Dekorasyon API'");
+    }
+
+    public Locator getEarlyAccessButton() {
+        return page.locator("button:has-text('Erken Erişim İsteyin'), a:has-text('Erken Erişim İsteyin')");
+    }
+
+    public Locator getEmailInput() {
+        return page.locator("input[name='email'], input[placeholder*='example']");
+    }
+
+    public Locator getSubmitRequestButton() {
+        return page.locator("button:has-text('Talebi Gönder'), button[type='submit']");
+    }
+
+    public Locator getSuccessMessage() {
+        return page.locator("text='Talebiniz alınmıştır', text='başarılı', .success-message");
+    }
+
+    public Locator getEmailErrorMessage() {
+        return page.locator("text='geçerli bir e-posta', text='error'");
+    }
+
+    public Locator getContactUsButton() {
+        return page.locator("button:has-text('İletişime Geçin'), a:has-text('İletişime Geçin')");
+    }
+
+    public Locator getNameInput() {
+        return page.locator("input[name='name'], input[placeholder*='Ad']");
+    }
+
+    public Locator getMessageInput() {
+        return page.locator("textarea[name='message'], textarea[placeholder*='Mesaj']");
+    }
+
+    public Locator getPricingButton() {
+        return page.locator("text='Fiyatlandırmayı Görüntüle', a:has-text('Fiyatlandırma')");
+    }
 }
