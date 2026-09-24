@@ -1,4 +1,5 @@
 package Pages;
+import com.microsoft.playwright.options.AriaRole;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
@@ -11,39 +12,39 @@ public class RegisterPage {
         this.page = PD.getPage();
     }
 
-    public Locator emailInput() {
-        return page.locator("input[type='email'], #register-email");
+    public Locator getSifreInput() {
+        return page.locator("input[name='password']");
     }
 
-    public Locator passwordInput() {
-        return page.locator("input[name='password'], #register-password");
+    public Locator getSifreyiOnaylaInput() {
+        return page.locator("input[name='confirmPassword']");
     }
 
-    public Locator confirmPasswordInput() {
-        return page.locator("input[name='confirmPassword'], #confirm-password");
+    public Locator getKayitOlButton() {
+        return page.getByRole(com.microsoft.playwright.options.AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Hesap Oluştur"));
     }
 
-    public Locator termsCheckbox() {
-        return page.locator("input[type='checkbox'], #terms");
+    public Locator getParolaPolitikaHatasi() {
+        return page.locator(".password-error, [class*='error']");
     }
 
-    public Locator submitRegisterButton() {
-        return page.locator("button[type='submit'], button:has-text('Kayıt Ol'), button:has-text('Register')");
+    public Locator getKullaniciSozlesmesiCheckbox() {
+        return page.locator("#terms-accept");
     }
 
-    public Locator emailAlreadyInUseError() {
-        return page.locator(":text('zaten kullanımda'), :text('already in use')");
+    public Locator getSozlesmeZorunluUyarisi() {
+        return page.locator(".terms-error, [class*='terms']");
     }
 
-    public Locator passwordMismatchError() {
-        return page.locator(":text('eşleşmiyor'), :text('match')");
+    public Locator getVarolanEpostaInput() {
+        return page.locator("input[name='email']");
     }
 
-    public Locator termsRequiredError() {
-        return page.locator(":text('sözleşme'), :text('terms')");
+    public Locator getZatenKullanimdaUyarisi() {
+        return page.getByText("zaten kullanımda");
     }
 
-    public Locator googleOAuthButton() {
-        return page.locator("button:has-text('Google ile devam et'), button:has-text('Continue with Google')");
+    public Locator getHosgeldinMesaji() {
+        return page.getByText("Hoş geldin");
     }
 }

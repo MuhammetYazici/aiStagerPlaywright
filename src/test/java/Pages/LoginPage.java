@@ -1,4 +1,5 @@
 package Pages;
+import com.microsoft.playwright.options.AriaRole;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
@@ -11,39 +12,39 @@ public class LoginPage {
         this.page = PD.getPage();
     }
 
-    public Locator emailInput() {
-        return page.locator("input[type='email'], #email");
+    public Locator getEpostaInput() {
+        return page.locator("input[name='email']");
     }
 
-    public Locator passwordInput() {
-        return page.locator("input[type='password'], #password");
+    public Locator getSifreInput() {
+        return page.locator("input[name='password']");
     }
 
-    public Locator passwordToggleVisibilityIcon() {
-        return page.locator(".password-toggle, svg.fa-eye, svg.fa-eye-slash");
+    public Locator getGirisYapSubmitButton() {
+        return page.getByRole(com.microsoft.playwright.options.AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Giriş Yap").setExact(false));
     }
 
-    public Locator submitLoginButton() {
-        return page.locator("button[type='submit'], button:has-text('Giriş Yap'), button:has-text('Login')");
+    public Locator getZorunlulukUyarilari() {
+        return page.locator(".error, [class*='validation']");
     }
 
-    public Locator dashboardElement() {
-        return page.locator(".dashboard, .main-panel, #dashboard");
+    public Locator getEpostaFormatUyarisi() {
+        return page.locator(".email-error, [class*='email-validation']");
     }
 
-    public Locator requiredFieldError() {
-        return page.locator(":text('bu alan zorunlu'), :text('required')");
+    public Locator getJenerikHataMesaji() {
+        return page.locator(".alert-danger, [class*='alert']");
     }
 
-    public Locator invalidEmailFormatError() {
-        return page.locator(":text('geçerli e-posta'), :text('valid email')");
+    public Locator getSifreGozIkonu() {
+        return page.locator(".password-toggle, [class*='eye-icon']");
     }
 
-    public Locator generalAuthError() {
-        return page.locator(".auth-error, :text('hatalı'), :text('invalid credentials')");
+    public Locator getGoogleIleGirisButton() {
+        return page.getByRole(com.microsoft.playwright.options.AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Google ile devam et"));
     }
 
-    public Locator googleOAuthButton() {
-        return page.locator("button:has-text('Google ile devam et'), button:has-text('Continue with Google')");
+    public Locator getGoogleKimlikDogrulamaEkrani() {
+        return page.locator("iframe[src*='google'], #credential_picker_container");
     }
 }

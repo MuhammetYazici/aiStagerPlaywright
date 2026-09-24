@@ -5,7 +5,7 @@ import io.cucumber.testng.CucumberOptions;
 
 @CucumberOptions(
     features = "src/test/java/FeatureFiles",
-    glue = {"StepDefinitions", "Hooks"},
+    glue = {"StepDefinations", "Hooks"},
     plugin = {"pretty", "html:target/cucumber-reports.html"},
     tags = ""
 )
