@@ -1,8 +1,9 @@
 package Pages;
+import com.microsoft.playwright.options.AriaRole;
 
-import Utilities.PD;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
+import Utilities.PD;
 
 public class RegisterPage {
     private Page page;
@@ -11,47 +12,47 @@ public class RegisterPage {
         this.page = PD.getPage();
     }
 
-    public Locator getAdSoyadInput() {
-        return page.locator("input[name='name'], input[placeholder*='Ad']");
+    public Locator getEpostaInput() {
+        return page.locator("input[type='email'], input[name='email']").first();
     }
 
-    public Locator getEmailInput() {
-        return page.locator("input[name='email'], input[placeholder='you@example.com']");
+    public Locator getSifreInput() {
+        return page.locator("input[name='password'], input#password").first();
     }
 
-    public Locator getPasswordInput() {
-        return page.locator("input[name='password'], input[placeholder='Min. 8 karakter']");
+    public Locator getSifreyiOnaylaInput() {
+        return page.locator("input[name='confirmPassword'], input#confirmPassword").first();
     }
 
-    public Locator getConfirmPasswordInput() {
-        return page.locator("input[name='confirmPassword'], input[placeholder='Şifrenizi tekrar girin']");
+    public Locator getSozlesmeCheckbox() {
+        return page.locator("input[type='checkbox']").first();
     }
 
-    public Locator getTermsCheckbox() {
-        return page.locator("input#terms-accept, input[type='checkbox']");
+    public Locator getKayitOlButton() {
+        return page.getByRole(com.microsoft.playwright.options.AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Kayıt Ol")).first();
     }
 
-    public Locator getHesapOlusturButonu() {
-        return page.locator("button:text('Hesap Oluştur'), button[type='submit']");
+    public Locator getGozIkonu() {
+        return page.locator(".toggle-password, [class*='eye-icon']").first();
     }
 
-    public Locator getBasariliKayitMesaji() {
-        return page.locator("text='Hesabınız başarıyla oluşturuldu'");
-    }
-
-    public Locator getSifrelerEslenmiyorMesaji() {
-        return page.locator("text='Şifreler eşleşmiyor'");
+    public Locator getZorunluAlanUyarisi() {
+        return page.locator("text=Bu alan zorunludur").first();
     }
 
     public Locator getSifreUzunlukUyarisi() {
-        return page.locator("text='en az 8 karakter'");
+        return page.locator("text=en az 8 karakter").first();
+    }
+
+    public Locator getSifrelerEslenmiyorUyarisi() {
+        return page.locator("text=Şifreler eşleşmiyor").first();
     }
 
     public Locator getSozlesmeUyarisi() {
-        return page.locator("text='sözleşme', text='onay'");
+        return page.locator("text=Sözleşmeyi kabul etmelisiniz").first();
     }
 
-    public Locator getZatenKullanimdaMesaji() {
-        return page.locator("text='zaten kullanımda', text='kayıtlı'");
+    public Locator getZatenKullanimdaUyarisi() {
+        return page.locator("text=Bu e-posta adresi zaten kullanımda").first();
     }
 }
