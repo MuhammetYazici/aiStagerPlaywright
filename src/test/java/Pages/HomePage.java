@@ -1,6 +1,6 @@
 package Pages;
-import com.microsoft.playwright.options.AriaRole;
 
+import com.microsoft.playwright.options.AriaRole;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import Utilities.PD;
@@ -78,5 +78,21 @@ public class HomePage {
 
     public Locator getValidasyonHataMesaji() {
         return page.locator(".error-message, [class*='error']");
+    }
+
+    public Locator getUrunlerMenu() {
+        return page.locator("text=Ürünler");
+    }
+
+    public Locator getAltSecenekler() {
+        return page.locator(".dropdown-menu, .submenu, nav");
+    }
+
+    public Locator getYapayZekaSanalTurSecenegi() {
+        return page.locator("text=Yapay Zeka Sanal Tur");
+    }
+
+    public Locator getSanalDekorasyonApiSecenegi() {
+        return page.locator("text=Sanal Dekorasyon API");
     }
 }
