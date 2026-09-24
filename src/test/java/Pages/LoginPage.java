@@ -1,5 +1,4 @@
 package Pages;
-import com.microsoft.playwright.options.AriaRole;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
@@ -13,38 +12,54 @@ public class LoginPage {
     }
 
     public Locator getEpostaInput() {
-        return page.locator("input[name='email']");
+        return page.locator("input[name='email'], input[type='email']");
     }
 
     public Locator getSifreInput() {
-        return page.locator("input[name='password']");
+        return page.locator("input[name='password'], input[type='password']").first();
+    }
+
+    public Locator getGozIkonu() {
+        return page.locator(".eye-icon, button.toggle-password").first();
     }
 
     public Locator getGirisYapSubmitButton() {
-        return page.getByRole(com.microsoft.playwright.options.AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Giriş Yap").setExact(false));
+        return page.locator("button:has-text('Giriş Yap'), button[type='submit']").first();
     }
 
-    public Locator getZorunlulukUyarilari() {
-        return page.locator(".error, [class*='validation']");
+    public Locator getDashboardYonetim() {
+        return page.locator(".dashboard, .user-panel");
     }
 
-    public Locator getEpostaFormatUyarisi() {
-        return page.locator(".email-error, [class*='email-validation']");
+    public Locator getSifremiUnuttumBaglantisi() {
+        return page.locator("text=Şifremi unuttum");
     }
 
-    public Locator getJenerikHataMesaji() {
-        return page.locator(".alert-danger, [class*='alert']");
+    public Locator getSifreSifirlamaEkrani() {
+        return page.locator("text=Şifre Sıfırlama");
     }
 
-    public Locator getSifreGozIkonu() {
-        return page.locator(".password-toggle, [class*='eye-icon']");
+    public Locator getGoogleIleDevamEtButton() {
+        return page.locator("button:has-text('Google ile devam et')");
     }
 
-    public Locator getGoogleIleGirisButton() {
-        return page.getByRole(com.microsoft.playwright.options.AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Google ile devam et"));
+    public Locator getGoogleKimlikDogrulamaPenceresi() {
+        return page.locator("iframe[src*='google'], .google-login-modal");
     }
 
-    public Locator getGoogleKimlikDogrulamaEkrani() {
-        return page.locator("iframe[src*='google'], #credential_picker_container");
+    public Locator getBuAlanZorunludurUyarisi() {
+        return page.locator("text=Bu alan zorunludur");
+    }
+
+    public Locator getGecerliEpostaUyarisi() {
+        return page.locator("text=Lütfen geçerli bir e-posta adresi girin");
+    }
+
+    public Locator getGenelHataMesaji() {
+        return page.locator("text=E-posta veya şifre hatalı");
+    }
+
+    public Locator getGuvenlikFiltreMesaji() {
+        return page.locator("text=Geçersiz karakter");
     }
 }
