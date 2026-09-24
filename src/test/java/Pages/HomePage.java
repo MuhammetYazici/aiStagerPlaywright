@@ -98,4 +98,24 @@ public class HomePage {
     public Locator getBultenHataMesaji() {
         return page.locator(".error-message, text='Geçersiz'");
     }
+
+    public Locator getUrunlerMenu() {
+        return page.locator("text='Ürünler'");
+    }
+
+    public Locator getAiVirtualTourSecenegi() {
+        return page.locator("text='Yapay Zeka Sanal Tur'");
+    }
+
+    public Locator getErkenErisimIsteyinButton() {
+        return page.locator("button:has-text('Erken Erişim İsteyin'), a:has-text('Erken Erişim İsteyin')");
+    }
+
+    public Locator getFormGonderButton() {
+        return page.locator("button:has-text('Gönder'), button[type='submit']");
+    }
+
+    public Locator getErkenErisimEpostaInput() {
+        return page.locator("input[placeholder*='E-posta'], input[type='email']");
+    }
 }
