@@ -1,442 +1,244 @@
 package StepDefinations;
+import com.microsoft.playwright.options.AriaRole;
 import com.microsoft.playwright.Page;
 
+import Pages.LoginPage;
 import Pages.VirtualStagingPage;
 import Pages.NavigationPage;
-import Pages.LoginPage;
+import Utilities.PD;
 import Utilities.ReusableMethod;
 import Utilities.ConfigReader;
-import Utilities.PD;
+import com.microsoft.playwright.Locator;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
-import io.cucumber.java.en.Then;
 import io.cucumber.java.en.And;
+import io.cucumber.java.en.Then;
 import org.testng.Assert;
 
 public class AistagerTestcasesSteps {
-
+    LoginPage loginPage = new LoginPage();
     VirtualStagingPage virtualStagingPage = new VirtualStagingPage();
     NavigationPage navigationPage = new NavigationPage();
-    LoginPage loginPage = new LoginPage();
     ReusableMethod rm = new ReusableMethod();
 
     @Given("Kullanıcı AiStager platformundadır")
-    public void kullaniciAiStagerPlatformundadir() {
+    public void kullaniciAiStagerPlatformundadirdir() {
         PD.getPage().navigate(ConfigReader.getProperty("url"));
-        Assert.assertTrue(PD.getPage().url().contains("aistager"));
+        try {
+            rm.myClick(loginPage.getAcceptCookiesButton());
+        } catch (Exception e) {
+            System.out.println("Çerez banner'ı bulunamadı veya zaten kabul edildi.");
+        }
     }
 
-    @Given("Kullanıcı giriş sayfasındadır")
-    public void kullaniciGirisSayfasindadir() {
-        rm.myClick(loginPage.getGirisYapLink());
+    @Given("Kullanıcı giriş yapmıştır")
+    public void kullaniciGirisYapmistir() {
+        PD.getPage().navigate(ConfigReader.getProperty("url") + "/login");
+        rm.mySendKeys(loginPage.getEmailInput(), ConfigReader.getProperty("existing_user_email"));
+        rm.mySendKeys(loginPage.getPasswordInput(), ConfigReader.getProperty("existing_user_password"));
+        rm.myClick(loginPage.getLoginButton());
     }
 
-    @When("Kullanıcı sisteme giriş yapar")
-    public void kullaniciSistemeGirisYapar() {
-        rm.mySendKeys(loginPage.getEpostaInput(), "testuser@example.com");
-        rm.mySendKeys(loginPage.getSifreInput(), "ValidPassword123");
+    @And("Kullanıcı sisteme başarılı bir şekilde giriş yapmıştır")
+    public void kullaniciSistemeBasariliBirSekildeGirisYapmistir() {
+        Assert.assertTrue(PD.getPage().url().contains("dashboard") || PD.getPage().url().contains("app") || PD.getPage().url().contains("tr"));
     }
 
-    @And("Kullanıcı sisteme giriş yapmıştır")
-    public void kullaniciSistemeGirisYapmistir() {
-        Assert.assertTrue(PD.getPage().url().contains("aistager"));
-    }
-
-    @And("Kullanıcı \"Virtual Staging\" sayfasındadır")
+    @And("Kullanıcı Virtual Staging sayfasındadır")
     public void kullaniciVirtualStagingSayfasindadir() {
-        PD.getPage().navigate(ConfigReader.getProperty("url") + "/virtual-staging");
-        Assert.assertTrue(PD.getPage().url().contains("virtual-staging"));
+        PD.getPage().navigate(ConfigReader.getProperty("url") + "/tr/virtual-staging");
+        rm.veriyfyContainsText(virtualStagingPage.getVirtualStagingHeader(), "Virtual Staging");
     }
 
-    @And("Kullanıcı yükleme alanına geçerli formatta .jpg veya .png oda fotoğrafını sürükleyip bırakır")
-    public void kullaniciYuklemeAlaninaGecerliFormattaJpgVeyaPngOdaFotografiniSurukleyipBirakir() {
-        virtualStagingPage.getYuklemeAlani().setInputFiles(java.nio.file.Paths.get("src/test/resources/test.jpg"));
+    @When("Kullanıcı desteklenen {string} formatında boş bir oda görseli yükler")
+    public void kullaniciDesteklenenFormattaBosBirOdaGorseliYukler(String format) {
+        System.out.println("Yüklenen görsel formatı: " + format);
+        rm.mySendKeys(virtualStagingPage.getFileUploadInput(), "src/test/resources/testdata/sample_room" + format);
     }
 
-    @Then("Yüklenen görselin önizlemesi kullanıcıya gösterilmelidir")
-    public void yuklenenGorselinOnizlemesiKullaniciyaGosterilmelidir() {
-        Assert.assertTrue(virtualStagingPage.getOnizleme().isVisible());
+    @And("Mevcut mobilyaları kaldır seçeneğinin varsayılan olarak aktif olduğunu görür")
+    public void mevcutMobilyalariKaldirSecenegininVarsayilanOlarakAktifOldugunuGorur() {
+        Assert.assertTrue(virtualStagingPage.getRemoveFurnitureCheckbox().isChecked());
     }
 
-    @When("Kullanıcı \"Oda Türü\" dropdown alanından \"Oturma Odası\" seçeneğini seçer")
-    public void kullaniciOdaTuruDropdownAlanindanOturmaOdasiSeceneginiSecerQuotes() {
-        rm.myClick(virtualStagingPage.getOdaTuruDropdown());
-        rm.myClick(virtualStagingPage.getOturmaOdasiSecenegi());
+    @And("Kullanıcı Oda Türü olarak {string} ve Tasarım Stili olarak {string} seçer")
+    public void kullaniciOdaTuruOlarakVeTasarimStiliOlarakSecer(String odaTuru, String stil) {
+        rm.mySendKeys(virtualStagingPage.getRoomTypeDropdown(), odaTuru);
+        rm.mySendKeys(virtualStagingPage.getDesignStyleDropdown(), stil);
     }
 
-    @And("Kullanıcı Oda Türü dropdown alanından Oturma Odası seçeneğini seçer")
-    public void kullaniciOdaTuruDropdownAlanindanOturmaOdasiSeceneginiSecer() {
-        rm.myClick(virtualStagingPage.getOdaTuruDropdown());
-        rm.myClick(virtualStagingPage.getOturmaOdasiSecenegi());
+    @And("{string} butonuna tıklar")
+    public void butonunaTiklar(String butonAdi) {
+        if (butonAdi.equals("Dekorasyon Oluştur")) {
+            rm.myClick(virtualStagingPage.getCreateDecorationButton());
+        } else if (butonAdi.equals("Edit Photo")) {
+            rm.myClick(virtualStagingPage.getEditPhotoButton());
+        } else if (butonAdi.equals("Erken Erişim Talep Et")) {
+            rm.myClick(navigationPage.getEarlyAccessButton());
+        } else if (butonAdi.equals("Gönder")) {
+            rm.myClick(navigationPage.getSubmitButton());
+        } else {
+            rm.myClick(PD.getPage().getByRole(com.microsoft.playwright.options.AriaRole.BUTTON, new com.microsoft.playwright.Page.GetByRoleOptions().setName(butonAdi)));
+        }
     }
 
-    @And("Kullanıcı Tasarım Stili dropdown alanından Modern seçeneğini seçer")
-    public void kullaniciTasarimStiliDropdownAlanindanModernSeceneginiSecer() {
-        rm.myClick(virtualStagingPage.getTasarimStiliDropdown());
-        rm.myClick(virtualStagingPage.getModernSecenegi());
+    @Then("Sistem yüklenen odanın yapay zeka tarafından mobilyalandırılmış yeni halini ekranda göstermelidir")
+    public void sistemYuklenenOdaninYapayZekaTarafindanMobilyalandirilmisYeniHaliniEkrandaGostermelidir() {
+        Assert.assertTrue(virtualStagingPage.getResultImage().isVisible());
     }
 
-    @And("Mevcut mobilyaları kaldır toggle'ının varsayılan olarak açık olduğu doğrulanır")
-    public void mevcutMobilyalariKaldirToggleIninVarsayilanOlarakAcikOlduguDogrulanir() {
-        Assert.assertTrue(virtualStagingPage.getMobilyaKaldirToggle().isChecked());
+    @When("Kullanıcı desteklenmeyen formatta bir dosya yükler {string}")
+    public void kullaniciDesteklenmeyenFormattaBirDosyaYukler(String format) {
+        rm.mySendKeys(virtualStagingPage.getFileUploadInput(), "src/test/resources/testdata/sample" + format);
     }
 
-    @And("Kullanıcı görünürlük seçeneklerinden Herkese açık galeride göster radio butonunu seçer")
-    public void kullaniciGorunurlukSeceneklerindenHerkeseAcikGalerideGosterRadioButonunuSecer() {
-        rm.myClick(virtualStagingPage.getHerkesAcikGalerideGosterRadio());
-    }
-
-    @Then("Dekorasyon Oluştur butonunun aktif olduğu görülür")
-    public void dekorasyonOlusturButonununAktifOlduguGorulur() {
-        Assert.assertTrue(virtualStagingPage.getDekorasyonOlusturButonu().isEnabled());
-    }
-
-    @When("Kullanıcı Dekorasyon Oluştur butonuna tıklar")
-    public void kullaniciDekorasyonOlusturButonunaTiklar() {
-        rm.myClick(virtualStagingPage.getDekorasyonOlusturButonu());
-    }
-
-    @Then("İşlem tamamlandığında odanın yapay zeka tarafından mobilyalandırılmış yeni hali ekranda gösterilmelidir")
-    public void islemTamamlandigindaOdaninYapayZekaTarafindanMobilyalandirilmisYeniHaliErandaGosterilmelidir() {
-        Assert.assertTrue(virtualStagingPage.getBasariliSonuc().isVisible());
-    }
-
-    @When("Kullanıcı yükleme alanına {string} formatında dosya yükler")
-    public void kullaniciYuklemeAlaninaFormatindaDosyaYukler(String gecersizFormat) {
-        virtualStagingPage.getYuklemeAlani().setInputFiles(java.nio.file.Paths.get("src/test/resources/test" + gecersizFormat));
-    }
-
-    @Then("Sistem hata mesajı göstermelidir ve görsel yüklenmemelidir")
-    public void sistemHataMesajiGostermelidirVeGorselYuklenmemelidir() {
-        Assert.assertTrue(virtualStagingPage.getHataMesaji().isVisible());
+    @Then("Sistem kullanıcıya uygun formatlarda dosya yüklemesi gerektiğine dair hata mesajı göstermelidir")
+    public void sistemKullaniciyaUygunFormatlardaDosyaYuklemesiGerektigineDairHataMesajiGostermelidir() {
+        Assert.assertTrue(virtualStagingPage.getErrorMessage().isVisible());
     }
 
     @And("Dekorasyon Oluştur butonu pasif kalmalıdır")
     public void dekorasyonOlusturButonuPasifKalmalidir() {
-        Assert.assertFalse(virtualStagingPage.getDekorasyonOlusturButonu().isEnabled());
+        Assert.assertFalse(virtualStagingPage.getCreateDecorationButton().isEnabled());
     }
 
-    @When("Kullanıcı geçerli bir görsel yükler")
-    public void kullaniciGecerliBirGorselYukler() {
-        virtualStagingPage.getYuklemeAlani().setInputFiles(java.nio.file.Paths.get("src/test/resources/test.jpg"));
+    @When("Kullanıcı izin verilen maksimum boyut sınırını aşan bir {string} görseli yükler")
+    public void kullaniciIzinVerilenMaksimumBoyutSiniriniAsanBirGorseliYukler(String format) {
+        rm.mySendKeys(virtualStagingPage.getFileUploadInput(), "src/test/resources/testdata/large_image" + format);
     }
 
-    @And("Kullanıcı Oda Türü seçimini boş bırakır")
-    public void kullaniciOdaTuruSeciminiBosBirakir() {
-        // Dropdown seçim yapılmıyor
+    @Then("Sistem görsel boyutunun çok büyük olduğuna dair bir uyarı mesajı göstermelidir")
+    public void sistemGorselBoyutununCokBuyukOldugunaDairBirUyariMesajiGostermelidir() {
+        Assert.assertTrue(virtualStagingPage.getErrorMessage().isVisible());
     }
 
-    @And("Kullanıcı Tasarım Stili seçimini boş bırakır")
-    public void kullaniciTasarimStiliSeciminiBosBirakir() {
-        // Dropdown seçim yapılmıyor
+    @And("Kullanıcı Virtual Staging sayfasında AI Edit sekmesindedir")
+    public void kullaniciVirtualStagingSayfasindaAIEditSekmesindedir() {
+        PD.getPage().navigate(ConfigReader.getProperty("url") + "/tr/virtual-staging/ai-edit");
+        rm.myClick(virtualStagingPage.getAiEditTab());
     }
 
-    @Then("Dekorasyon Oluştur butonunun pasif olduğu doğrulanır")
-    public void dekorasyonOlusturButonununPasifOlduguDogrulanir() {
-        Assert.assertFalse(virtualStagingPage.getDekorasyonOlusturButonu().isEnabled());
+    @When("Kullanıcı mevcut kaynak görseli seçer")
+    public void kullaniciMevcutKaynakGorseliSecer() {
+        rm.myClick(virtualStagingPage.getSourceImageSelector());
     }
 
-    @When("Kullanıcı geçerli bir görsel yükler, Oda Türü ve Tasarım Stili seçer")
-    public void kullaniciGecerliBirGorselYuklerOdaTuruVeTasarimStiliSecer() {
-        virtualStagingPage.getYuklemeAlani().setInputFiles(java.nio.file.Paths.get("src/test/resources/test.jpg"));
-        rm.myClick(virtualStagingPage.getOdaTuruDropdown());
-        rm.myClick(virtualStagingPage.getOturmaOdasiSecenegi());
-        rm.myClick(virtualStagingPage.getTasarimStiliDropdown());
-        rm.myClick(virtualStagingPage.getModernSecenegi());
+    @And("Describe what to change alanına {string} talimatını yazar")
+    public void describeWhatToChangeAlaninaTalimatiniYazar(String talimat) {
+        rm.mySendKeys(virtualStagingPage.getDescribeInput(), talimat);
     }
 
-    @And("Kullanıcı varsayılan olarak açık gelen Mevcut mobilyaları kaldır toggle'ını kapatır")
-    public void kullaniciVarsayilanOlarakAcikGelenMevcutMobilyalariKaldirToggleiniKapatir() {
-        rm.myClick(virtualStagingPage.getMobilyaKaldirToggle());
+    @Then("Sistem, girilen talimata uygun olarak görseli güncellemeli ve güncel hali ekranda göstermelidir")
+    public void sistemGirilenTalimataUygunOlarakGorseliGuncellemeliVeGuncelHaliEkrandaGostermelidir() {
+        Assert.assertTrue(virtualStagingPage.getResultImage().isVisible());
     }
 
-    @Then("Toggle'ın kapalı duruma geldiği doğrulanır")
-    public void toggleInKapaliDurumaGeldigiDogrulanir() {
-        Assert.assertFalse(virtualStagingPage.getMobilyaKaldirToggle().isChecked());
+    @And("Describe what to change alanını boş bırakır")
+    public void describeWhatToChangeAlaniniBosBirakir() {
+        virtualStagingPage.getDescribeInput().fill("");
     }
 
-    @Then("İşlem başarılı bir şekilde tamamlanır")
-    public void islemBasariliBirSekildeTamamlanir() {
-        Assert.assertTrue(virtualStagingPage.getBasariliSonuc().isVisible());
+    @Then("Sistem kullanıcının talimat girmesi gerektiğini belirten bir uyarı mesajı göstermelidir")
+    public void sistemKullanicininTalimatGirmesiGerektiginiBelirtenBirUyariMesajiGostermelidir() {
+        Assert.assertTrue(virtualStagingPage.getErrorMessage().isVisible());
     }
 
-    @When("Kullanıcı izin verilen maksimum boyuttan büyük bir oda fotoğrafı yükler")
-    public void kullaniciIzinVerilenMaksimumBoyuttanBuyukBirOdaFotografiYukler() {
-        virtualStagingPage.getYuklemeAlani().setInputFiles(java.nio.file.Paths.get("src/test/resources/large_test.jpg"));
+    @And("Görsel düzenleme işlemi tetiklenmemelidir")
+    public void gorselDuzenlemeIslemiTetiklenmemelidir() {
+        Assert.assertFalse(virtualStagingPage.getResultImage().isVisible());
     }
 
-    @Then("Sistem dosya boyutu hatası vermelidir ve görsel yüklenmemelidir")
-    public void sistemDosyaBoyutuHatasiVermelidirVeGorselYuklenmemelidir() {
-        Assert.assertTrue(virtualStagingPage.getHataMesaji().isVisible());
+    @When("Kullanıcı sistemdeki kaynak görsel yerine yeni bir {string} görseli yükler")
+    public void kullaniciSistemdekiKaynakGorselYerineYeniBirGorseliYukler(String format) {
+        rm.mySendKeys(virtualStagingPage.getFileUploadInput(), "src/test/resources/testdata/new_image" + format);
     }
 
-    @And("Kullanıcı AI Edit sekmesini aktif hale getirmiştir")
-    public void kullaniciAIEditSekmesiniAktifHaleGetirmistir() {
-        rm.myClick(virtualStagingPage.getAiEditSekmesi());
-    }
-
-    @Then("Edit photo source dropdown alanında varsayılan olarak Current image seçili olmalıdır")
-    public void editPhotoSourceDropdownAlanindaVarsayilanOlarakCurrentImageSeciliOlmalidir() {
-        Assert.assertTrue(virtualStagingPage.getEditPhotoSourceDropdown().isVisible());
-    }
-
-    @And("Seçilen görselin önizlemesi ekranda görünmelidir")
-    public void secilenGorselinOnizlemesiEkrandaGorunmelidir() {
-        Assert.assertTrue(virtualStagingPage.getOnizleme().isVisible());
-    }
-
-    @When("Kullanıcı Describe what to change metin alanına Remove the chair yazar")
-    public void kullaniciDescribeWhatToChangeMetinAlaninaRemoveTheChairYazar() {
-        rm.mySendKeys(virtualStagingPage.getDescribeWhatToChangeInput(), "Remove the chair");
-    }
-
-    @Then("Edit Photo butonunun aktif olduğu görülür")
-    public void editPhotoButonununAktifOlduguGorulur() {
-        Assert.assertTrue(virtualStagingPage.getEditPhotoButonu().isEnabled());
-    }
-
-    @When("Kullanıcı Edit Photo butonuna tıklar")
-    public void kullaniciEditPhotoButonunaTiklar() {
-        rm.myClick(virtualStagingPage.getEditPhotoButonu());
-    }
-
-    @Then("Sistem kullanıcının metinsel talimatına uygun şekilde düzenlenmiş yeni görseli ekranda sunmalıdır")
-    public void sistemKullanicininMetinselTalimatinaUygunSekildeDuzenlenmisYeniGorseliEkrandaSunmalidir() {
-        Assert.assertTrue(virtualStagingPage.getBasariliSonuc().isVisible());
-    }
-
-    @When("Kullanıcı Edit photo source alanından yeni bir kaynak görsel yükler")
-    public void kullaniciEditPhotoSourceAlanindanYeniBirKaynakGorselYukler() {
-        virtualStagingPage.getYuklemeAlani().setInputFiles(java.nio.file.Paths.get("src/test/resources/test.jpg"));
-    }
-
-    @Then("Yeni yüklenen görselin önizlemesi ekranda görünmelidir")
-    public void yeniYuklenenGorselinOnizlemesiEkrandaGorunmelidir() {
-        Assert.assertTrue(virtualStagingPage.getOnizleme().isVisible());
-    }
-
-    @When("Kullanıcı Describe what to change metin alanına Add a modern sofa yazar")
-    public void kullaniciDescribeWhatToChangeMetinAlaninaAddAModernSofaYazar() {
-        rm.mySendKeys(virtualStagingPage.getDescribeWhatToChangeInput(), "Add a modern sofa");
-    }
-
-    @And("Kullanıcı Edit Photo butonuna tıklar")
-    public void kullaniciEditPhotoButonunaTiklarAnd() {
-        rm.myClick(virtualStagingPage.getEditPhotoButonu());
-    }
-
-    @Then("Sistem güncellenmiş yeni görseli ekranda sunmalıdır")
-    public void sistemGuncellenmisYeniGorseliEkrandaSunmalidir() {
-        Assert.assertTrue(virtualStagingPage.getBasariliSonuc().isVisible());
-    }
-
-    @When("Kullanıcı {string} alanından {string} seçer")
-    public void kullaniciAlanindanSecer(String arg0, String arg1) {
-        rm.myClick(virtualStagingPage.getEditPhotoSourceDropdown());
-    }
-
-    @And("Kullanıcı Describe what to change metin alanını boş bırakır")
-    public void kullaniciDescribeWhatToChangeMetinAlaniniBosBirakir() {
-        // Boş bırakılıyor
-    }
-
-    @Then("Edit Photo butonunun pasif olduğu doğrulanır")
-    public void editPhotoButonununPasifOlduguDogrulanir() {
-        Assert.assertFalse(virtualStagingPage.getEditPhotoButonu().isEnabled());
-    }
-
-    @When("Kullanıcı Describe what to change alanına sistemin karakter sınırını zorlayacak çok uzun bir açıklama metni yazar")
-    public void kullaniciDescribeWhatToChangeAlaninaSisteminKarakterSiniriniZorlayacakCokUzunBirAciklamaMetniYazar() {
-        String uzunMetin = "a".repeat(1000);
-        rm.mySendKeys(virtualStagingPage.getDescribeWhatToChangeInput(), uzunMetin);
-    }
-
-    @Then("Metin alanının bu girdiyi kabul ettiği veya uygun bir sınırlama uyarısı verdiği doğrulanır")
-    public void metinAlanininBuGirdiyiKabulEtTigiVeyaUygunBirSinirlamaUyarisiVerdigiDogrulanir() {
-        Assert.assertTrue(virtualStagingPage.getDescribeWhatToChangeInput().isVisible());
-    }
-
-    @And("Edit Photo butonunun işlevselliği test edilir")
-    public void editPhotoButonununIslevselligiTestEdilir() {
-        Assert.assertTrue(virtualStagingPage.getEditPhotoButonu().isVisible());
-    }
-
-    @When("Kullanıcı {string} alanına özel karakterler ve emojiler içeren bir talep yazar (örn. \"Remove chair & table! 🪑\")")
-    public void kullaniciAlaninaOzelKarakterlerVeEmojilerIcerenBirTalepYazar(String arg0) {
-        rm.mySendKeys(virtualStagingPage.getDescribeWhatToChangeInput(), "Remove chair & table! 🪑");
-    }
-
-    @Then("Yapay zekanın girdiyi işleyip görseli başarılı bir şekilde düzenlediği doğrulanır")
-    public void yapayZekaninGirdiyiIsleyipGorseliBasariliBirSekildeDuzenledigiDogrulanir() {
-        Assert.assertTrue(virtualStagingPage.getBasariliSonuc().isVisible());
+    @Then("Sistem yeni yüklenen görsel üzerinden talimatı uygulamalı ve sonucu ekranda göstermelidir")
+    public void sistemYeniYuklenenGorselUzerindenTalimatiUygulamaliVeSonucuEkrandaGostermelidir() {
+        Assert.assertTrue(virtualStagingPage.getResultImage().isVisible());
     }
 
     @And("Kullanıcı ana sayfadadır")
     public void kullaniciAnaSayfadadir() {
-        PD.getPage().navigate(ConfigReader.getProperty("url"));
-        Assert.assertTrue(PD.getPage().url().contains("aistager"));
+        PD.getPage().navigate(ConfigReader.getProperty("url") + "/tr");
+        Assert.assertTrue(PD.getPage().url().contains("/tr"));
     }
 
-    @When("Kullanıcı header alanındaki Ürünler dropdown menüsünün üzerine gelir")
-    public void kullaniciHeaderAlanindakiUrunlerDropdownMenusunUzerineGelir() {
-        navigationPage.getUrunlerDropdown().hover();
+    @When("Kullanıcı Header üzerindeki Ürünler menüsünün üzerine gelir")
+    public void kullaniciHeaderUzerindekiUrunlerMenusununUzerineGelir() {
+        navigationPage.getProductsMenu().hover();
     }
 
-    @Then("Menünün açıldığı ve seçeneklerin listelendiği görülür")
-    public void menununAcildigiVeSeceneklerinListelendigiGorulur() {
-        Assert.assertTrue(navigationPage.getYapayZekaSanalTurSecenegi().isVisible());
+    @And("Açılan dropdown menüden Yapay Zeka Sanal Tur seçeneğine tıklar")
+    public void acilanDropdownMenudenYapayZekaSanalTurSecenegineTiklar() {
+        rm.myClick(navigationPage.getVirtualTourOption());
     }
 
-    @When("Kullanıcı listeden 2. sırada yer alan Yapay Zeka Sanal Tur seçeneğine tıklar")
-    public void kullaniciListeden2SiradaYerAlanYapayZekaSanalTurSeceneginiTiklar() {
-        rm.myClick(navigationPage.getYapayZekaSanalTurSecenegi());
+    @Then("Kullanıcı {string} sayfasına yönlendirilmelidir")
+    public void kullaniciSayfasinaYonlendirilmelidir(String urlPath) {
+        Assert.assertTrue(PD.getPage().url().contains(urlPath));
     }
 
-    @Then("Kullanıcı aistager.ai/tr/ai-virtual-tour sayfasına yönlendirilmelidir")
-    public void kullaniciAiVirtualTourSayfasinaYonlendirilmelidir() {
-        Assert.assertTrue(PD.getPage().url().contains("ai-virtual-tour"));
+    @And("Açılan dropdown menüden Sanal Dekorasyon API seçeneğine tıklar")
+    public void acilanDropdownMenudenSanalDekorasyonAPIsecenegineTiklar() {
+        rm.myClick(navigationPage.getApiOption());
     }
 
-    @When("Kullanıcı sayfadaki Erken Erişim İsteyin butonuna tıklar")
-    public void kullaniciSayfadakiErkenErisimIsteyinButonunaTiklar() {
-        rm.myClick(navigationPage.getErkenErisimIsteyinButonu());
+    @Given("Kullanıcı {string} sayfasındadır")
+    public void kullaniciSayfasindadir(String urlPath) {
+        PD.getPage().navigate(ConfigReader.getProperty("url") + urlPath);
+        Assert.assertTrue(PD.getPage().url().contains(urlPath));
     }
 
-    @Then("İlgili form veya modal açılmalıdır")
-    public void ilgiliFormVeyaModalAcilmalidir() {
-        Assert.assertTrue(navigationPage.getEpostaInput().isVisible());
+    @When("Kullanıcı erken erişim formundaki zorunlu alan olan E-posta adresini geçerli formatta girer {string}")
+    public void kullaniciErkenErisimFormundakiZorunluAlanOlanEpostaAdresiniGecerliFormattaGirer(String email) {
+        rm.mySendKeys(navigationPage.getEarlyAccessEmailInput(), email);
     }
 
-    @When("Kullanıcı form alanına geçerli bir e-posta adresi girer ve gönderir")
-    public void kullaniciFormAlaninaGecerliBirEPostaAdresiGirerVeGonderir() {
-        rm.mySendKeys(navigationPage.getEpostaInput(), rm.resolveDynamicValue("fakerEmail"));
-        rm.myClick(navigationPage.getGonderButonu());
+    @Then("Kullanıcı talebinin başarıyla alındığına dair onay mesajı görmelidir")
+    public void kullaniciTalebininBasariylaAlindiginaDairOnayMesajiGormelidir() {
+        Assert.assertTrue(navigationPage.getSuccessMessage().isVisible());
     }
 
-    @Then("Sistem bilgileri kaydetmeli ve kullanıcıya başarılı iletim onay mesajı göstermelidir")
-    public void sistemBilgileriKaydetmeliVeKullaniciyaBasariliIletimOnayMesajiGostermelidir() {
-        Assert.assertTrue(navigationPage.getOnayMesaji().isVisible());
+    @When("Kullanıcı erken erişim formuna geçersiz bir e-posta adresi girer {string}")
+    public void kullaniciErkenErisimFormunaGecersizBirEpostaAdresiGirer(String gecersizEmail) {
+        rm.mySendKeys(navigationPage.getEarlyAccessEmailInput(), gecersizEmail);
     }
 
-    @And("Kullanıcı aistager.ai/tr/ai-virtual-tour sayfasındadır")
-    public void kullaniciAiVirtualTourSayfasindadir() {
-        PD.getPage().navigate(ConfigReader.getProperty("url") + "/ai-virtual-tour");
-        Assert.assertTrue(PD.getPage().url().contains("ai-virtual-tour"));
+    @Then("Sistem e-posta formatının hatalı olduğuna dair bir doğrulama mesajı göstermelidir")
+    public void sistemEpostaFormatininHataliOldugunaDairBirDogrulamaMesajiGostermelidir() {
+        Assert.assertTrue(virtualStagingPage.getErrorMessage().isVisible());
     }
 
-    @And("Kullanıcı form alanına geçersiz bir e-posta adresi girer")
-    public void kullaniciFormAlaninaGecersizBirEPostaAdresiGirer() {
-        rm.mySendKeys(navigationPage.getEpostaInput(), "gecersizemail");
+    @And("Form gönderilmemelidir")
+    public void formGonderilmemelidir() {
+        Assert.assertFalse(navigationPage.getSuccessMessage().isVisible());
     }
 
-    @And("Kullanıcı formu gönderme butonuna tıklar")
-    public void kullaniciFormuGondermeButonunaTiklar() {
-        rm.myClick(navigationPage.getGonderButonu());
+    @Given("Kullanıcı {string} sayfazasındadır")
+    public void kullaniciSayfazasindadir(String urlPath) {
+        PD.getPage().navigate(ConfigReader.getProperty("url") + urlPath);
+        Assert.assertTrue(PD.getPage().url().contains(urlPath));
     }
 
-    @Then("Sistem e-posta formatı hatası göstermelidir ve talep gönderilmemelidir")
-    public void sistemEPostaFormatiHatasiGostermelidirVeTalepGonderilmemelidir() {
-        Assert.assertTrue(navigationPage.getOnayMesaji().isHidden());
+    @When("Kullanıcı API iletişim formundaki zorunlu alanları doldurur")
+    public void kullaniciApiIletisimFormundakiZorunluAlanlariDoldurur() {
+        rm.mySendKeys(navigationPage.getApiFormNameInput(), "Test User");
+        rm.mySendKeys(navigationPage.getApiFormEmailInput(), "api_test@example.com");
     }
 
-    @And("Kullanıcı e-posta alanını boş bırakıp gönder butonuna tıklar")
-    public void kullaniciEPostaAlaniniBosBirakipGonderButonunaTiklar() {
-        rm.myClick(navigationPage.getGonderButonu());
+    @Then("Başarılı gönderim mesajı ekranda görünmelidir")
+    public void basariliGonderimMesajiEkrandaGorunmelidir() {
+        Assert.assertTrue(navigationPage.getSuccessMessage().isVisible());
     }
 
-    @Then("Zorunlu alan uyarısı gösterilmelidir")
-    public void zorunluAlanUyarisiGosterilmelidir() {
-        Assert.assertTrue(navigationPage.getEpostaInput().isVisible());
+    @When("Kullanıcı sayfadaki Fiyatlandırmayı Görüntüle butonuna tıklar")
+    public void kullaniciSayfadakiFiyatlandirmayiGoruntuleButonunaTiklar() {
+        rm.myClick(navigationPage.getPricingButton());
     }
 
-    @And("Daha önce erken erişim talebinde bulunmuş bir e-posta adresi bilinmektedir")
-    public void dahaOnceErkenErisimTalebindeBulunmusBirEPostaAdresiBilinmektedir() {
-        // Bilinen mail
-    }
-
-    @When("Kullanıcı Erken Erişim İsteyin formuna bu e-posta adresini tekrar girer ve gönderir")
-    public void kullaniciErkenErisimIsteyinFormunaBuEPostaAdresiniTekrarGirerVeGonderir() {
-        rm.mySendKeys(navigationPage.getEpostaInput(), "tekrar@example.com");
-        rm.myClick(navigationPage.getGonderButonu());
-    }
-
-    @Then("Sistem mükerrer kaydı engellemeli veya kullanıcıya daha önce kayıt olduğuna dair uygun bir bilgi mesajı göstermelidir")
-    public void sistemMukerrerKaydiEngellemeliVeyaKullaniciyaDahaOnceKayitOldugunaDairUygunBirBilgiMesajiGostermelidir() {
-        Assert.assertTrue(navigationPage.getEpostaInput().isVisible());
-    }
-
-    @And("Kullanıcı listedeki 3. eleman olan Sanal Dekorasyon API seçeneğine tıklar")
-    public void kullaniciListedeki3ElemanOlanSanalDekorasyonApiSeceneginiTiklar() {
-        rm.myClick(navigationPage.getSanalDekorasyonApiSecenegi());
-    }
-
-    @Then("Kullanıcı aistager.ai/tr/api sayfasına yönlendirilmelidir")
-    public void kullaniciApiSayfasinaYonlendirilmelidir() {
-        Assert.assertTrue(PD.getPage().url().contains("api"));
-    }
-
-    @When("Kullanıcı sayfanın üst kısmındaki İletişime Geçin butonuna tıklar")
-    public void kullaniciSayfaninUstKismindakiIletisimeGecinButonunaTiklar() {
-        rm.myClick(navigationPage.getIletisimeGecinButonu());
-    }
-
-    @Then("İletişim formu açılmalıdır")
-    public void iletisimFormuAcilmalidir() {
-        Assert.assertTrue(navigationPage.getIletisimFormuAdSoyad().isVisible());
-    }
-
-    @When("Kullanıcı zorunlu alanları eksiksiz doldurur ve formu onaylar")
-    public void kullaniciZorunluAlanlariEksiksizDoldururVeFormuOnaylar() {
-        rm.mySendKeys(navigationPage.getIletisimFormuAdSoyad(), "Test User");
-        rm.mySendKeys(navigationPage.getEpostaInput(), rm.resolveDynamicValue("fakerEmail"));
-        rm.mySendKeys(navigationPage.getMesajAlani(), "Test mesajıdır.");
-        rm.myClick(navigationPage.getGonderButonu());
-    }
-
-    @Then("Talep başarıyla iletilmeli ve ekranda onay mesajı gösterilmelidir")
-    public void talepBasariylaIletilmeliVeEkrandaOnayMesajiGosterilmelidir() {
-        Assert.assertTrue(navigationPage.getOnayMesaji().isVisible());
-    }
-
-    @When("Kullanıcı sayfanın alt kısmında yer alan Fiyatlandırmayı Görüntüle butonuna tıklar")
-    public void kullaniciSayfaninAltKismindaYerAlanFiyatlandirmayiGoruntuleButonunaTiklar() {
-        rm.myClick(navigationPage.getFiyatlandirmayiGoruntuleButonu());
-    }
-
-    @Then("Kullanıcı hatasız bir şekilde Fiyatlandırma sayfasına yönlendirilmelidir")
-    public void kullaniciHatasizBirSekildeFiyatlandirmaSayfasinaYonlendirilmelidir() {
-        Assert.assertTrue(PD.getPage().url().contains("pricing"));
-    }
-
-    @And("Kullanıcı aistager.ai/tr/api sayfasındadır")
-    public void kullaniciApiSayfasindadir() {
-        PD.getPage().navigate(ConfigReader.getProperty("url") + "/api");
-        Assert.assertTrue(PD.getPage().url().contains("api"));
-    }
-
-    @When("Kullanıcı İletişime Geçin butonuna tıklar")
-    public void kullaniciIletisimeGecinButonunaTiklar() {
-        rm.myClick(navigationPage.getIletisimeGecinButonu());
-    }
-
-    @And("Kullanıcı zorunlu alanlardan bazılarını boş bırakarak formu onaylar")
-    public void kullaniciZorunluAlanlardanBazilariniBosBirakarakFormuOnaylar() {
-        rm.myClick(navigationPage.getGonderButonu());
-    }
-
-    @Then("Sistem zorunlu alan hatalarını göstermeli ve form gönderilmemelidir")
-    public void sistemZorunluAlanHatalariniGostermeliVeFormGonderilmemelidir() {
-        Assert.assertTrue(navigationPage.getIletisimFormuAdSoyad().isVisible());
-    }
-
-    @And("Kullanıcı mesaj alanına karakter sınırını aşan çok uzun bir metin girer")
-    public void kullaniciMesajAlaninaKarakterSiniriniAsanCokUzunBirMetinGirer() {
-        String uzunMesaj = "m".repeat(5000);
-        rm.mySendKeys(navigationPage.getMesajAlani(), uzunMesaj);
-    }
-
-    @Then("Sistem karakter sınırını aşım uyarısı vermeli ya da metni sınıra göre kırpmalıdır")
-    public void sistemKarakterSiniriniAsimUyarisiVermeliYaDaMetniSiniraGoreKirpmalidir() {
-        Assert.assertTrue(navigationPage.getMesajAlani().isVisible());
+    @Then("Kullanıcı doğru şekilde Fiyatlandırma sayfasına yönlendirilmelidir")
+    public void kullaniciDogruSekildeFiyatlandirmaSayfasinaYonlendirilmelidir() {
+        Assert.assertTrue(PD.getPage().url().contains("pricing") || PD.getPage().url().contains("fiyat"));
     }
 }

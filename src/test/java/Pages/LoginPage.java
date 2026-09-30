@@ -64,4 +64,20 @@ public class LoginPage {
     public void navigateToLogin() {
         page.navigate(ConfigReader.getProperty("url"));
     }
+
+    public Locator getPasswordInput() {
+        return page.getByPlaceholder("••••••••");
+    }
+
+    public Locator getAcceptCookiesButton() {
+        return page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Tümünü Kabul Et"));
+    }
+
+    public Locator getEmailInput() {
+        return page.locator("input[type='email'], input[name='email'], #email");
+    }
+
+    public Locator getLoginButton() {
+        return page.locator("button[type='submit'], input[type='submit'], .login-button");
+    }
 }

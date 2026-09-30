@@ -12,47 +12,43 @@ public class NavigationPage {
         this.page = PD.getPage();
     }
 
-    public Locator getUrunlerDropdown() {
+    public Locator getProductsMenu() {
         return page.getByText("Ürünler");
     }
 
-    public Locator getYapayZekaSanalTurSecenegi() {
+    public Locator getVirtualTourOption() {
         return page.getByText("Yapay Zeka Sanal Tur");
     }
 
-    public Locator getSanalDekorasyonApiSecenegi() {
+    public Locator getApiOption() {
         return page.getByText("Sanal Dekorasyon API");
     }
 
-    public Locator getErkenErisimIsteyinButonu() {
-        return page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Erken Erişim İsteyin"));
+    public Locator getEarlyAccessEmailInput() {
+        return page.getByPlaceholder("you@example.com").first();
     }
 
-    public Locator getEpostaInput() {
-        return page.getByPlaceholder("you@example.com");
+    public Locator getEarlyAccessButton() {
+        return page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Erken Erişim Talep Et"));
     }
 
-    public Locator getGonderButonu() {
+    public Locator getSuccessMessage() {
+        return page.locator(".success-message, .toast-success, text=başarıyla").first();
+    }
+
+    public Locator getApiFormNameInput() {
+        return page.locator("input[name='name'], input[placeholder*='Ad']").first();
+    }
+
+    public Locator getApiFormEmailInput() {
+        return page.locator("input[name='email'], input[placeholder*='E-posta']").first();
+    }
+
+    public Locator getSubmitButton() {
         return page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Gönder"));
     }
 
-    public Locator getOnayMesaji() {
-        return page.locator(".success-message");
-    }
-
-    public Locator getIletisimeGecinButonu() {
-        return page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("İletişime Geçin"));
-    }
-
-    public Locator getFiyatlandirmayiGoruntuleButonu() {
+    public Locator getPricingButton() {
         return page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Fiyatlandırmayı Görüntüle"));
-    }
-
-    public Locator getIletisimFormuAdSoyad() {
-        return page.getByPlaceholder("Ad Soyad");
-    }
-
-    public Locator getMesajAlani() {
-        return page.getByPlaceholder("Mesajınız");
     }
 }

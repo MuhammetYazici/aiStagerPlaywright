@@ -12,63 +12,71 @@ public class VirtualStagingPage {
         this.page = PD.getPage();
     }
 
-    public Locator getYuklemeAlani() {
+    public Locator getOdaniziYukleyinButton() {
+        return page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Odanızı Yükleyin"));
+    }
+
+    public Locator getOdaTuruSelect() {
+        return page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Tüm Tipler"));
+    }
+
+    public Locator getTasarimStiliSelect() {
+        return page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Oturma Odası"));
+    }
+
+    public Locator getDekorasyonOlusturButton() {
+        return page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Daha Fazla Tasarım Yükle"));
+    }
+
+    public Locator getToggleMobilya() {
+        return page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("View comparison 1"));
+    }
+
+    public Locator getVirtualStagingHeader() {
+        return page.getByText("Virtual Staging");
+    }
+
+    public Locator getFileUploadInput() {
         return page.locator("input[type='file']");
     }
 
-    public Locator getOnizleme() {
-        return page.locator(".preview-image, img");
-    }
-
-    public Locator getOdaTuruDropdown() {
-        return page.getByText("Oda Türü");
-    }
-
-    public Locator getOturmaOdasiSecenegi() {
-        return page.getByText("Oturma Odası");
-    }
-
-    public Locator getTasarimStiliDropdown() {
-        return page.getByText("Tasarım Stili");
-    }
-
-    public Locator getModernSecenegi() {
-        return page.getByText("Modern");
-    }
-
-    public Locator getMobilyaKaldirToggle() {
+    public Locator getRemoveFurnitureCheckbox() {
         return page.locator("input[type='checkbox']").first();
     }
 
-    public Locator getHerkesAcikGalerideGosterRadio() {
-        return page.getByText("Herkese açık galeride göster");
+    public Locator getRoomTypeDropdown() {
+        return page.locator("select, [role='combobox']").first();
     }
 
-    public Locator getDekorasyonOlusturButonu() {
+    public Locator getDesignStyleDropdown() {
+        return page.locator("select, [role='combobox']").nth(1);
+    }
+
+    public Locator getCreateDecorationButton() {
         return page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Dekorasyon Oluştur"));
     }
 
-    public Locator getBasariliSonuc() {
-        return page.locator(".result-image, canvas");
+    public Locator getResultImage() {
+        return page.locator("img.result-image, .ai-result-container img").first();
     }
 
-    public Locator getHataMesaji() {
-        return page.locator(".error-message");
+    public Locator getErrorMessage() {
+        return page.locator(".error-message, .alert-danger").first();
     }
 
-    public Locator getAiEditSekmesi() {
-        return page.getByText("AI Edit");
+    public Locator getAiEditTab() {
+        return page.getByRole(AriaRole.TAB, new Page.GetByRoleOptions().setName("AI Edit"));
     }
 
-    public Locator getEditPhotoSourceDropdown() {
-        return page.getByText("Current image");
+    public Locator getSourceImageSelector() {
+        return page.locator(".source-image-item, img.selectable-image").first();
     }
 
-    public Locator getDescribeWhatToChangeInput() {
+    public Locator getDescribeInput() {
         return page.getByPlaceholder("Describe what to change");
     }
 
-    public Locator getEditPhotoButonu() {
+    public Locator getEditPhotoButton() {
         return page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Edit Photo"));
     }
 }
