@@ -4,6 +4,7 @@ import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
 import Utilities.PD;
+import Utilities.ConfigReader;
 
 public class LoginPage {
     private Page page;
@@ -50,5 +51,17 @@ public class LoginPage {
 
     public Locator getGenelGuvenlikMesaji() {
         return page.getByText("E-posta veya şifre hatalı", new Page.GetByTextOptions().setExact(false));
+    }
+
+    public Locator getGirisYapLink() {
+        return page.getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName("Giriş yap"));
+    }
+
+    public Locator getHesapOlusturButonu() {
+        return page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Hesap Oluştur"));
+    }
+
+    public void navigateToLogin() {
+        page.navigate(ConfigReader.getProperty("url"));
     }
 }
