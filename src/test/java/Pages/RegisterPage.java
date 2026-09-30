@@ -2,6 +2,7 @@ package Pages;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
+import com.microsoft.playwright.options.AriaRole;
 import Utilities.PD;
 
 public class RegisterPage {
@@ -11,47 +12,59 @@ public class RegisterPage {
         this.page = PD.getPage();
     }
 
-    public Locator getEmailInput() {
-        return page.locator("input[name='email'], input[placeholder='you@example.com']").first();
+    public Locator getEpostaInput() {
+        return page.getByPlaceholder("you@example.com");
     }
 
-    public Locator getPasswordInput() {
-        return page.locator("input[name='password'], input[placeholder='Min. 8 karakter']").first();
+    public Locator getSifreInput() {
+        return page.getByPlaceholder("Min. 8 karakter");
     }
 
-    public Locator getConfirmPasswordInput() {
-        return page.locator("input[name='confirmPassword'], input[placeholder='Şifrenizi tekrar girin']").first();
+    public Locator getSifreyiOnaylaInput() {
+        return page.getByPlaceholder("Şifrenizi tekrar girin");
     }
 
-    public Locator getTermsCheckbox() {
-        return page.locator("input#terms-accept, input[type='checkbox']").first();
+    public Locator getSozlesmeCheckbox() {
+        return page.locator("input[type='checkbox']");
     }
 
-    public Locator getKayitOlButton() {
-        return page.locator("button:has-text('Hesap Oluştur'), button:has-text('Kayıt Ol')").first();
+    public Locator getHesapOlusturButton() {
+        return page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Hesap Oluştur"));
     }
 
-    public Locator getHesapOlusturOnayMesaji() {
-        return page.locator("text=Hesap başarıyla oluşturuldu, .success-alert").first();
+    public Locator getGozIkonu() {
+        return page.locator(".eye-icon, [class*='password-toggle']").first();
     }
 
-    public Locator getSifreKriterHataMesaji() {
-        return page.locator("text=en az 8 karakter, text=eşleşmiyor").first();
+    public Locator getGirisYapBaglantisi() {
+        return page.getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName("Giriş yap"));
     }
 
-    public Locator getSozlesmeHataMesaji() {
-        return page.locator("text=Sözleşmenin onaylanması gerekiyor").first();
+    public Locator getGoogleIleDevamEtButton() {
+        return page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Google ile devam et"));
     }
 
-    public Locator getGonderButton() {
-        return page.locator("button[type='submit']").first();
+    public Locator getZorunluAlanUyarisi() {
+        return page.getByText("zorunludur", new Page.GetByTextOptions().setExact(false));
     }
 
-    public Locator getSecurityInput() {
-        return page.locator("input[type='text'], input[type='email']").first();
+    public Locator getEpostaFormatUyarisi() {
+        return page.getByText("geçerli", new Page.GetByTextOptions().setExact(false));
     }
 
-    public Locator getIslemButton() {
-        return page.locator("button[type='submit']").first();
+    public Locator getZatenKullanimdaUyarisi() {
+        return page.getByText("zaten kullanımda", new Page.GetByTextOptions().setExact(false));
+    }
+
+    public Locator getMinimumUzunlukUyarisi() {
+        return page.getByText("en az 8 karakter", new Page.GetByTextOptions().setExact(false));
+    }
+
+    public Locator getSifrelerEslesmiyorUyarısı() {
+        return page.getByText("Şifreler eşleşmiyor", new Page.GetByTextOptions().setExact(false));
+    }
+
+    public Locator getSozlesmeOnayUyarisi() {
+        return page.getByText("sözleşme", new Page.GetByTextOptions().setExact(false));
     }
 }

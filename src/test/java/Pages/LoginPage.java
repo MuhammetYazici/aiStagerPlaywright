@@ -2,6 +2,7 @@ package Pages;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
+import com.microsoft.playwright.options.AriaRole;
 import Utilities.PD;
 
 public class LoginPage {
@@ -11,31 +12,43 @@ public class LoginPage {
         this.page = PD.getPage();
     }
 
-    public Locator getEmailInput() {
-        return page.locator("input[name='email'], input[placeholder='you@example.com']").first();
+    public Locator getEpostaInput() {
+        return page.getByPlaceholder("you@example.com");
     }
 
-    public Locator getPasswordInput() {
-        return page.locator("input[name='password'], input[placeholder='Min. 8 karakter']").first();
+    public Locator getSifreInput() {
+        return page.getByPlaceholder("Min. 8 karakter");
     }
 
     public Locator getGirisYapSubmitButton() {
-        return page.locator("button:has-text('Giriş Yap')").first();
+        return page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Giriş Yap"));
     }
 
     public Locator getGozIkonu() {
-        return page.locator(".eye-icon, [data-icon='eye']").first();
+        return page.locator(".eye-icon, [class*='password-toggle']").first();
+    }
+
+    public Locator getSifremiUnuttumLink() {
+        return page.getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName("Şifremi unuttum?"));
+    }
+
+    public Locator getKayitOlLink() {
+        return page.getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName("Kayıt ol"));
     }
 
     public Locator getGoogleIleDevamEtButton() {
-        return page.locator("button:has-text('Google ile devam et')").first();
+        return page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Google ile devam et"));
     }
 
     public Locator getZorunluAlanUyarisi() {
-        return page.locator("text=Bu alan zorunludur, .validation-error").first();
+        return page.getByText("zorunludur", new Page.GetByTextOptions().setExact(false));
     }
 
-    public Locator getGenelHataUyarısı() {
-        return page.locator("text=E-posta veya şifre hatalı, .alert-danger").first();
+    public Locator getGecersizEpostaUyarisi() {
+        return page.getByText("Lütfen geçerli bir e-posta adresi girin", new Page.GetByTextOptions().setExact(false));
+    }
+
+    public Locator getGenelGuvenlikMesaji() {
+        return page.getByText("E-posta veya şifre hatalı", new Page.GetByTextOptions().setExact(false));
     }
 }
