@@ -12,11 +12,23 @@ public class AiEditPage {
         this.page = PD.getPage();
     }
 
-    public Locator getDescribeInput() {
-        return page.getByRole(AriaRole.TEXTBOX, new Page.GetByRoleOptions().setName("Describe what to change"));
+    public Locator getCurrentImageView() {
+        return page.getByText("Current image");
+    }
+
+    public Locator getGorselOnizleme() {
+        return page.locator("img[alt*='preview'], img[src*='blob']");
+    }
+
+    public Locator getDescribeWhatToChangeInput() {
+        return page.getByPlaceholder("Describe what to change");
     }
 
     public Locator getEditPhotoButton() {
         return page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Edit Photo"));
+    }
+
+    public Locator getFileInput() {
+        return page.locator("input[type='file']");
     }
 }

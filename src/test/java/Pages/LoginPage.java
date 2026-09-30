@@ -80,4 +80,8 @@ public class LoginPage {
     public Locator getLoginButton() {
         return page.locator("button[type='submit'], input[type='submit'], .login-button");
     }
+
+    public Locator getGirisYapButton() {
+        return page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Giriş Yap"));
+    }
 }
