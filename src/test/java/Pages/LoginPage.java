@@ -84,4 +84,8 @@ public class LoginPage {
     public Locator getGirisYapButton() {
         return page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Giriş Yap"));
     }
+
+    public void login() {
+        page.navigate(ConfigReader.getProperty("url"));
+    }
 }

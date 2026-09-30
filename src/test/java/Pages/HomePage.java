@@ -136,43 +136,11 @@ public class HomePage {
         return page.getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName("Gizlilik Politikası"));
     }
 
-    public Locator getUrunlerMenu() {
-        return page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Ürünler"));
-    }
-
-    public Locator getSanalTurLink() {
-        return page.getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName("Yapay Zeka Sanal Tur"));
-    }
-
-    public Locator getSanalDekorasyonApiLink() {
-        return page.getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName("API"));
-    }
-
-    public Locator getEpostaInput() {
-        return page.getByRole(AriaRole.TEXTBOX, new Page.GetByRoleOptions().setName("E-posta"));
-    }
-
-    public Locator getAboneOlButton() {
-        return page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Abone Ol"));
-    }
-
-    public Locator getFiyatlandirmaGosterButton() {
-        return page.getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName("Fiyatlandırma"));
-    }
-
     public Locator getYapayZekaSanalTurSecenegi() {
         return page.getByText("Yapay Zeka Sanal Tur");
     }
 
     public Locator getSanalDekorasyonApiSecenegi() {
         return page.getByText("Sanal Dekorasyon API");
-    }
-
-    public Locator getFiyatlandirmayiGoruntuleButton() {
-        return page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Fiyatlandırmayı Görüntüle"));
-    }
-
-    public Locator getTumuKabulEtButton() {
-        return page.locator("text=Tümü Kabul Et");
     }
 }

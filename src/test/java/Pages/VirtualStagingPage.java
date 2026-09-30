@@ -12,35 +12,43 @@ public class VirtualStagingPage {
         this.page = PD.getPage();
     }
 
-    public Locator getFileInput() {
+    public Locator getVirtualStagingHeader() {
+        return page.getByText("Virtual Staging");
+    }
+
+    public Locator getFileUploadInput() {
         return page.locator("input[type='file']");
     }
 
-    public Locator getGorselOnizleme() {
-        return page.locator("img[alt*='preview'], img[src*='blob']");
+    public Locator getImagePreview() {
+        return page.locator("img");
     }
 
-    public Locator getOdaTuruDropdown(String odaTuru) {
-        return page.getByText(odaTuru);
+    public Locator getRemoveFurnitureToggle() {
+        return page.getByText("Mevcut mobilyaları kaldır");
     }
 
-    public Locator getTasarimStiliDropdown(String stil) {
-        return page.getByText(stil);
+    public Locator getRoomTypeDropdown() {
+        return page.getByText("Oda Türü");
     }
 
-    public Locator getMevcutMobilyalariKaldirToggle() {
-        return page.locator("input[type='checkbox'], [role='switch']").first();
+    public Locator getDesignStyleDropdown() {
+        return page.getByText("Tasarım Stili");
     }
 
-    public Locator getRadioButon() {
-        return page.locator("input[type='radio']").first();
+    public Locator getVisibilitySelect() {
+        return page.getByText("Görünürlük");
     }
 
-    public Locator getDekorasyonOlusturButton() {
+    public Locator getCreateDecorationButton() {
         return page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Dekorasyon Oluştur"));
     }
 
-    public Locator getHataMesaji() {
-        return page.locator(".error-message, [role='alert']");
+    public Locator getSuccessResultImage() {
+        return page.locator("img");
+    }
+
+    public Locator getErrorMessage() {
+        return page.getByText("hata");
     }
 }

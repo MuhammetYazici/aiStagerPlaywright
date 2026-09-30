@@ -1,54 +1,37 @@
 package Utilities;
 
+import Utilities.PD;
+
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
+import static org.testng.Assert.assertTrue;
 
-import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
-
-public class ReusableMethod{
-    private final Page page;
-
+public class ReusableMethod {
+    private Page page;
 
     public ReusableMethod() {
         this.page = PD.getPage();
     }
 
-    public  void myClick(Locator locator){
+    public void myClick(Locator locator) {
         locator.waitFor();
         locator.click();
     }
 
-    public  void mySendKeys(Locator locator,String text){
+    public void mySendKeys(Locator locator, String text) {
         locator.waitFor();
         locator.fill(text);
     }
 
-    public  void myDropDown(Locator locator, String value){
+    public void myVerifyContainsText(Locator locator, String text) {
         locator.waitFor();
-        locator.selectOption(value);
+        assertTrue(locator.textContent().contains(text));
     }
 
-    public  void veriyfyContainsText(Locator locator, String text){
+    public void myCheckBox(Locator locator) {
         locator.waitFor();
-        assertThat(locator).containsText(text);
-    }
-
-    public void myCheckBox(Locator locator){
-        locator.waitFor();
-        locator.check();
-    }
-
-    public String resolveDynamicValue(String data) {
-        if (data.equalsIgnoreCase("fakerEmail")){
-            data = ConfigReader.getRandomEmail();
-        } else if (data.equalsIgnoreCase("fakerPassword")) {
-            data = ConfigReader.getRandomPassword();
-        } else if (data.equalsIgnoreCase("fakerGenerateEmail")) {
-            data = ConfigReader.getGenerateEmail();
-        } else if (data.equalsIgnoreCase("fakerGeneratePassword")) {
-            data = ConfigReader.getGeneratePassword();
+        if (!locator.isChecked()) {
+            locator.click();
         }
-        return data;
     }
-
 }
