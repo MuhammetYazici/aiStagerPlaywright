@@ -4,9 +4,11 @@ import Pages.BasePage;
 import com.microsoft.playwright.options.AriaRole;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.Locator;
-import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
+
 import java.nio.file.Paths;
 import java.util.regex.Pattern;
+
+import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 
 public class AistagerTestcasesPage extends BasePage {
 
@@ -14,163 +16,311 @@ public class AistagerTestcasesPage extends BasePage {
         super();
     }
 
-    public void navigateToHomePage() {
-        page.navigate("/");
+    // Locators
+    public Locator getAcceptCookiesButton() {
+        return page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Tümünü Kabul Et"));
     }
 
-    public void navigateToVirtualTourPage() {
-        page.navigate("/tr/ai-virtual-tour");
+    public Locator getEmailInput() {
+        return page.getByPlaceholder("you@example.com");
     }
 
-    public void navigateToApiPage() {
-        page.navigate("/tr/api");
+    public Locator getPasswordInput() {
+        return page.getByPlaceholder("••••••••");
     }
 
-    public void clickVirtualStagingButton() {
-        page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Sanal Dekorasyon")).click();
+    public Locator getLoginButton() {
+        return page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Giriş Yap"));
     }
 
-    public void uploadFile(String fileName) {
-        page.locator("input[type='file']").setInputFiles(Paths.get(fileName));
+    public Locator getRemoveFurnitureCheckbox() {
+        return page.getByRole(AriaRole.CHECKBOX, new Page.GetByRoleOptions().setName("Mevcut mobilyaları kaldır"));
     }
 
-    public void verifyPreviewImageVisible() {
-        assertThat(page.getByRole(AriaRole.IMG, new Page.GetByRoleOptions().setName("Önizleme"))).isVisible();
+    public Locator getPublicVisibilityRadio() {
+        return page.getByRole(AriaRole.RADIO, new Page.GetByRoleOptions().setName("Herkese Açık"));
+    }
+
+    public Locator getUploadImageButton() {
+        return page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Görsel Yükle"));
+    }
+
+    public Locator getPreviewImage() {
+        return page.getByRole(AriaRole.IMG, new Page.GetByRoleOptions().setName("Önizleme"));
+    }
+
+    public Locator getRoomTypeSelect() {
+        return page.getByRole(AriaRole.COMBOBOX, new Page.GetByRoleOptions().setName("Oda Türü"));
+    }
+
+    public Locator getDesignStyleSelect() {
+        return page.getByRole(AriaRole.COMBOBOX, new Page.GetByRoleOptions().setName("Tasarım Stili"));
+    }
+
+    public Locator getCreateDecorationButton() {
+        return page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Dekorasyon Oluştur"));
+    }
+
+    public Locator getResultImage() {
+        return page.getByRole(AriaRole.IMG, new Page.GetByRoleOptions().setName("Sonuç Görseli"));
+    }
+
+    public Locator getUnsupportedFormatAlert() {
+        return page.getByRole(AriaRole.ALERT, new Page.GetByRoleOptions().setName("Desteklenmeyen dosya formatı"));
+    }
+
+    public Locator getAiEditTab() {
+        return page.getByRole(AriaRole.TAB, new Page.GetByRoleOptions().setName("AI Edit"));
+    }
+
+    public Locator getCurrentImageRadio() {
+        return page.getByRole(AriaRole.RADIO, new Page.GetByRoleOptions().setName("Current image"));
+    }
+
+    public Locator getPromptInput() {
+        return page.getByRole(AriaRole.TEXTBOX, new Page.GetByRoleOptions().setName("Komut girin"));
+    }
+
+    public Locator getEditPhotoButton() {
+        return page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Edit Photo"));
+    }
+
+    public Locator getProcessingProgressBar() {
+        return page.getByRole(AriaRole.PROGRESSBAR, new Page.GetByRoleOptions().setName("İşleniyor"));
+    }
+
+    public Locator getEditedImage() {
+        return page.getByRole(AriaRole.IMG, new Page.GetByRoleOptions().setName("Düzenlenmiş Görsel"));
+    }
+
+    public Locator getMoreInfoLink() {
+        return page.getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName("Daha fazla bilgi"));
+    }
+
+    public Locator getProductsMenuButton() {
+        return page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Ürünler"));
+    }
+
+    public Locator getAiVirtualTourLink() {
+        return page.getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName("Yapay Zeka Sanal Tur"));
+    }
+
+    public Locator getVirtualStagingApiLink() {
+        return page.getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName("Sanal Dekorasyon API"));
+    }
+
+    public Locator getFullNameInput() {
+        return page.getByRole(AriaRole.TEXTBOX, new Page.GetByRoleOptions().setName("Ad Soyad"));
+    }
+
+    public Locator getRequestEarlyAccessButton() {
+        return page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Erken Erişim İsteyin"));
+    }
+
+    public Locator getEarlyAccessSuccessAlert() {
+        return page.getByRole(AriaRole.ALERT, new Page.GetByRoleOptions().setName("Talebiniz başarıyla alındı"));
+    }
+
+    public Locator getEarlyAccessDialog() {
+        return page.getByRole(AriaRole.DIALOG, new Page.GetByRoleOptions().setName("Erken Erişim Formu"));
+    }
+
+    public Locator getConfirmationStatus() {
+        return page.getByRole(AriaRole.STATUS, new Page.GetByRoleOptions().setName("Talebiniz iletilmiştir"));
+    }
+
+    public Locator getSubmitButton() {
+        return page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Gönder"));
+    }
+
+    public Locator getInvalidEmailAlert() {
+        return page.getByRole(AriaRole.ALERT, new Page.GetByRoleOptions().setName("Geçerli bir e-posta adresi giriniz"));
+    }
+
+    public Locator getRequiredFieldAlert() {
+        return page.getByRole(AriaRole.ALERT, new Page.GetByRoleOptions().setName("Bu alan zorunludur"));
+    }
+
+    public Locator getContactDialog() {
+        return page.getByRole(AriaRole.DIALOG, new Page.GetByRoleOptions().setName("İletişime Geçin"));
+    }
+
+    public Locator getContactSuccessStatus() {
+        return page.getByRole(AriaRole.STATUS, new Page.GetByRoleOptions().setName("Mesajınız başarıyla iletildi"));
+    }
+
+    public Locator getViewPricingLink() {
+        return page.getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName("Fiyatlandırmayı Görüntüle"));
+    }
+
+    // Step Actions & Verifications
+    public void acceptCookies() {
+        myClick(getAcceptCookiesButton());
+    }
+
+    public void login(String email, String password) {
+        mySendKeys(getEmailInput(), email);
+        mySendKeys(getPasswordInput(), password);
+        myClick(getLoginButton());
+    }
+
+    public void verifyRemoveFurnitureOptionChecked() {
+        assertThat(getRemoveFurnitureCheckbox()).isChecked();
+    }
+
+    public void verifyPublicVisibilityChecked() {
+        assertThat(getPublicVisibilityRadio()).isChecked();
+    }
+
+    public void uploadImage(String filePath) {
+        getUploadImageButton().setInputFiles(Paths.get(filePath));
+    }
+
+    public void verifyPreviewImageDisplayed() {
+        assertThat(getPreviewImage()).isVisible();
     }
 
     public void verifyPreviewImageHidden() {
-        assertThat(page.getByRole(AriaRole.IMG, new Page.GetByRoleOptions().setName("Önizleme"))).isHidden();
-    }
-
-    public void verifyRemoveFurnitureSwitchChecked() {
-        assertThat(page.getByRole(AriaRole.SWITCH, new Page.GetByRoleOptions().setName("on"))).isChecked();
+        assertThat(getPreviewImage()).isHidden();
     }
 
     public void selectRoomType(String roomType) {
-        page.getByRole(AriaRole.COMBOBOX, new Page.GetByRoleOptions().setName("Oda türü seçin...")).selectOption(roomType);
+        getRoomTypeSelect().selectOption(roomType);
     }
 
     public void selectDesignStyle(String designStyle) {
-        page.getByRole(AriaRole.COMBOBOX, new Page.GetByRoleOptions().setName("Tasarım stili seçin...")).selectOption(designStyle);
+        getDesignStyleSelect().selectOption(designStyle);
     }
 
-    public void verifyRoomTypeDropdownEmpty() {
-        assertThat(page.getByRole(AriaRole.COMBOBOX, new Page.GetByRoleOptions().setName("Oda türü seçin..."))).hasValue("");
-    }
-
-    public void clickCreateDecorationButton() {
-        page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Dekorasyon Oluştur")).click();
+    public void clickCreateDecoration() {
+        myClick(getCreateDecorationButton());
     }
 
     public void verifyCreateDecorationButtonDisabled() {
-        assertThat(page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Dekorasyon Oluştur"))).isDisabled();
+        assertThat(getCreateDecorationButton()).isDisabled();
     }
 
-    public void verifyProcessingStatusVisible() {
-        assertThat(page.getByText("İşleniyor")).isVisible();
+    public void verifyResultImageDisplayed() {
+        assertThat(getResultImage()).isVisible();
     }
 
-    public void verifyResultImageVisible() {
-        assertThat(page.getByRole(AriaRole.IMG, new Page.GetByRoleOptions().setName("Sonuç Görseli"))).isVisible();
-    }
-
-    public void verifyInvalidFormatErrorMessage() {
-        assertThat(page.getByText("Yalnızca JPG veya PNG formatları desteklenmektedir")).isVisible();
+    public void verifyUnsupportedFormatAlertDisplayed() {
+        assertThat(getUnsupportedFormatAlert()).isVisible();
     }
 
     public void clickAiEditTab() {
-        page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Yapay Zeka Düzenleme")).click();
+        myClick(getAiEditTab());
     }
 
-    public void verifySourceImageVisible() {
-        assertThat(page.getByRole(AriaRole.IMG, new Page.GetByRoleOptions().setName("Kaynak Görsel"))).isVisible();
+    public void verifyCurrentImageRadioChecked() {
+        assertThat(getCurrentImageRadio()).isChecked();
     }
 
-    public void fillDescribeWhatToChange(String instruction) {
-        page.getByRole(AriaRole.TEXTBOX, new Page.GetByRoleOptions().setName("Describe what to change")).fill(instruction);
+    public void enterEditPrompt(String prompt) {
+        mySendKeys(getPromptInput(), prompt);
     }
 
-    public void clickEditPhotoButton() {
-        page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Edit Photo")).click();
+    public void clearEditPrompt() {
+        getPromptInput().fill("");
+    }
+
+    public void clickEditPhoto() {
+        myClick(getEditPhotoButton());
+    }
+
+    public void verifyProcessingState() {
+        assertThat(getProcessingProgressBar()).isVisible();
+    }
+
+    public void verifyEditedImageDisplayed() {
+        assertThat(getEditedImage()).isVisible();
     }
 
     public void verifyEditPhotoButtonDisabled() {
-        assertThat(page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Edit Photo"))).isDisabled();
+        assertThat(getEditPhotoButton()).isDisabled();
     }
 
-    public void verifyEditedImageVisible() {
-        assertThat(page.getByRole(AriaRole.IMG, new Page.GetByRoleOptions().setName("İşlenmiş Görsel"))).isVisible();
+    public void verifyHomePageDisplayed() {
+        assertThat(getMoreInfoLink()).isVisible();
     }
 
-    public void verifyInvalidCommandWarningVisible() {
-        assertThat(page.getByText("Lütfen geçerli bir komut girin")).isVisible();
+    public void openProductsMenu() {
+        myClick(getProductsMenuButton());
     }
 
-    public void clickProductsMenuButton() {
-        page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Ürünler")).click();
+    public void clickAiVirtualTour() {
+        myClick(getAiVirtualTourLink());
     }
 
-    public void clickAiVirtualTourLink() {
-        page.getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName("Yapay Zeka Sanal Tur")).click();
+    public void clickVirtualStagingApi() {
+        myClick(getVirtualStagingApiLink());
     }
 
-    public void verifyVirtualTourUrl() {
-        assertThat(page).hasURL(Pattern.compile(".*/tr/ai-virtual-tour.*"));
+    public void verifyCurrentUrl(String expectedUrlFragment) {
+        assertThat(page).hasURL(Pattern.compile(".*" + Pattern.quote(expectedUrlFragment) + ".*"));
     }
 
-    public void clickRequestEarlyAccessButton() {
-        page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Erken Erişim İsteyin")).click();
+    public void fillEarlyAccessFullName(String fullName) {
+        mySendKeys(getFullNameInput(), fullName);
     }
 
-    public void fillEmailField(String email) {
-        page.getByRole(AriaRole.TEXTBOX, new Page.GetByRoleOptions().setName("E-posta")).fill(email);
+    public void fillEarlyAccessEmail(String email) {
+        mySendKeys(getEmailInput(), email);
     }
 
-    public void clickSubmitButton() {
-        page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Gönder")).click();
+    public void clickRequestEarlyAccess() {
+        myClick(getRequestEarlyAccessButton());
     }
 
-    public void verifySubmitButtonEnabled() {
-        assertThat(page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Gönder"))).isEnabled();
+    public void verifyEarlyAccessRequestSuccess() {
+        assertThat(getEarlyAccessSuccessAlert()).isVisible();
     }
 
-    public void verifyRequestReceivedConfirmationMessage() {
-        assertThat(page.getByText("Talebiniz başarıyla alındı")).isVisible();
+    public void verifyEarlyAccessFormClosed() {
+        assertThat(getEarlyAccessDialog()).isHidden();
     }
 
-    public void verifyInvalidEmailErrorMessage() {
-        assertThat(page.getByText("Geçerli bir e-posta adresi giriniz")).isVisible();
+    public void verifyEarlyAccessFormVisible() {
+        assertThat(getEarlyAccessDialog()).isVisible();
     }
 
-    public void clickApiLink() {
-        page.getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName("API")).click();
+    public void verifyConfirmationNotificationDisplayed() {
+        assertThat(getConfirmationStatus()).isVisible();
     }
 
-    public void verifyApiUrl() {
-        assertThat(page).hasURL(Pattern.compile(".*/tr/api.*"));
+    public void clickSubmit() {
+        myClick(getSubmitButton());
     }
 
-    public void clickContactUsButton() {
-        page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("İletişime Geçin")).click();
+    public void verifyInvalidEmailErrorDisplayed() {
+        assertThat(getInvalidEmailAlert()).isVisible();
     }
 
-    public void fillFullNameField(String fullName) {
-        page.getByRole(AriaRole.TEXTBOX, new Page.GetByRoleOptions().setName("Ad Soyad")).fill(fullName);
+    public void fillContactEmail(String email) {
+        mySendKeys(getEmailInput(), email);
     }
 
-    public void verifyFormSubmittedConfirmationMessage() {
-        assertThat(page.getByText("Mesajınız başarıyla iletildi")).isVisible();
+    public void clearContactEmail() {
+        getEmailInput().fill("");
     }
 
-    public void clickViewPricingLink() {
-        page.getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName("Fiyatlandırma")).click();
+    public void verifyRequiredFieldErrorDisplayed() {
+        assertThat(getRequiredFieldAlert()).isVisible();
     }
 
-    public void verifyPricingUrl() {
-        assertThat(page).hasURL(Pattern.compile(".*/tr/pricing.*"));
+    public void verifyContactFormVisible() {
+        assertThat(getContactDialog()).isVisible();
     }
 
-    public void verifyRequiredFieldErrorVisible() {
-        assertThat(page.getByText("Bu alan zorunludur")).isVisible();
+    public void verifyContactSuccessMessageDisplayed() {
+        assertThat(getContactSuccessStatus()).isVisible();
+    }
+
+    public void verifyContactFormClosed() {
+        assertThat(getContactDialog()).isHidden();
+    }
+
+    public void clickViewPricing() {
+        myClick(getViewPricingLink());
     }
 }

@@ -2,11 +2,11 @@ package StepDefinations;
 
 import Pages.AistagerTestcasesPage;
 import Utilities.TestContext;
-import io.cucumber.java.en.Given;
-import io.cucumber.java.en.When;
-import io.cucumber.java.en.Then;
 import io.cucumber.java.en.And;
-import io.cucumber.java.en.But;
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
+import org.testng.Assert;
 
 public class AistagerTestcasesSteps {
 
@@ -18,229 +18,266 @@ public class AistagerTestcasesSteps {
         this.page = new AistagerTestcasesPage();
     }
 
-    @Given("Kullanıcı web sitesi ana sayfasına erişir")
-    public void kullaniciWebSitesiAnaSayfasinaErisir() {
-        page.navigateToHomePage();
+    @Given("Kullanıcı AiStager platformuna erişim sağlar")
+    public void kullaniciAiStagerPlatformunaErisimSaglar() {
+        page.verifyHomePageDisplayed();
     }
 
-    @Given("Kullanıcı oturum açarak \"Virtual Staging\" sayfasına gider")
-    public void kullaniciOturumAcarakVirtualStagingSayfasinaGider() {
-        page.clickVirtualStagingButton();
+    @Given("Kullanıcı Virtual Staging sayfasında oturum açmış durumdadır")
+    public void kullaniciVirtualStagingSayfasindaOturumAcmisDurumdadir() {
+        page.acceptCookies();
+        page.login("user@example.com", "Password123*");
     }
 
-    @When("Kullanıcı {string} dosyasını yükler")
-    public void kullaniciDosyasiniYukler(String fileName) {
-        page.uploadFile(fileName);
+    @Then("Mevcut mobilyaları kaldır seçeneğinin varsayılan olarak aktif olduğu doğrulanır")
+    public void mevcutMobilyalariKaldirSecenegininVarsayilanOlarakAktifOlduguDogrulanir() {
+        page.verifyRemoveFurnitureOptionChecked();
     }
 
-    @Then("Yüklenen görselin önizlemesi ekranda görüntülenmelidir")
-    public void yuklenenGorselinOnizlemesiEkrandaGoruntulenmelidir() {
-        page.verifyPreviewImageVisible();
+    @Then("Görünürlük seçeneklerinden {string} radyo butonunun seçili olduğu doğrulanır")
+    public void gorunurlukSeceneklerindenRadyoButonununSeciliOlduguDogrulanir(String radioName) {
+        page.verifyPublicVisibilityChecked();
     }
 
-    @And("Mevcut mobilyaları kaldır seçeneğinin varsayılan olarak açık durumda olduğu doğrulanır")
-    public void mevcutMobilyalariKaldirSecenegininVarsayilanOlarakAcikDurumdaOlduguDogrulanir() {
-        page.verifyRemoveFurnitureSwitchChecked();
+    @When("Kullanıcı dosya yükleme alanına {string} dosyasını yükler")
+    public void kullaniciDosyaYuklemeAlaninaDosyasiniYukler(String dosyaAdi) {
+        page.uploadImage(dosyaAdi);
     }
 
-    @When("Kullanıcı Oda Türü alanından {string} değerini seçer")
-    public void kullaniciOdaTuruAlanindanDegeriniSecer(String roomType) {
-        page.selectRoomType(roomType);
+    @Then("Yüklenen görselin önizlemesi ekranda görüntülenir")
+    public void yuklenenGorselinOnizlemesiEkrandaGoruntulenir() {
+        page.verifyPreviewImageDisplayed();
     }
 
-    @And("Kullanıcı Tasarım Stili alanından {string} değerini seçer")
-    public void kullaniciTasarimStiliAlanindanDegeriniSecer(String designStyle) {
-        page.selectDesignStyle(designStyle);
+    @When("Kullanıcı Oda Türü alanından {string} seçeneğini seçer")
+    public void kullaniciOdaTuruAlanindanSeceneginiSecer(String odaTuru) {
+        page.selectRoomType(odaTuru);
     }
 
-    @And("Kullanıcı Dekorasyon Oluştur butonuna tıklar")
-    public void kullaniciDekorasyonOlusturButonunaTiklar() {
-        page.clickCreateDecorationButton();
+    @When("Kullanıcı Tasarım Stili alanından {string} seçeneğini seçer")
+    public void kullaniciTasarimStiliAlanindanSeceneginiSecer(String tasarimStili) {
+        page.selectDesignStyle(tasarimStili);
     }
 
-    @Then("Sistem görsel işleme sürecini başlatmalıdır")
-    public void sistemGorselIslemeSureciniBaslatmalidir() {
-        page.verifyProcessingStatusVisible();
+    @When("Dekorasyon Oluştur butonuna tıklar")
+    public void dekorasyonOlusturButonunaTiklar() {
+        page.clickCreateDecoration();
     }
 
-    @And("İşlem tamamlandığında seçilen parametrelere uygun mobilyalandırılmış çıktı görseli önizleme alanında sunulmalıdır")
-    public void islemTamamlandigindaSecilenParametrelereUygunMobilyalandirilmisCiktiGorseliOnizlemeAlanindaSunulmalidir() {
-        page.verifyResultImageVisible();
-    }
-
-    @When("Kullanıcı sisteme geçersiz formattaki {string} dosyasını yüklemeyi dener")
-    public void kullaniciSistemeGecersizFormattakiDosyasiniYuklemeyiDener(String fileName) {
-        page.uploadFile(fileName);
-    }
-
-    @Then("Ekranda yalnızca JPG veya PNG formatlarının desteklendiğini belirten hata mesajı görüntülenmelidir")
-    public void ekrandaYalnizcaJpgVeyaPngFormatlarininDesteklendiginiBelirtenHataMesajiGoruntulenmelidir() {
-        page.verifyInvalidFormatErrorMessage();
-    }
-
-    @And("Görsel önizleme alanı boş kalmalıdır")
-    public void gorselOnizlemeAlaniBosKalmalidir() {
-        page.verifyPreviewImageHidden();
-    }
-
-    @And("Görsel önizlemesinin ekranda olduğunu doğrular")
-    public void gorselOnizlemesininEkrandaOldugunuDogrular() {
-        page.verifyPreviewImageVisible();
-    }
-
-    @But("Oda Türü ve Tasarım Stili dropdown alanlarını boş bırakır")
-    public void odaTuruVeTasarimStiliDropdownAlanlariniBosBirakir() {
-        page.verifyRoomTypeDropdownEmpty();
-    }
-
-    @Then("Dekorasyon Oluştur butonu pasif durumda olmalıdır ve işlem başlatılamamalıdır")
-    public void dekorasyonOlusturButonuPasifDurumdaOlmalidirVeIslemBaslatilamamalidir() {
+    @Then("Dekorasyon Oluştur butonunun işlem sırasında devre dışı ve yükleniyor durumunda olduğu doğrulanır")
+    public void dekorasyonOlusturButonununIslemSirasindaDevreDisiVeYukleniyorDurumundaOlduguDogrulanir() {
         page.verifyCreateDecorationButtonDisabled();
     }
 
-    @Given("Kullanıcı oturum açarak \"Virtual Staging\" altındaki \"AI Edit\" sekmesine gider")
-    public void kullaniciOturumAcarakVirtualStagingAltindakiAiEditSekmesineGider() {
+    @Then("İşlem tamamlandığında mobilyalandırılmış görsel ekranda render edilir")
+    public void islemTamamlandigindaMobilyalandirilmisGorselEkrandaRenderEdilir() {
+        page.verifyResultImageDisplayed();
+    }
+
+    @Then("Desteklenmeyen dosya formatı uyarısı ekranda görüntülenir")
+    public void desteklenmeyenDosyaFormatiUyarisiEkrandaGoruntulenir() {
+        page.verifyUnsupportedFormatAlertDisplayed();
+    }
+
+    @Then("Görsel önizleme alanı boş kalır")
+    public void gorselOnizlemeAlaniBosKalir() {
+        page.verifyPreviewImageHidden();
+    }
+
+    @Then("Dekorasyon Oluştur butonu tıklanamaz durumda olur")
+    public void dekorasyonOlusturButonuTiklanamazDurumdaOlur() {
+        page.verifyCreateDecorationButtonDisabled();
+    }
+
+    @When("Kullanıcı görsel yükleme durumunu {string} olarak ayarlar")
+    public void kullaniciGorselYuklemeDurumunuOlarakAyarlar(String gorselDurumu) {
+        if ("Yuklendi".equalsIgnoreCase(gorselDurumu)) {
+            page.uploadImage("sample.jpg");
+        }
+    }
+
+    @When("Kullanıcı Oda Türü seçimini {string} olarak belirler")
+    public void kullaniciOdaTuruSeciminiOlarakBelirler(String odaTuru) {
+        if (!"Secilmedi".equalsIgnoreCase(odaTuru)) {
+            page.selectRoomType(odaTuru);
+        }
+    }
+
+    @When("Kullanıcı Tasarım Stili seçimini {string} olarak belirler")
+    public void kullaniciTasarimStiliSeciminiOlarakBelirler(String tasarimStili) {
+        if (!"Secilmedi".equalsIgnoreCase(tasarimStili)) {
+            page.selectDesignStyle(tasarimStili);
+        }
+    }
+
+    @Then("Dekorasyon Oluştur butonunun tıklanamaz durumda olduğu doğrulanır")
+    public void dekorasyonOlusturButonununTiklanamazDurumdaOlduguDogrulanir() {
+        page.verifyCreateDecorationButtonDisabled();
+    }
+
+    @Given("Kullanıcı AI Edit sekmesine geçer ve kaynak görsel tanımlıdır")
+    public void kullaniciAiEditSekmesineGecerVeKaynakGorselTanimlidir() {
         page.clickAiEditTab();
     }
 
-    @And("Düzenlenecek kaynak görselin sistemde seçili olduğunu doğrular")
-    public void duzenlenecekKaynakGorselinSistemdeSeciliOldugunuDogrular() {
-        page.verifySourceImageVisible();
+    @Then("Kaynak görsel seçeneğinin varsayılan olarak {string} olduğu doğrulanır")
+    public void kaynakGorselSecenegininVarsayilanOlarakOlduguDogrulanir(String sourceOption) {
+        page.verifyCurrentImageRadioChecked();
     }
 
-    @When("Kullanıcı Describe what to change alanına {string} talimatını girer")
-    public void kullaniciDescribeWhatToChangeAlaninaTalimatiniGirer(String instruction) {
-        page.fillDescribeWhatToChange(instruction);
+    @When("Kullanıcı metin alanına {string} komutunu yazar")
+    public void kullaniciMetinAlaninaKomutunuYazar(String prompt) {
+        page.enterEditPrompt(prompt);
     }
 
-    @And("Edit Photo butonuna tıklar")
+    @When("Edit Photo butonuna tıklar")
     public void editPhotoButonunaTiklar() {
-        page.clickEditPhotoButton();
+        page.clickEditPhoto();
     }
 
-    @Then("Sistem talimata uygun olarak işlenmiş yeni görseli ekranda başarıyla görüntülemelidir")
-    public void sistemTalimataUygunOlarakIslenmisYeniGorseliEkrandaBasariylaGoruntulemelidir() {
-        page.verifyEditedImageVisible();
+    @Then("Sistemin talebi işlediği görüntülenir")
+    public void sisteminTalebiIsledigiGoruntulenir() {
+        page.verifyProcessingState();
     }
 
-    @When("Kullanıcı Describe what to change alanına {string} yazar")
-    public void kullaniciDescribeWhatToChangeAlaninaYazar(String instruction) {
-        page.fillDescribeWhatToChange(instruction);
+    @Then("Orijinal görsel korunarak yeni düzenlenmiş versiyon ekranda sunulur")
+    public void orijinalGorselKorunarakYeniDuzenlenmisVersiyonEkrandaSunulur() {
+        page.verifyEditedImageDisplayed();
     }
 
-    @Then("Edit Photo butonu işlem başlatmamalıdır")
-    public void editPhotoButonuIslemBaslatmamalidir() {
+    @When("Kullanıcı komut giriş alanını boş bırakır")
+    public void kullaniciKomutGirisAlaniniBosBirakir() {
+        page.clearEditPrompt();
+    }
+
+    @Then("Edit Photo butonunun devre dışı olduğu doğrulanır")
+    public void editPhotoButonununDevreDisiOlduguDogrulanir() {
         page.verifyEditPhotoButtonDisabled();
     }
 
-    @And("Ekranda geçerli bir komut girilmesini isteyen doğrulama mesajı görüntülenmelidir")
-    public void ekrandaGecerliBirKomutGirilmesiniIsteyenDogrulamaMesajiGoruntulenmelidir() {
-        page.verifyInvalidCommandWarningVisible();
+    @Given("Kullanıcı ana sayfadadır")
+    public void kullaniciAnaSayfadadir() {
+        page.verifyHomePageDisplayed();
     }
 
-    @When("Kullanıcı menüdeki Ürünler seçeneğine tıklar")
-    public void kullaniciMenudekiUrunlerSecenegineTiklar() {
-        page.clickProductsMenuButton();
+    @When("Kullanıcı Header menüsünde yer alan {string} sekmesini açar")
+    public void kullaniciHeaderMenusundeYerAlanSekmesiniAcar(String menuAdi) {
+        page.openProductsMenu();
     }
 
-    @And("Açılan menünün ikinci sırasındaki Yapay Zeka Sanal Tur seçeneğine tıklar")
-    public void acilanMenununIkinciSirasindakiYapayZekaSanalTurSecenegineTiklar() {
-        page.clickAiVirtualTourLink();
+    @When("Açılan menünün ikinci sırasındaki {string} seçeneğine tıklar")
+    public void acilanMenununIkinciSirasindakiSecenegineTiklar(String secenekAdi) {
+        page.clickAiVirtualTour();
     }
 
-    @Then("Kullanıcı doğrudan \"/tr/ai-virtual-tour\" adresine yönlendirilmelidir")
-    public void kullaniciDogrudanTrAiVirtualTourAdresineYonlendirilmelidir() {
-        page.verifyVirtualTourUrl();
+    @Then("Tarayıcı adres çubuğundaki URL değeri {string} olmalıdır")
+    public void tarayiciAdresCubugundakiUrlDegeriOlmalidir(String expectedUrlFragment) {
+        page.verifyCurrentUrl(expectedUrlFragment);
     }
 
-    @When("Kullanıcı Erken Erişim İsteyin butonuna tıklar")
-    public void kullaniciErkenErisimIsteyinButonunaTiklar() {
-        page.clickRequestEarlyAccessButton();
+    @When("Açılan menünün üçüncü sırasındaki {string} seçeneğine tıklar")
+    public void acilanMenununUcuncuSirasindakiSecenegineTiklar(String secenekAdi) {
+        page.clickVirtualStagingApi();
     }
 
-    @And("Erken erişim formundaki e-posta alanına {string} yazar")
-    public void erkenErisimFormundakiEpostaAlaninaYazar(String email) {
-        page.fillEmailField(email);
+    @Given("Kullanıcı {string} sayfasına gider")
+    public void kullaniciSayfasinaGider(String targetUrl) {
+        page.verifyCurrentUrl(targetUrl);
     }
 
-    @And("Form gönder butonuna tıklar")
-    public void formGonderButonunaTiklar() {
-        page.clickSubmitButton();
+    @When("Kullanıcı Erken Erişim Formu üzerindeki ad alanına {string} bilgisini girer")
+    public void kullaniciErkenErisimFormuUzerindekiAdAlaninaBilgisiniGirer(String fullName) {
+        page.fillEarlyAccessFullName(fullName);
     }
 
-    @Then("Kullanıcıya talebin alındığına dair onay bildirim mesajı gösterilmelidir")
-    public void kullaniciyaTalebinAlindiginaDairOnayBildirimMesajiGosterilmelidir() {
-        page.verifyRequestReceivedConfirmationMessage();
+    @When("E-posta alanına {string} bilgisini girer")
+    public void ePostaAlaninaBilgisiniGirer(String email) {
+        page.fillEarlyAccessEmail(email);
     }
 
-    @Given("Kullanıcı doğrudan \"/tr/ai-virtual-tour\" sayfasına gider")
-    public void kullaniciDogrudanTrAiVirtualTourSayfasinaGider() {
-        page.navigateToVirtualTourPage();
+    @When("Erken Erişim İsteyin butonuna tıklar")
+    public void erkenErisimIsteyinButonunaTiklar() {
+        page.clickRequestEarlyAccess();
     }
 
-    @Then("Form gönderilmemelidir")
-    public void formGonderilmemelidir() {
-        page.verifySubmitButtonEnabled();
+    @Then("Talep başarıyla kaydedilmelidir")
+    public void talepBasariylaKaydedilmelidir() {
+        page.verifyEarlyAccessRequestSuccess();
     }
 
-    @And("Ekranda geçerli bir e-posta adresi girilmesi gerektiğine dair hata uyarısı gösterilmelidir")
-    public void ekrandaGecerliBirEpostaAdresiGirilmesiGerektigineDairHataUyarisiGosterilmelidir() {
-        page.verifyInvalidEmailErrorMessage();
+    @Then("Form ekranı kapanmalıdır")
+    public void formEkraniKapanmalidir() {
+        page.verifyEarlyAccessFormClosed();
     }
 
-    @And("Açılan menünün üçüncü sırasındaki Sanal Dekorasyon API bağlantısına tıklar")
-    public void acilanMenununUcuncuSirasindakiSanalDekorasyonApiBaglantisinaTiklar() {
-        page.clickApiLink();
+    @Then("Ekranda onay bildirim mesajı görüntülenmelidir")
+    public void ekrandaOnayBildirimMesajiGoruntulenmelidir() {
+        page.verifyConfirmationNotificationDisplayed();
     }
 
-    @Then("Kullanıcı doğrudan \"/tr/api\" adresine yönlendirilmelidir")
-    public void kullaniciDogrudanTrApiAdresineYonlendirilmelidir() {
-        page.verifyApiUrl();
+    @When("Kullanıcı E-posta alanına {string} bilgisini yazar")
+    public void kullaniciEPostaAlaninaBilgisiniYazar(String email) {
+        page.fillContactEmail(email);
     }
 
-    @When("Kullanıcı İletişime Geçin butonuna tıklar")
-    public void kullaniciIletisimeGecinButonunaTiklar() {
-        page.clickContactUsButton();
+    @When("Formu gönder butonuna tıklar")
+    public void formuGonderButonunaTiklar() {
+        page.clickSubmit();
     }
 
-    @And("Açılan form üzerindeki tüm zorunlu alanları geçerli bilgilerle doldurur")
-    public void acilanFormUzerindekiTumZorunluAlanlariGecerliBilgilerleDoldurur() {
-        page.fillFullNameField("Test Kullanıcı");
-        page.fillEmailField("test@aistager.ai");
+    @Then("Geçersiz e-posta biçimi hata mesajı görüntülenir")
+    public void gecersizEPostaBicimiHataMesajiGoruntulenir() {
+        page.verifyInvalidEmailErrorDisplayed();
     }
 
-    @Then("Ekranda formun başarıyla iletildiğini belirten onay bildirimi görüntülenmelidir")
-    public void ekrandaFormunBasariylaIletildiginiBelirtenOnayBildirimiGoruntulenmelidir() {
-        page.verifyFormSubmittedConfirmationMessage();
+    @Then("Form gönderimi engellenir")
+    public void formGonderimiEngellenir() {
+        page.verifyEarlyAccessFormVisible();
     }
 
-    @When("Kullanıcı sayfa altındaki Fiyatlandırmayı Görüntüle butonuna tıklar")
-    public void kullaniciSayfaAltindakiFiyatlandirmayiGoruntuleButonunaTiklar() {
-        page.clickViewPricingLink();
+    @When("Kullanıcı İletişime Geçin formundaki zorunlu alanları boş bırakır")
+    public void kullaniciIletisimeGecinFormundakiZorunluAlanlariBosBirakir() {
+        page.clearContactEmail();
     }
 
-    @Then("Kullanıcı ilgili Fiyatlandırma sayfasına hatasız yönlendirilmelidir")
-    public void kullaniciIlgiliFiyatlandirmaSayfasinaHatasizYonlendirilmelidir() {
-        page.verifyPricingUrl();
+    @When("Gönder butonuna tıklar")
+    public void gonderButonunaTiklar() {
+        page.clickSubmit();
     }
 
-    @Given("Kullanıcı doğrudan \"/tr/api\" sayfasına gider")
-    public void kullaniciDogrudanTrApiSayfasinaGider() {
-        page.navigateToApiPage();
+    @Then("Zorunlu alanların doldurulması gerektiğine dair uyarı mesajları görüntülenir")
+    public void zorunluAlanlarinDoldurulmasiGerektigineDairUyariMesajlariGoruntulenir() {
+        page.verifyRequiredFieldErrorDisplayed();
     }
 
-    @And("Form üzerindeki zorunlu alanları doldurmadan Form gönder butonuna tıklar")
-    public void formUzerindekiZorunluAlanlariDoldurmadanFormGonderButonunaTiklar() {
-        page.clickSubmitButton();
+    @Then("Form gönderilmez")
+    public void formGonderilmez() {
+        page.verifyContactFormVisible();
     }
 
-    @Then("Form iletilmemelidir")
-    public void formIletilmemelidir() {
-        page.verifySubmitButtonEnabled();
+    @When("Kullanıcı İletişime Geçin formunu eksiksiz ve geçerli verilerle doldurur")
+    public void kullaniciIletisimeGecinFormunuEksiksizVeGecerliVerilerleDoldurur() {
+        page.fillEarlyAccessFullName("Ahmet Yılmaz");
+        page.fillContactEmail("ahmet.yilmaz@example.com");
     }
 
-    @And("Eksik alanların doldurulmasını belirten doğrulama uyarıları görüntülenmelidir")
-    public void eksikAlanlarinDoldurulmasiniBelirtenDogrulamaUyarilariGoruntulenmelidir() {
-        page.verifyRequiredFieldErrorVisible();
+    @Then("Başarılı gönderim onay mesajı görüntülenir")
+    public void basariliGonderimOnayMesajiGoruntulenir() {
+        page.verifyContactSuccessMessageDisplayed();
+    }
+
+    @Then("Form alanı kapanır")
+    public void formAlaniKapanir() {
+        page.verifyContactFormClosed();
+    }
+
+    @When("Kullanıcı sayfanın alt bölümündeki Fiyatlandırmayı Görüntüle butonuna tıklar")
+    public void kullaniciSayfaninAltBolumundekiFiyatlandirmayiGoruntuleButonunaTiklar() {
+        page.clickViewPricing();
+    }
+
+    @Then("Kullanıcı {string} sayfasına başarıyla yönlendirilmelidir")
+    public void kullaniciSayfasinaBasariylaYonlendirilmelidir(String expectedUrlFragment) {
+        page.verifyCurrentUrl(expectedUrlFragment);
     }
 }

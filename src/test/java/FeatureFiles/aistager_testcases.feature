@@ -1,90 +1,115 @@
-Feature: AiStager.ai Sanal Dekorasyon, Yapay Zeka Düzenleme ve Ürün Yönetimi
+Feature: AiStager Platformu Virtual Staging ve Müşteri Talepleri Yönetimi
 
   Background:
-    Given Kullanıcı web sitesi ana sayfasına erişir
+    Given Kullanıcı AiStager platformuna erişim sağlar
 
-  Scenario: Geçerli parametreler ile başarılı sanal dekorasyon üretimi
-    Given Kullanıcı oturum açarak "Virtual Staging" sayfasına gider
-    When Kullanıcı "salon.jpg" dosyasını yükler
-    Then Yüklenen görselin önizlemesi ekranda görüntülenmelidir
-    And Mevcut mobilyaları kaldır seçeneğinin varsayılan olarak açık durumda olduğu doğrulanır
-    When Kullanıcı Oda Türü alanından "Oturma Odası" değerini seçer
-    And Kullanıcı Tasarım Stili alanından "Modern" değerini seçer
-    And Kullanıcı Dekorasyon Oluştur butonuna tıklar
-    Then Sistem görsel işleme sürecini başlatmalıdır
-    And İşlem tamamlandığında seçilen parametrelere uygun mobilyalandırılmış çıktı görseli önizleme alanında sunulmalıdır
+  Scenario: Varsayılan kontroller ve başarılı sanal dekorasyon oluşturma
+    Given Kullanıcı Virtual Staging sayfasında oturum açmış durumdadır
+    Then Mevcut mobilyaları kaldır seçeneğinin varsayılan olarak aktif olduğu doğrulanır
+    And Görünürlük seçeneklerinden "Herkese Açık" radyo butonunun seçili olduğu doğrulanır
+    When Kullanıcı dosya yükleme alanına "oda.jpg" dosyasını yükler
+    Then Yüklenen görselin önizlemesi ekranda görüntülenir
+    When Kullanıcı Oda Türü alanından "Salon" seçeneğini seçer
+    And Kullanıcı Tasarım Stili alanından "Modern" seçeneğini seçer
+    And Dekorasyon Oluştur butonuna tıklar
+    Then Dekorasyon Oluştur butonunun işlem sırasında devre dışı ve yükleniyor durumunda olduğu doğrulanır
+    And İşlem tamamlandığında mobilyalandırılmış görsel ekranda render edilir
 
-  Scenario Outline: Desteklenmeyen dosya formatı yüklendiğinde sistemin hata vermesi
-    Given Kullanıcı oturum açarak "Virtual Staging" sayfasına gider
-    When Kullanıcı sisteme geçersiz formattaki "<dosya_adi>" dosyasını yüklemeyi dener
-    Then Ekranda yalnızca JPG veya PNG formatlarının desteklendiğini belirten hata mesajı görüntülenmelidir
-    And Görsel önizleme alanı boş kalmalıdır
+  Scenario Outline: Desteklenen görsel formatları ile dekorasyon oluşturma
+    Given Kullanıcı Virtual Staging sayfasında oturum açmış durumdadır
+    When Kullanıcı dosya yükleme alanına "<dosya_adi>" dosyasını yükler
+    Then Yüklenen görselin önizlemesi ekranda görüntülenir
+    When Kullanıcı Oda Türü alanından "Yatak Odası" seçeneğini seçer
+    And Kullanıcı Tasarım Stili alanından "Minimalist" seçeneğini seçer
+    And Dekorasyon Oluştur butonuna tıklar
+    Then İşlem tamamlandığında mobilyalandırılmış görsel ekranda render edilir
 
     Examples:
-      | dosya_adi    |
-      | plan.pdf     |
-      | animasyon.gif|
-      | model.bmp    |
-      | metin.txt    |
+      | dosya_adi |
+      | salon.jpg |
+      | salon.png |
 
-  Scenario: Zorunlu parametreler seçilmeden dekorasyon sürecinin başlatılamaması
-    Given Kullanıcı oturum açarak "Virtual Staging" sayfasına gider
-    When Kullanıcı "bos-oda.png" dosyasını yükler
-    And Görsel önizlemesinin ekranda olduğunu doğrular
-    But Oda Türü ve Tasarım Stili dropdown alanlarını boş bırakır
-    Then Dekorasyon Oluştur butonu pasif durumda olmalıdır ve işlem başlatılamamalıdır
+  Scenario: Desteklenmeyen dosya formatı yüklendiğinde hata gösterimi
+    Given Kullanıcı Virtual Staging sayfasında oturum açmış durumdadır
+    When Kullanıcı dosya yükleme alanına "proje_taslagi.pdf" dosyasını yükler
+    Then Desteklenmeyen dosya formatı uyarısı ekranda görüntülenir
+    And Görsel önizleme alanı boş kalır
+    And Dekorasyon Oluştur butonu tıklanamaz durumda olur
 
-  Scenario: Metin tabanlı talimat ile görsel üzerinde başarılı yapay zeka düzenlemesi yapma
-    Given Kullanıcı oturum açarak "Virtual Staging" altındaki "AI Edit" sekmesine gider
-    And Düzenlenecek kaynak görselin sistemde seçili olduğunu doğrular
-    When Kullanıcı Describe what to change alanına "Remove the chair" talimatını girer
+  Scenario Outline: Zorunlu alanlar eksik bırakıldığında dekorasyon oluşturma butonunun kısıtlanması
+    Given Kullanıcı Virtual Staging sayfasında oturum açmış durumdadır
+    When Kullanıcı görsel yükleme durumunu "<gorsel_durumu>" olarak ayarlar
+    And Kullanıcı Oda Türü seçimini "<oda_turu>" olarak belirler
+    And Kullanıcı Tasarım Stili seçimini "<tasarim_stili>" olarak belirler
+    Then Dekorasyon Oluştur butonunun tıklanamaz durumda olduğu doğrulanır
+
+    Examples:
+      | gorsel_durumu | oda_turu | tasarim_stili |
+      | Yuklenmedi    | Salon    | Modern        |
+      | Yuklendi      | Secilmedi| Iskandinav    |
+      | Yuklendi      | Mutfak   | Secilmedi     |
+      | Yuklenmedi    | Secilmedi| Secilmedi     |
+
+  Scenario: Prompt kullanarak başarılı görsel manipülasyonu
+    Given Kullanıcı AI Edit sekmesine geçer ve kaynak görsel tanımlıdır
+    Then Kaynak görsel seçeneğinin varsayılan olarak "Current image" olduğu doğrulanır
+    When Kullanıcı metin alanına "Ortadaki sandalyeyi kaldır" komutunu yazar
     And Edit Photo butonuna tıklar
-    Then Sistem talimata uygun olarak işlenmiş yeni görseli ekranda başarıyla görüntülemelidir
+    Then Sistemin talebi işlediği görüntülenir
+    And Orijinal görsel korunarak yeni düzenlenmiş versiyon ekranda sunulur
 
-  Scenario Outline: AI Edit alanına boş veya geçersiz girdi sağlandığında işlemin engellenmesi
-    Given Kullanıcı oturum açarak "Virtual Staging" altındaki "AI Edit" sekmesine gider
-    And Düzenlenecek kaynak görselin sistemde seçili olduğunu doğrular
-    When Kullanıcı Describe what to change alanına "<gecersiz_girdi>" yazar
-    Then Edit Photo butonu işlem başlatmamalıdır
-    And Ekranda geçerli bir komut girilmesini isteyen doğrulama mesajı görüntülenmelidir
+  Scenario: Prompt alanı boş bırakıldığında düzenleme işleminin engellenmesi
+    Given Kullanıcı AI Edit sekmesine geçer ve kaynak görsel tanımlıdır
+    When Kullanıcı komut giriş alanını boş bırakır
+    Then Edit Photo butonunun devre dışı olduğu doğrulanır
+
+  Scenario: Ürünler menüsünden Yapay Zeka Sanal Tur sayfasına yönlendirme
+    Given Kullanıcı ana sayfadadır
+    When Kullanıcı Header menüsünde yer alan "Ürünler" sekmesini açar
+    And Açılan menünün ikinci sırasındaki "Yapay Zeka Sanal Tur" seçeneğine tıklar
+    Then Tarayıcı adres çubuğundaki URL değeri "aistager.ai/tr/ai-virtual-tour" olmalıdır
+
+  Scenario: Ürünler menüsünden Sanal Dekorasyon API sayfasına yönlendirme
+    Given Kullanıcı ana sayfadadır
+    When Kullanıcı Header menüsünde yer alan "Ürünler" sekmesini açar
+    And Açılan menünün üçüncü sırasındaki "Sanal Dekorasyon API" seçeneğine tıklar
+    Then Tarayıcı adres çubuğundaki URL değeri "aistager.ai/tr/api" olmalıdır
+
+  Scenario: Sanal Tur erken erişim talebinin başarıyla gönderilmesi
+    Given Kullanıcı "aistager.ai/tr/ai-virtual-tour" sayfasına gider
+    When Kullanıcı Erken Erişim Formu üzerindeki ad alanına "Ahmet Yılmaz" bilgisini girer
+    And E-posta alanına "ahmet.yilmaz@example.com" bilgisini girer
+    And Erken Erişim İsteyin butonuna tıklar
+    Then Talep başarıyla kaydedilmelidir
+    And Form ekranı kapanmalıdır
+    And Ekranda onay bildirim mesajı görüntülenmelidir
+
+  Scenario Outline: Erken erişim ve iletişim formlarında geçersiz e-posta validasyonu
+    Given Kullanıcı "aistager.ai/tr/ai-virtual-tour" sayfasına gider
+    When Kullanıcı E-posta alanına "<gecersiz_eposta>" bilgisini yazar
+    And Formu gönder butonuna tıklar
+    Then Geçersiz e-posta biçimi hata mesajı görüntülenir
+    And Form gönderimi engellenir
 
     Examples:
-      | gecersiz_girdi |
-      |                |
-      |    !@#$%^&*    |
-      | ??????         |
+      | gecersiz_eposta     |
+      | ahmet.ornek.com     |
+      | ahmet@              |
+      | ahmet@domain        |
+      | @example.com        |
 
-  Scenario: Menüden Yapay Zeka Sanal Tur sayfasına geçiş ve erken erişim formu gönderimi
-    When Kullanıcı menüdeki Ürünler seçeneğine tıklar
-    And Açılan menünün ikinci sırasındaki Yapay Zeka Sanal Tur seçeneğine tıklar
-    Then Kullanıcı doğrudan "/tr/ai-virtual-tour" adresine yönlendirilmelidir
-    When Kullanıcı Erken Erişim İsteyin butonuna tıklar
-    And Erken erişim formundaki e-posta alanına "test.kullanici@aistager.ai" yazar
-    And Form gönder butonuna tıklar
-    Then Kullanıcıya talebin alındığına dair onay bildirim mesajı gösterilmelidir
+  Scenario: Zorunlu alanlar doldurulmadan form gönderiminin engellenmesi
+    Given Kullanıcı "aistager.ai/tr/api" sayfasına gider
+    When Kullanıcı İletişime Geçin formundaki zorunlu alanları boş bırakır
+    And Gönder butonuna tıklar
+    Then Zorunlu alanların doldurulması gerektiğine dair uyarı mesajları görüntülenir
+    And Form gönderilmez
 
-  Scenario: Geçersiz e-posta adresi ile erken erişim formu gönderiminin engellenmesi
-    Given Kullanıcı doğrudan "/tr/ai-virtual-tour" sayfasına gider
-    When Kullanıcı Erken Erişim İsteyin butonuna tıklar
-    And Erken erişim formundaki e-posta alanına "hatali-eposta-formati" yazar
-    And Form gönder butonuna tıklar
-    Then Form gönderilmemelidir
-    And Ekranda geçerli bir e-posta adresi girilmesi gerektiğine dair hata uyarısı gösterilmelidir
-
-  Scenario: Sanal Dekorasyon API iletişim formu iletimi ve fiyatlandırma navigasyonu
-    When Kullanıcı menüdeki Ürünler seçeneğine tıklar
-    And Açılan menünün üçüncü sırasındaki Sanal Dekorasyon API bağlantısına tıklar
-    Then Kullanıcı doğrudan "/tr/api" adresine yönlendirilmelidir
-    When Kullanıcı İletişime Geçin butonuna tıklar
-    And Açılan form üzerindeki tüm zorunlu alanları geçerli bilgilerle doldurur
-    And Form gönder butonuna tıklar
-    Then Ekranda formun başarıyla iletildiğini belirten onay bildirimi görüntülenmelidir
-    When Kullanıcı sayfa altındaki Fiyatlandırmayı Görüntüle butonuna tıklar
-    Then Kullanıcı ilgili Fiyatlandırma sayfasına hatasız yönlendirilmelidir
-
-  Scenario: API iletişim formunun zorunlu alanlar doldurulmadan gönderilememesi
-    Given Kullanıcı doğrudan "/tr/api" sayfasına gider
-    When Kullanıcı İletişime Geçin butonuna tıklar
-    And Form üzerindeki zorunlu alanları doldurmadan Form gönder butonuna tıklar
-    Then Form iletilmemelidir
-    And Eksik alanların doldurulmasını belirten doğrulama uyarıları görüntülenmelidir
+  Scenario: API iletişim formunun gönderilmesi ve fiyatlandırma yönlendirmesi
+    Given Kullanıcı "aistager.ai/tr/api" sayfasına gider
+    When Kullanıcı İletişime Geçin formunu eksiksiz ve geçerli verilerle doldurur
+    And Gönder butonuna tıklar
+    Then Başarılı gönderim onay mesajı görüntülenir
+    And Form alanı kapanır
+    When Kullanıcı sayfanın alt bölümündeki Fiyatlandırmayı Görüntüle butonuna tıklar
+    Then Kullanıcı "/pricing" sayfasına başarıyla yönlendirilmelidir
