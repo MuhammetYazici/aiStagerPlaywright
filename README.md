@@ -13,7 +13,8 @@ IDE ve Cucumber Expression Uyuşmazlığı: Tırnak işaretlerinin kaçış hata
 Derleme Döngüsü Yorgunluğu: Üretilen kodların Maven derleyicisi (mvn test-compile) çıktılarıyla beslenen Healer Agent sayesinde insan müdahalesine gerek kalmadan mikro-yamalarla (patch) kendi kendini iyileştirmesi sağlandı.
 
 🏗️ Çok Ajanlı (Multi-Agent) Mimari Şeması
-Plaintext
+
+```text
        [ İş Analizi Dokümanı (.xlsx / .docx) ]
                          │
                          ▼
@@ -121,7 +122,8 @@ Model Fallback Katmanı: Yoğunluk anında sistem otomatik olarak sıradaki kara
 Bozuk Kod Engeli: Derleme aşamasını geçemeyen hiçbir senaryo depoya pushlanmaz; main branch her zaman çalışır durumda tutulur.
 
 📁 Proje Dizin Yapısı
-Plaintext
+
+```text
 .
 ├── input_docs/                   # Analiz edilecek .xlsx veya .docx dosyaları
 ├── scenario_pipeline.py          # Çok ajanlı ana orkestrasyon betiği
