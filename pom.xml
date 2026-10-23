@@ -79,6 +79,15 @@
             <scope>compile</scope>
         </dependency>
 
+
+        <!-- Cucumber PicoContainer (Senaryo Kapsamlı Dependency Injection) -->
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-picocontainer</artifactId>
+            <version>7.34.7</version> <!-- Projendeki cucumber-java versiyonuyla AYNI olmalı -->
+            <scope>test</scope>
+        </dependency>
+
     </dependencies><!-- Source: https://mvnrepository.com/artifact/com.microsoft.playwright/playwright -->
     <build>
         <plugins>

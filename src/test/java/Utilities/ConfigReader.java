@@ -11,8 +11,8 @@ public class ConfigReader {
     private static Properties properties = new Properties();
     private static final String configFilePath = "src/test/resources/configuration.properties";
     private static Faker faker;
-    private static String dynmicEmail;
-    private static String dynmicPassword;
+    private static final ThreadLocal<String> threadDynamicEmail = new ThreadLocal<>();
+    private static final ThreadLocal<String> threadDynamicPassword = new ThreadLocal<>();
 
 
     static {
@@ -42,12 +42,14 @@ public class ConfigReader {
     }
 
     public static String getRandomEmail(){
-        dynmicEmail= faker.internet().emailAddress();
-        return dynmicEmail;
+        String email = faker.internet().emailAddress();
+        threadDynamicEmail.set(email);
+        return email;
     }
 
     public static String getRandomPassword(){
-        dynmicPassword = faker.internet().password(8,16,true,true,true);
+        String dynmicPassword = faker.internet().password(8,16,true,true,true);
+        threadDynamicPassword.set(dynmicPassword);
         return dynmicPassword;
     }
 
@@ -57,17 +59,22 @@ public class ConfigReader {
 
     // aynı senaryoda daha önce üretilen emaili ve password u tekrar çağırmak
     public static String getGenerateEmail(){
-        if (dynmicEmail == null){
-            dynmicEmail = faker.internet().emailAddress();
+        if (threadDynamicEmail.get() == null) {
+            getRandomEmail();
         }
-        return dynmicEmail;
+        return threadDynamicEmail.get();
     }
 
     public static String getGeneratePassword(){
-        if (dynmicPassword == null){
-            dynmicPassword = faker.internet().password(8,16,true,true,true);
+        if (threadDynamicPassword.get() == null){
+            getRandomPassword();
         }
-        return dynmicPassword;
+        return threadDynamicPassword.get();
+    }
+
+    public static void clearThreadData() {
+        threadDynamicEmail.remove();
+        threadDynamicPassword.remove();
     }
 
 }

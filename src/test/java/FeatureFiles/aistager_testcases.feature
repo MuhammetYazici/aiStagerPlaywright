@@ -1,146 +1,90 @@
-Feature: AiStager Platform Test Senaryoları
+Feature: AiStager.ai Sanal Dekorasyon, Yapay Zeka Düzenleme ve Ürün Yönetimi
 
   Background:
-    Given Kullanıcı AiStager platformundadır
+    Given Kullanıcı web sitesi ana sayfasına erişir
 
-  @Positive @US-01
-  Scenario: Geçerli formatta görsel yükleme ve başarılı dekorasyon oluşturma
-    Given Kullanıcı giriş yapmıştır
-    And Kullanıcı "Virtual Staging" sayfasındadır
-    When Kullanıcı jpg veya png formatında geçerli bir oda görselini yükler
-    Then Görselin önizlemesi ekranda görüntülenmelidir
-    And Mevcut mobilyaları kaldır toggle özelliğinin varsayılan olarak açık olduğu görülmelidir
-    When Kullanıcı "Oda Türü" ve "Tasarım Stili" seçimlerini yapar
-    And Kullanıcı Görünürlük seçeneğini belirler
+  Scenario: Geçerli parametreler ile başarılı sanal dekorasyon üretimi
+    Given Kullanıcı oturum açarak "Virtual Staging" sayfasına gider
+    When Kullanıcı "salon.jpg" dosyasını yükler
+    Then Yüklenen görselin önizlemesi ekranda görüntülenmelidir
+    And Mevcut mobilyaları kaldır seçeneğinin varsayılan olarak açık durumda olduğu doğrulanır
+    When Kullanıcı Oda Türü alanından "Oturma Odası" değerini seçer
+    And Kullanıcı Tasarım Stili alanından "Modern" değerini seçer
     And Kullanıcı Dekorasyon Oluştur butonuna tıklar
-    Then İşlem tamamlandığında yapay zeka tarafından mobilyalandırılmış yeni görsel ekranda sunulmalıdır
+    Then Sistem görsel işleme sürecini başlatmalıdır
+    And İşlem tamamlandığında seçilen parametrelere uygun mobilyalandırılmış çıktı görseli önizleme alanında sunulmalıdır
 
-  @Negative @US-01
-  Scenario Outline: Desteklenmeyen dosya formatı ile görsel yükleme denemesi
-    Given Kullanıcı giriş yapmıştır
-    And Kullanıcı "Virtual Staging" sayfasındadır
-    When Kullanıcı "<gecersiz_format>" formatında bir dosya yüklemeye çalışır
-    Then Sistem hata mesajı göstermeli ve görsel önizlemesi oluşmamalıdır
-
-    Examples:
-      | gecersiz_format |
-      | pdf             |
-      | gif             |
-      | tiff            |
-      | exe             |
-
-  @Negative @US-01
-  Scenario: Zorunlu alanlar seçilmeden dekorasyon oluşturma denemesi
-    Given Kullanıcı giriş yapmıştır
-    And Kullanıcı "Virtual Staging" sayfasındadır
-    When Kullanıcı geçerli bir görsel yükler
-    And Kullanıcı Oda Türü veya Tasarım Stili seçimlerinden birini veya ikisini boş bırakır
-    And Kullanıcı Dekorasyon Oluştur butonuna tıklar
-    Then Dekorasyon Oluştur butonu pasif kalmalı veya uyarı mesajı verilerek işlem başlatılmamalıdır
-
-  @EdgeCase @US-01
-  Scenario: Çok büyük boyutlu dosya yükleme sınırı
-    Given Kullanıcı giriş yapmıştır
-    And Kullanıcı "Virtual Staging" sayfasındadır
-    When Kullanıcı sistemin izin verdiği maksimum boyut sınırını aşan bir jpg görseli yükler
-    Then Sistem dosya boyutunun çok büyük olduğuna dair bir hata mesajı göstermelidir
-
-  @Positive @US-02
-  Scenario Outline: Mevcut kaynak görsel ile metin komutu kullanarak fotoğraf düzenleme
-    Given Kullanıcı giriş yapmıştır
-    And Kullanıcı "AI Edit" sekmesindedir
-    Then Edit photo source alanında varsayılan olarak Current image seçili gelmelidir
-    When Kullanıcı Describe what to change alanına serbest metin olarak "<talimat>" girer
-    And Kullanıcı Edit Photo butonuna tıklar
-    Then Sistem girilen talimata uygun şekilde güncellenmiş görseli kullanıcıya göstermelidir
+  Scenario Outline: Desteklenmeyen dosya formatı yüklendiğinde sistemin hata vermesi
+    Given Kullanıcı oturum açarak "Virtual Staging" sayfasına gider
+    When Kullanıcı sisteme geçersiz formattaki "<dosya_adi>" dosyasını yüklemeyi dener
+    Then Ekranda yalnızca JPG veya PNG formatlarının desteklendiğini belirten hata mesajı görüntülenmelidir
+    And Görsel önizleme alanı boş kalmalıdır
 
     Examples:
-      | talimat                   |
-      | Remove the chair          |
-      | Add a modern floor lamp   |
-      | Change wall color to blue |
+      | dosya_adi    |
+      | plan.pdf     |
+      | animasyon.gif|
+      | model.bmp    |
+      | metin.txt    |
 
-  @Negative @US-02
-  Scenario: Boş metin komutu ile düzenleme yapma denemesi
-    Given Kullanıcı giriş yapmıştır
-    And Kullanıcı "AI Edit" sekmesindedir
-    And Kaynak görsel seçilidir veya yüklenmiştir
-    When Kullanıcı Describe what to change alanını boş bırakır
-    And Kullanıcı Edit Photo butonuna tıklar
-    Then Sistem Edit Photo işlemini gerçekleştirmemeli ve zorunlu alan uyarısı vermelidir
+  Scenario: Zorunlu parametreler seçilmeden dekorasyon sürecinin başlatılamaması
+    Given Kullanıcı oturum açarak "Virtual Staging" sayfasına gider
+    When Kullanıcı "bos-oda.png" dosyasını yükler
+    And Görsel önizlemesinin ekranda olduğunu doğrular
+    But Oda Türü ve Tasarım Stili dropdown alanlarını boş bırakır
+    Then Dekorasyon Oluştur butonu pasif durumda olmalıdır ve işlem başlatılamamalıdır
 
-  @EdgeCase @US-02
-  Scenario: Çok uzun veya özel karakter içeren metin komutu girilmesi
-    Given Kullanıcı giriş yapmıştır
-    And Kullanıcı "AI Edit" sekmesindedir
-    And Kaynak görsel seçilidir veya yüklenmiştir
-    When Kullanıcı metin kutusuna çok uzun bir açıklama metni veya SQL enjeksiyon karakterleri girer
-    And Kullanıcı Edit Photo butonuna tıklar
-    Then Sistem girdiyi güvenli şekilde işleme almalı veya uygun karakter sınırı uyarısı göstermelidir
+  Scenario: Metin tabanlı talimat ile görsel üzerinde başarılı yapay zeka düzenlemesi yapma
+    Given Kullanıcı oturum açarak "Virtual Staging" altındaki "AI Edit" sekmesine gider
+    And Düzenlenecek kaynak görselin sistemde seçili olduğunu doğrular
+    When Kullanıcı Describe what to change alanına "Remove the chair" talimatını girer
+    And Edit Photo butonuna tıklar
+    Then Sistem talimata uygun olarak işlenmiş yeni görseli ekranda başarıyla görüntülemelidir
 
-  @Positive @US-03
-  Scenario: Ürünler menüsünden Sanal Tur sayfasına gitme ve erken erişim talebi oluşturma
-    Given Kullanıcı ana sayfadadır
-    When Kullanıcı Header üzerindeki Ürünler alanı üzerine gelir
-    Then Dropdown menü açılmalıdır
-    When Kullanıcı dropdown menüden Yapay Zeka Sanal Tur seçeneğine tıklar
-    Then Kullanıcı aistager.ai/tr/ai-virtual-tour sayfasına yönlendirilmelidir
+  Scenario Outline: AI Edit alanına boş veya geçersiz girdi sağlandığında işlemin engellenmesi
+    Given Kullanıcı oturum açarak "Virtual Staging" altındaki "AI Edit" sekmesine gider
+    And Düzenlenecek kaynak görselin sistemde seçili olduğunu doğrular
+    When Kullanıcı Describe what to change alanına "<gecersiz_girdi>" yazar
+    Then Edit Photo butonu işlem başlatmamalıdır
+    And Ekranda geçerli bir komut girilmesini isteyen doğrulama mesajı görüntülenmelidir
+
+    Examples:
+      | gecersiz_girdi |
+      |                |
+      |    !@#$%^&*    |
+      | ??????         |
+
+  Scenario: Menüden Yapay Zeka Sanal Tur sayfasına geçiş ve erken erişim formu gönderimi
+    When Kullanıcı menüdeki Ürünler seçeneğine tıklar
+    And Açılan menünün ikinci sırasındaki Yapay Zeka Sanal Tur seçeneğine tıklar
+    Then Kullanıcı doğrudan "/tr/ai-virtual-tour" adresine yönlendirilmelidir
     When Kullanıcı Erken Erişim İsteyin butonuna tıklar
-    And Açılan form içerisine geçerli bir e-posta adresi girer
-    And Kullanıcı talebi gönderir
-    Then Sistem talebin başarıyla alındığına dair bir onay mesajı göstermelidir
+    And Erken erişim formundaki e-posta alanına "test.kullanici@aistager.ai" yazar
+    And Form gönder butonuna tıklar
+    Then Kullanıcıya talebin alındığına dair onay bildirim mesajı gösterilmelidir
 
-  @Negative @US-03
-  Scenario Outline: Geçersiz e-posta formatı ile erken erişim talebi gönderme
-    Given Kullanıcı aistager.ai/tr/ai-virtual-tour sayfasındadır
+  Scenario: Geçersiz e-posta adresi ile erken erişim formu gönderiminin engellenmesi
+    Given Kullanıcı doğrudan "/tr/ai-virtual-tour" sayfasına gider
     When Kullanıcı Erken Erişim İsteyin butonuna tıklar
-    And Form alanına "<gecersiz_eposta>" girer
-    And Kullanıcı talebi gönderir
-    Then Sistem e-posta format hatası vermeli ve talep kaydedilmemelidir
+    And Erken erişim formundaki e-posta alanına "hatali-eposta-formati" yazar
+    And Form gönder butonuna tıklar
+    Then Form gönderilmemelidir
+    And Ekranda geçerli bir e-posta adresi girilmesi gerektiğine dair hata uyarısı gösterilmelidir
 
-    Examples:
-      | gecersiz_eposta |
-      | testuser        |
-      | test@.com       |
-      | test@domain     |
-      | @domain.com     |
-
-  @EdgeCase @US-03
-  Scenario: Boş e-posta alanı ile erken erişim talebi gönderme
-    Given Kullanıcı Erken Erişim İsteyin formunu açmıştır
-    When Kullanıcı e-posta alanını boş bırakarak gönder butonuna tıklar
-    Then Sistem alanın boş bırakılamayacağına dair zorunlu alan uyarısı vermelidir
-
-  @Positive @US-04
-  Scenario: API sayfasına erişim, iletişim formu doldurma ve fiyatlandırma sayfasına gitme
-    Given Kullanıcı ana sayfadadır
-    When Kullanıcı Header üzerindeki Ürünler alanı üzerine gelir
-    And Dropdown menüden Sanal Dekorasyon API seçeneğine tıklar
-    Then Kullanıcı aistager.ai/tr/api sayfasına yönlendirilmelidir
-    When Kullanıcı sayfa üstündeki İletişime Geçin butonuna tıklar
-    And İletişim formundaki Ad E-posta ve Mesaj alanlarını geçerli bilgilerle doldurur
-    And Kullanıcı formu gönderir
-    Then Sistem başarı mesajı göstermelidir
+  Scenario: Sanal Dekorasyon API iletişim formu iletimi ve fiyatlandırma navigasyonu
+    When Kullanıcı menüdeki Ürünler seçeneğine tıklar
+    And Açılan menünün üçüncü sırasındaki Sanal Dekorasyon API bağlantısına tıklar
+    Then Kullanıcı doğrudan "/tr/api" adresine yönlendirilmelidir
+    When Kullanıcı İletişime Geçin butonuna tıklar
+    And Açılan form üzerindeki tüm zorunlu alanları geçerli bilgilerle doldurur
+    And Form gönder butonuna tıklar
+    Then Ekranda formun başarıyla iletildiğini belirten onay bildirimi görüntülenmelidir
     When Kullanıcı sayfa altındaki Fiyatlandırmayı Görüntüle butonuna tıklar
-    Then Kullanıcı hatasız şekilde Fiyatlandırma sayfasına yönlendirilmelidir
+    Then Kullanıcı ilgili Fiyatlandırma sayfasına hatasız yönlendirilmelidir
 
-  @Negative @US-04
-  Scenario Outline: API iletişim formunda eksik alan bırakarak gönderme denemesi
-    Given Kullanıcı aistager.ai/tr/api sayfasındaki iletişim formundadır
-    When Kullanıcı formda Ad: "<ad>", E-posta: "<eposta>", Mesaj: "<mesaj>" alanlarını girer
-    And Kullanıcı formu göndermeye çalışır
-    Then Sistem eksik alanlar için uyarı mesajı göstermelidir ve form gönderilmemelidir
-
-    Examples:
-      | ad   | eposta        | mesaj              |
-      |      | test@test.com | API hakkında bilgi |
-      | John |               | API hakkında bilgi |
-      | John | test@test.com |                    |
-
-  @EdgeCase @US-04
-  Scenario: Sayfa altındaki Fiyatlandırma butonunun görünürlüğü ve erişilebilirliği
-    Given Kullanıcı aistager.ai/tr/api sayfasına gelmiştir
-    When Kullanıcı sayfanın en altına kadar kaydırma yapar
-    Then Fiyatlandırmayı Görüntüle butonu görünür ve tıklanabilir durumda olmalıdır
-    When Kullanıcı bu butona hızlıca üst üste iki kez tıklar
-    Then Sistem mükerrer yönlendirme veya hata üretmeden kullanıcıyı Fiyatlandırma sayfasına ulaştırmalıdır
+  Scenario: API iletişim formunun zorunlu alanlar doldurulmadan gönderilememesi
+    Given Kullanıcı doğrudan "/tr/api" sayfasına gider
+    When Kullanıcı İletişime Geçin butonuna tıklar
+    And Form üzerindeki zorunlu alanları doldurmadan Form gönder butonuna tıklar
+    Then Form iletilmemelidir
+    And Eksik alanların doldurulmasını belirten doğrulama uyarıları görüntülenmelidir

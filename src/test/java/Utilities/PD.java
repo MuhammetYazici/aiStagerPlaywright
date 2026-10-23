@@ -1,139 +1,186 @@
 package Utilities;
 
 import com.microsoft.playwright.*;
-import io.cucumber.java.Scenario;
-import io.cucumber.java.en.And;
+import io.cucumber.java.*;
 
-import javax.sql.rowset.BaseRowSet;
-import java.awt.*;
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Date;
 
 public class PD {
     private static Playwright playwright;
     private static Browser browser;
-    private static BrowserContext context;
-    private static Page page;
 
-    private static final String tracePath = "src/test/resources/TraceViewer/";
-    private static final String videoPath = "src/test/resources/Video/";
+    private static final ThreadLocal<BrowserContext> threadContext = new ThreadLocal<>();
+    private static final ThreadLocal<Page> threadPage = new ThreadLocal<>();
 
-    public static Page getPage() {
-        if (page == null) {
+    private static final String TRACE_PATH = "src/test/resources/TraceViewer/";
+    private static final String VIDEO_PATH = "src/test/resources/Video/";
+
+
+    private PD() {
+    }
+
+
+    public static synchronized void initBrowser() {
+        if (playwright == null) {
             playwright = Playwright.create();
-            String browserName = ConfigReader.getProperty("browser");
-            BrowserType.LaunchOptions launchOptions = new BrowserType.LaunchOptions().setHeadless(true).setArgs(Arrays.asList("--start-maximized"));
-            ;
 
-            switch (browserName.toLowerCase()) {
-                case "chromium":
-                    browser = playwright.chromium().launch(launchOptions);
-                    break;
+            String browserName = ConfigReader.getProperty("browser");
+            if (browserName == null) {
+                browserName = "chromium";
+            }
+
+            boolean isHeadless = Boolean.parseBoolean(ConfigReader.getProperty("headless"));
+
+            BrowserType.LaunchOptions launchOptions = new BrowserType.LaunchOptions()
+                    .setHeadless(isHeadless)
+                    .setArgs(Arrays.asList("--start-maximized"));
+
+            switch (browserName) {
                 case "firefox":
                     browser = playwright.firefox().launch(launchOptions);
-                    break;
-                case "edge":
-                    launchOptions.setChannel("msedge");
-                    browser = playwright.chromium().launch(launchOptions);
                     break;
                 case "chrome":
                     launchOptions.setChannel("chrome");
                     browser = playwright.chromium().launch(launchOptions);
                     break;
+                case "webkit":
+                    browser = playwright.webkit().launch(launchOptions);
+                    break;
+                case "edge":
+                    launchOptions.setChannel("msedge");
+                    browser = playwright.chromium().launch(launchOptions);
+                    break;
+                case "chromium":
                 default:
-                    String message = "Tarayıcı ismi geçersiz. " + browserName;
-                    message += "Lütfen geçerli bir tarayıcı ismi giriniz [Edge, Firefox, Chrome,Chromium]";
-            }
+                    browser = playwright.chromium().launch(launchOptions);
+                    break;
 
+            }
+        }
+    }
+
+
+    public static Page getPage() {
+
+        if (browser == null) {
+            initBrowser();
+        }
+
+        if (threadPage.get() == null) {
             int width = ConfigReader.getIntProperty("width");
             int height = ConfigReader.getIntProperty("height");
 
             Browser.NewContextOptions contextOptions = new Browser.NewContextOptions()
-                    .setRecordVideoDir(Paths.get(videoPath))
-                    .setViewportSize(width,height);
+                    .setRecordVideoDir(Paths.get(VIDEO_PATH))
+                    .setViewportSize(width > 0 ? width : 1920, height > 0 ? height : 1080);
 
-            context = browser.newContext(contextOptions);
-            ;
+
+            BrowserContext context = browser.newContext(contextOptions);
+
             context.tracing().start(new Tracing.StartOptions()
                     .setScreenshots(true)
                     .setSnapshots(true)
                     .setSources(true));
 
-            page = context.newPage();
+            Page page = context.newPage();
+
+            threadContext.set(context);
+            threadPage.set(page);
         }
-        return page;
+
+        return threadPage.get();
     }
 
-    public static void quitPage(Scenario scenario) {
-        Video video = null;
+
+
+    public static void closePage(Scenario scenario) {
+        Page page = threadPage.get();
+        BrowserContext context = threadContext.get();
+
+        if (context == null) {
+            return;
+        }
+
+        Video video;
 
         if (page != null) {
             video = page.video();
+        } else {
+            video = null;
         }
 
         try {
             if (scenario.isFailed()) {
-                context.tracing().stop(new Tracing.StopOptions()
-                        .setPath(Paths.get(getTracePath(scenario))));
-            } else {
+                Path tracePath = Paths.get(getTracePath(scenario));
+                context.tracing().stop(new Tracing.StopOptions().setPath(tracePath));
+                System.out.println("❌ Test patladı! Trace kaydedildi: " + tracePath);
+            }else {
                 context.tracing().stop();
-                cleanupOldTraces(tracePath);
+                cleanupOldTraces(TRACE_PATH);
             }
-        } catch (Exception e) {
-            throw new IllegalArgumentException("TraceViewer kaydetme işlemi başarısız. " + e);
-        } finally {
-            contextClose();
+        }catch (Exception e){
+            System.out.println("⚠ Trace durdurulurken hata oluştu: "+ e.getMessage());
+        }finally {
+            try {
+                if (page != null){
+                    page.close();
+                }
+                context.close();
+            }catch (Exception e){
+                System.out.println("⚠ Context kapatılırken hata: "+ e.getMessage());
+            }
 
-            if (video != null) {
+            if (video != null){
                 try {
-                    if (scenario.isFailed()) {
-                        Path customVideoPath = Paths.get(getVideoPath(scenario));
-                        video.saveAs(customVideoPath);
+                    if (scenario.isFailed()){
+                        Path videoPath = Paths.get(getVideoPath(scenario));
+                        video.saveAs(videoPath);
                         video.delete();
-                        System.out.println("Hata vidosu kaydedildi: " + customVideoPath);
-                    } else {
+                        System.out.println("Video kaydedildi:"+ videoPath);
+                    }else {
                         video.delete();
-                        cleanupOldTraces(videoPath);
+                        cleanupOldTraces(VIDEO_PATH);
                     }
-                } catch (Exception e) {
-                    System.err.println("⚠ Video kaydetme işlemi başarısız: " + e.getMessage());
-                    e.printStackTrace();
+                }catch (Exception e){
+                    System.out.println("⚠ Video dosyası işlenirken hata: "+ e.getMessage());
                 }
             }
 
-            cleanUp();
+            threadPage.remove();
+            threadContext.remove();
+
         }
     }
 
-    private static void contextClose(){
-        if (context != null){ context.close();}
+
+    public static synchronized void quitBrowser(){
+        if (browser != null){
+            browser.close();
+            browser = null;
+        }
+
+        if (playwright != null){
+            playwright.close();
+            playwright = null;
+        }
     }
 
-    private static void cleanUp() {
-        if (browser != null) browser.close();
-        if (playwright != null) playwright.close();
-
-        page = null;
-        context = null;
-        browser = null;
-        playwright = null;
-    }
 
     public static String getTracePath(Scenario scenario) {
         String name = scenario.getName().replaceAll("[^a-zA-Z0-9]", "_");
         String tarih = new SimpleDateFormat("__HH__mm__ss__ddMMyyyy").format(new Date());
-        return tracePath + name + "_" + tarih + "_trace.zip";
+        return TRACE_PATH + name + "_" + tarih + "_trace.zip";
     }
 
     public static String getVideoPath(Scenario scenario) {
         String name = scenario.getName().replaceAll("[^a-zA-Z0-9]", "_");
         String tarih = new SimpleDateFormat("__HH__mm__ss__ddMMyyyy").format(new Date());
-        return videoPath + name + "_" + tarih + ".webm";
+        return VIDEO_PATH + name + "_" + tarih + ".webm";
     }
 
     private static void cleanupOldTraces(String path) {
