@@ -100,7 +100,9 @@ Exponential Backoff & API Protection: Requests are not dropped on 503 Unavailabl
 Model Fallback Layer: During high traffic, the system automatically switches to the next stable Gemini model.
 Broken Code Prevention: No scenario failing the compilation stage is pushed to the repository; the main branch is always kept in a working state.
 
+
 📁 Project Directory Structure
+
 .
 ├── input_docs/                   # .xlsx or .docx files to be analyzed
 ├── scenario_pipeline.py          # Multi-agent main orchestration script
