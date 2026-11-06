@@ -8,6 +8,7 @@ Traditional LLM-based code generators produce non-functional and unmaintainable 
 * **Compilation Loop Fatigue:** Enabled generated code to self-heal through micro-patches without human intervention via the Healer Agent, which is fed by Maven compiler (mvn test-compile) outputs.
 
 🏗️ Multi-Agent Architecture Schema
+
        [ Business Analysis Document (.xlsx / .docx) ]
                          │
                          ▼
