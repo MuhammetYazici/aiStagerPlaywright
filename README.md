@@ -101,6 +101,7 @@ Model Fallback Layer: During high traffic, the system automatically switches to 
 Broken Code Prevention: No scenario failing the compilation stage is pushed to the repository; the main branch is always kept in a working state.
 
 
+<pre><code>
 📁 Project Directory Structure
 
 .
@@ -115,3 +116,4 @@ Broken Code Prevention: No scenario failing the compilation stage is pushed to t
         ├── StepDefinations/      # Generated Cucumber step definitions (Steps)
         ├── Runners/              # Deterministic TestNG Runner classes
         └── Utilities/            # TestContext, Playwright Driver (PD), Hooks
+</code></pre>
